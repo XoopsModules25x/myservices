@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+<HEAD>
+	<Title>Inline image slideshow</TITLE>
+	<link rel="stylesheet" type="text/css" media="screen" href="css/image-slideshow-4.css">
+	<SCRIPT type="text/javascript" src="js/image-slideshow-4.js"></SCRIPT>	
+</head>
+<body>
+
+<div id="mainContainer">
+	<div id="header">
+		<img src="/images/heading3.gif">
+	</div>
+	<div class="contentContainer">	
+		<div class="imageSlideshowHolder" id="imageSlideshowHolder">
+			<img src="images/image1.jpg">	
+			<img src="images/image3.jpg">
+			<img src="images/image4.jpg">
+			<img src="images/image5.jpg">
+			<img src="images/image6.jpg">
+			<img src="images/image7.jpg">
+			<img src="images/image8.jpg">
+		</div>
+
+		<h1>Inline Gallery script</h1>
+		<p>This is a DHTML gallery scripts for equally sized images. As you can see, the gallery could be placed inline in an article.</p>
+		<p>What you have to do is to create a div on your page and place all your images inside that div, i.e. by using plain img tags. Then call
+		the initImageGallery function to initialize the script.</p>
+		<div class="leftFloatingDiv">
+		<div class="imageSlideshowHolder" id="imageSlideshowHolder2">
+			<img src="images/image8.jpg">
+			<img src="images/image7.jpg">
+			<img src="images/image6.jpg">
+			<img src="images/image5.jpg">
+			<img src="images/image4.jpg">
+			<img src="images/image1.jpg">	
+			<img src="images/image3.jpg">
+		</div>	
+		</div>
+		<p>This is an example of the js code used to initialize this script:</p>
+		<pre>
+		&lt;SCRIPT type="text/javascript">
+		initImageGallery('imageSlideshowHolder');
+		initImageGallery('imageSlideshowHolder2');
+		&lt;/SCRIPT>
+		</P>
+		<p>This transforms the elements with the ids imageSlideshowHolder and imageSlideshowHolder2 into a slideshow.</p>
+	</div>
+</div>
+
+<script type="text/javascript">
+initImageGallery('imageSlideshowHolder');
+initImageGallery('imageSlideshowHolder2');
+</script>
+</body>
+</html>
