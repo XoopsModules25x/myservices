@@ -89,15 +89,14 @@ CREATE TABLE `myservices_orders` (
   `orders_email` varchar(255) NOT NULL,
   `orders_articles_count` mediumint(8) unsigned NOT NULL,
   `orders_total` double(7,2) NOT NULL,
-  `orders_password` varchar(32) NOT NULL COMMENT 'Utilisé pour voir la facture en ligne',
-  `orders_cancel` varchar(32) NOT NULL COMMENT 'Utilisé pour annuler toute la commande',
+  `orders_password` varchar(32) NOT NULL COMMENT 'Used to view the bill online',
+  `orders_cancel` varchar(32) NOT NULL COMMENT 'Used to cancel the entire order',
   PRIMARY KEY  (`orders_id`),
   KEY `orders_date` (`orders_date`),
   KEY `orders_state` (`orders_state`),
   KEY `orders_password` (`orders_password`),
   KEY `orders_cancel` (`orders_cancel`)
 ) ENGINE=InnoDB;
-
 
 CREATE TABLE `myservices_prefs` (
   `prefs_id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -167,5 +166,6 @@ CREATE TABLE `myservices_vat` (
   PRIMARY KEY  (`vat_id`),
   KEY `vat_rate` (`vat_rate`)
 ) ENGINE=InnoDB;
+
 
 INSERT INTO `myservices_prefs` (`prefs_id`, `prefs_j1t1debut`, `prefs_j1t1fin`, `prefs_j1t2debut`, `prefs_j1t2fin`, `prefs_j2t1debut`, `prefs_j2t1fin`, `prefs_j2t2debut`, `prefs_j2t2fin`, `prefs_j3t1debut`, `prefs_j3t1fin`, `prefs_j3t2debut`, `prefs_j3t2fin`, `prefs_j4t1debut`, `prefs_j4t1fin`, `prefs_j4t2debut`, `prefs_j4t2fin`, `prefs_j5t1debut`, `prefs_j5t1fin`, `prefs_j5t2debut`, `prefs_j5t2fin`, `prefs_j6t1debut`, `prefs_j6t1fin`, `prefs_j6t2debut`, `prefs_j6t2fin`, `prefs_j7t1debut`, `prefs_j7t1fin`, `prefs_j7t2debut`, `prefs_j7t2fin`) VALUES(1, '08:00:00', '12:00:00', '14:00:00', '18:00:00', '08:00:00', '12:00:00', '14:00:00', '18:00:00', '08:00:00', '12:00:00', '14:00:00', '18:00:00', '08:00:00', '12:00:00', '14:00:00', '18:00:00', '08:00:00', '12:00:00', '14:00:00', '18:00:00', '00:00:00', '00:00:00', '00:00:00', '00:00:00', '00:00:00', '00:00:00', '00:00:00', '00:00:00');

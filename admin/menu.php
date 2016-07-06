@@ -2,39 +2,97 @@
 /**
  * ****************************************************************************
  * myservices - MODULE FOR XOOPS
- * Copyright (c) Hervé Thouzard of Instant Zero (http://www.instant-zero.com)
+ * Copyright (c) HervÃ© Thouzard of Instant Zero (http://www.instant-zero.com)
  * Created on 20 oct. 07 at 14:38:20
- * Version : $Id$
  * ****************************************************************************
  */
+defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 
-$adminmenu[0]['title'] = _MI_MYSERVICES_ADMENU0;
-$adminmenu[0]['link'] = "admin/index.php?op=dashboard";
+//$path = dirname(dirname(dirname(__DIR__)));
+//include_once $path . '/mainfile.php';
 
-$adminmenu[1]['title'] = _MI_MYSERVICES_ADMENU1;
-$adminmenu[1]['link'] = "admin/index.php?op=vat";
+$moduleDirName = basename(dirname(__DIR__));
 
-$adminmenu[2]['title'] = _MI_MYSERVICES_ADMENU2;
-$adminmenu[2]['link'] = "admin/index.php?op=employes";
+$moduleHandler = xoops_getHandler('module');
+$module        = $moduleHandler->getByDirname($moduleDirName);
+$pathIcon32    = '../../' . $module->getInfo('sysicons32');
+$pathModIcon32 = './' . $module->getInfo('modicons32');
+xoops_loadLanguage('modinfo', $module->dirname());
 
-$adminmenu[3]['title'] = _MI_MYSERVICES_ADMENU3;
-$adminmenu[3]['link'] = "admin/index.php?op=holiday";
+$xoopsModuleAdminPath = XOOPS_ROOT_PATH . '/' . $module->getInfo('dirmoduleadmin');
+if (!file_exists($fileinc = $xoopsModuleAdminPath . '/language/' . $GLOBALS['xoopsConfig']['language'] . '/' . 'main.php')) {
+    $fileinc = $xoopsModuleAdminPath . '/language/english/main.php';
+}
+include_once $fileinc;
 
-$adminmenu[4]['title'] = _MI_MYSERVICES_ADMENU4;
-$adminmenu[4]['link'] = "admin/index.php?op=categories";
+$adminmenu[] = array(
+    'title' => _AM_MODULEADMIN_HOME,
+    'link'  => 'admin/index.php',
+    'icon'  => $pathIcon32 . '/home.png'
+);
 
-$adminmenu[5]['title'] = _MI_MYSERVICES_ADMENU5;
-$adminmenu[5]['link'] = "admin/index.php?op=products";
+$adminmenu[] = array(
+    'title' => _MI_MYSERVICES_ADMENU0,
+    'link'  => 'admin/main.php?op=dashboard',
+    'icon'  => $pathIcon32 . '/manage.png'
+);
 
-$adminmenu[6]['title'] = _MI_MYSERVICES_ADMENU7;
-$adminmenu[6]['link'] = "admin/index.php?op=orders";
+$adminmenu[] = array(
+    'title' => _MI_MYSERVICES_ADMENU1,
+    'link'  => 'admin/main.php?op=vat',
+    'icon'  => $pathIcon32 . '/calculator.png'
+);
 
-$adminmenu[7]['title'] = _MI_MYSERVICES_ADMENU8;
-$adminmenu[7]['link'] = "admin/index.php?op=texts";
+$adminmenu[] = array(
+    'title' => _MI_MYSERVICES_ADMENU2,
+    'link'  => 'admin/main.php?op=employes',
+    'icon'  => $pathIcon32 . '/users.png'
+);
 
-$adminmenu[8]['title'] = _MI_MYSERVICES_ADMENU9;
-$adminmenu[8]['link'] = "admin/index.php?op=timesheet";
+$adminmenu[] = array(
+    'title' => _MI_MYSERVICES_ADMENU3,
+    'link'  => 'admin/main.php?op=holiday',
+    'icon'  => $pathIcon32 . '/face-smile.png'
+);
 
-$adminmenu[9]['title'] = "Instant Zero";
-$adminmenu[9]['link'] = "admin/index.php?op=instant-zero";
-?>
+$adminmenu[] = array(
+    'title' => _MI_MYSERVICES_ADMENU4,
+    'link'  => 'admin/main.php?op=categories',
+    'icon'  => $pathIcon32 . '/category.png'
+);
+
+$adminmenu[] = array(
+    'title' => _MI_MYSERVICES_ADMENU5,
+    'link'  => 'admin/main.php?op=products',
+    'icon'  => $pathIcon32 . '/delivery.png'
+);
+
+//$adminmenu[] = array(
+//    'title' => _MI_MYSERVICES_ADMENU6,
+//    'link'  => 'admin/main.php',
+//    'icon'  => $pathIcon32.'/manage.png'
+//);
+
+$adminmenu[] = array(
+    'title' => _MI_MYSERVICES_ADMENU7,
+    'link'  => 'admin/main.php?op=orders',
+    'icon'  => $pathIcon32 . '/cart_add.png'
+);
+
+$adminmenu[] = array(
+    'title' => _MI_MYSERVICES_ADMENU8,
+    'link'  => 'admin/main.php?op=texts',
+    'icon'  => $pathIcon32 . '/highlight.png'
+);
+
+$adminmenu[] = array(
+    'title' => _MI_MYSERVICES_ADMENU9,
+    'link'  => 'admin/main.php?op=timesheet',
+    'icon'  => $pathIcon32 . '/event.png'
+);
+
+$adminmenu[] = array(
+    'title' => _AM_MODULEADMIN_ABOUT,
+    'link'  => 'admin/about.php',
+    'icon'  => $pathIcon32 . '/about.png'
+);

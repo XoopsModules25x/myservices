@@ -1,24 +1,23 @@
 Bonjour {PRENOM} {NOM},
 
-Cet email vous informe que votre commande a bien été prise en compte sur notre site.
-Les services que vous avez demandé seront réservés dès que le paiement aura été vérifié.
+Cet email vous informe que votre commande a bien Ã©tÃ© prise en compte sur notre site.
+Les services que vous avez demandÃ© seront rÃ©servÃ©s dÃ¨s que le paiement aura Ã©tÃ© vÃ©rifiÃ©.
 
-La commande porte le numéro : {NUM_COMMANDE}
+La commande porte le numÃ©ro : {NUM_COMMANDE}
 Informations sur le client :
-	Nom et prénom : {NOM} {PRENOM}
-	Adresse : {ADRESSE}
-	CP et Ville : {CP} {VILLE}
-	Pays : {PAYS}
-	Téléphone : {TELEPHONE}
-	Email : {EMAIL}
+Nom et prÃ©nom : {NOM} {PRENOM}
+Adresse : {ADRESSE}
+CP et Ville : {CP} {VILLE}
+Pays : {PAYS}
+TÃ©lÃ©phone : {TELEPHONE}
+Email : {EMAIL}
 
-Détails de votre commande :
+DÃ©tails de votre commande :
 {COMMANDE}
 
 
+Nous vous remercions pour votre commande et espÃ©rons vous revoir bientÃ´t sur notre site.
 
-Nous vous remercions pour votre commande et espérons vous revoir bientôt sur notre site.
-
-Cet email est généré automatiquement, merci de ne pas y répondre
+Cet email est gÃ©nÃ©rÃ© automatiquement, merci de ne pas y rÃ©pondre
 -------------------------
 {X_SITENAME} ({X_SITEURL})

@@ -1,7 +1,7 @@
 Bonjour,
 
-Cet email vous informe que nous avons bien reçu le paiement pour votre
-commande numéro {NUM_COMMANDE} qui sera traitée dans les meilleurs délais.
+Cet email vous informe que nous avons bien reÃ§u le paiement pour votre
+commande numÃ©ro {NUM_COMMANDE} qui sera traitÃ©e dans les meilleurs dÃ©lais.
 
 {SUPPLEMENTAL}
 
@@ -9,11 +9,11 @@ commande numéro {NUM_COMMANDE} qui sera traitée dans les meilleurs délais.
 
 {QUALITY}
 
-Nous vous remercions pour votre commande et espérons vous revoir bientôt sur notre site.
+Nous vous remercions pour votre commande et espÃ©rons vous revoir bientÃ´t sur notre site.
 
-Cet email est généré automatiquement, merci de ne pas y répondre
+Cet email est gÃ©nÃ©rÃ© automatiquement, merci de ne pas y rÃ©pondre
 
 Cordialement,
-Toute l'équipe du site.
+Toute l'Ã©quipe du site.
 -------------------------
 {X_SITENAME} ({X_SITEURL})

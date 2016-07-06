@@ -1,8 +1,8 @@
 Bonjour,
 
-Cet email vous informe que votre commande numéro {NUM_COMMANDE} a été annulée.
+Cet email vous informe que votre commande numÃ©ro {NUM_COMMANDE} a Ã©tÃ© annulÃ©e.
 
 
-Cet email est généré automatiquement, merci de ne pas y répondre
+Cet email est gÃ©nÃ©rÃ© automatiquement, merci de ne pas y rÃ©pondre
 -------------------------
 {X_SITENAME} ({X_SITEURL})

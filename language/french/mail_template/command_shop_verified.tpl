@@ -1,9 +1,9 @@
 Bonjour,
 
-Cet email vous informe que le paiement de la commande numéro {NUM_COMMANDE} a été validé par Paypal.
+Cet email vous informe que le paiement de la commande numÃ©ro {NUM_COMMANDE} a Ã©tÃ© validÃ© par Paypal.
 
 {SUPPLEMENTAL}
 
-Cet email est généré automatiquement, merci de ne pas y répondre
+Cet email est gÃ©nÃ©rÃ© automatiquement, merci de ne pas y rÃ©pondre
 -------------------------
 {X_SITENAME} ({X_SITEURL})

@@ -1,0 +1,59 @@
+/* Styles pour le défilement d'images */
+.imageSlideshowHolder, .imageSlideshowHolder_left {
+    margin: 5px; /* "Air" */
+    float: left; /* Floating gallery at the right side of other web page content */
+    width: 115px; /* Image width */
+    height: 171px; /* Image height */
+    position: relative; /* Don't remove this line */
+}
+
+/* Don't change these values */
+.imageSlideshowHolder img {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+/* Styles pour le calendrier */
+.dayname {
+    padding: 3px 3px;
+    color: #FFF;
+    background-color: #b93f37;
+    border: 2px solid #8a312b;
+}
+
+.monthday {
+    text-align: center;
+}
+
+.saturday {
+    text-align: center;
+}
+
+.sunday {
+    text-align: center;
+}
+
+.event {
+    text-align: center;
+    background: #c89979;
+}
+
+.today {
+    text-align: center;
+    border: 1px solid #8A312B;
+}
+
+.todayevent {
+    text-align: center;
+    border: 1px solid #8A312B;
+}
+
+.available {
+    text-align: center;
+}
+
+.todayavailable {
+    text-align: center;
+}
+

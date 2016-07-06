@@ -1,24 +1,24 @@
 Bonjour,
 
-Cet email vous informe qu'une commande a été passée sur le site.
+Cet email vous informe qu'une commande a Ã©tÃ© passÃ©e sur le site.
 L'utilisateur avait pour adresse IP {IP}.
-Toutefois, il vous reste à vérifier l'état de paiement de la commande via votre console d'administration dans Paypal.
+Toutefois, il vous reste Ã  vÃ©rifier l'Ã©tat de paiement de la commande via votre console d'administration dans Paypal.
 
-Numéro de commande : {NUM_COMMANDE}
+NumÃ©ro de commande : {NUM_COMMANDE}
 
 Informations sur le client :
-		Nom et prénom : {NOM} {PRENOM}
-		Adresse : {ADRESSE}
-		CP et Ville : {CP} {VILLE}
-		Pays : {PAYS}
-		Téléphone : {TELEPHONE}
-		Email : {EMAIL}
+    Nom et prÃ©nom : {NOM} {PRENOM}
+    Adresse : {ADRESSE}
+    CP et Ville : {CP} {VILLE}
+    Pays : {PAYS}
+    TÃ©lÃ©phone : {TELEPHONE}
+    Email : {EMAIL}
 
 
-Détails de la commande :
+DÃ©tails de la commande :
 {COMMANDE}
 
 
-Cet email est généré automatiquement, merci de ne pas y répondre
+Cet email est gÃ©nÃ©rÃ© automatiquement, merci de ne pas y rÃ©pondre
 -------------------------
 {X_SITENAME} ({X_SITEURL})
