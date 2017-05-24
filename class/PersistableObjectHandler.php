@@ -161,7 +161,7 @@ class myservices_ORM extends XoopsObjectHandler
             $criteria = new Criteria($this->keyName, (int)$id);
         }
         $criteria->setLimit(1);
-        $obj_array =& $this->getObjects($criteria, false, $as_object);
+        $obj_array = $this->getObjects($criteria, false, $as_object);
         if (count($obj_array) != 1) {
             $ret = null;
         } else {
@@ -380,7 +380,7 @@ class myservices_ORM extends XoopsObjectHandler
         $ret = array();
         if (is_array($ids) && count($ids) > 0) {
             $criteria = new Criteria($this->keyName, '(' . implode(',', $ids) . ')', 'IN');
-            $ret      =& $this->getObjects($criteria, true);
+            $ret      = $this->getObjects($criteria, true);
         }
 
         return $ret;
@@ -817,7 +817,7 @@ class myservices_ORM extends XoopsObjectHandler
         $critere->setStart($start);
         $critere->setSort($sort);
         $critere->setOrder($order);
-        $items =& $this->getObjects($critere, $idAsKey);
+        $items = $this->getObjects($critere, $idAsKey);
 
         return $items;
     }

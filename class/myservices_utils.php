@@ -302,7 +302,7 @@ class myservices_utils
             }
         }
         if (function_exists('xoops_getMailer')) {
-            $xoopsMailer =& xoops_getMailer();
+            $xoopsMailer = xoops_getMailer();
         } else {
             $xoopsMailer =& getMailer();
         }

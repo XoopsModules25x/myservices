@@ -75,7 +75,7 @@ class MyservicesMyservices_calendarHandler extends myservices_ORM
         $criteria->add(new Criteria('date(calendar_start)', $startingDay, '>='));
         $criteria->add(new Criteria('date(calendar_start)', $endingDay, '<='));
         //$criteria->add(new Criteria('date(calendar_end)', $endingDay, '<='));
-        $closedDates =& $this->getObjects($criteria, false, true, 'calendar_start, calendar_end');
+        $closedDates = $this->getObjects($criteria, false, true, 'calendar_start, calendar_end');
         if (count($closedDates) > 0) {
             foreach ($closedDates as $closedDay) {
                 $elementsEndDate   = getdate(strtotime($closedDay->getVar('calendar_end')));
