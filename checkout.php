@@ -84,7 +84,7 @@ function CheckoutForm($message = false)
 
     $currency = &myservices_currency::getInstance();
 
-    $sform = new XoopsThemeForm(_MYSERVICES_PLEASE_ENTER, 'informationfrm', MYSERVICES_URL . 'checkout.php', 'post');
+    $sform = new XoopsThemeForm(_MYSERVICES_PLEASE_ENTER, 'informationfrm', MYSERVICES_URL . 'checkout.php', 'post', true);
     $sform->addElement(new XoopsFormHidden('op', 'paypal'));
     $sform->addElement(new XoopsFormLabel(_MYSERVICES_TOTAL, $currency->amountForDisplay($commandAmountTTC, 'l')));
     $sform->addElement(new XoopsFormText(_MYSERVICES_LASTNAME, 'orders_lastname', 50, 255, $commande->getVar('orders_lastname')), true);
@@ -195,7 +195,7 @@ switch ($op) {
         $payURL = $myservicesPaypal->getURL();
 
 		// Présentation finale avec panier en variables cachées ******************************
-        $sform    = new XoopsThemeForm(_MYSERVICES_PAY_PAYPAL, 'payform', $payURL, 'post');
+        $sform    = new XoopsThemeForm(_MYSERVICES_PAY_PAYPAL, 'payform', $payURL, 'post', true);
         $elements = array();
         $elements = $myservicesPaypal->getFormContent($commande->getVar('orders_id'), $commandAmountTTC, $commande->getVar('orders_email'));
         foreach ($elements as $key => $value) {
