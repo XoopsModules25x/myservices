@@ -1,0 +1,2 @@
+<!-- Created by Instant Zero (http://www.instant-zero.com) -->
+<{html_table loop=$block.blockCategories cols=$block.blockColumnsCount table_attr='cellspacing="1" cellpadding="3" border="0"' inner=rows}>
