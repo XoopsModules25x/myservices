@@ -7,7 +7,7 @@
  * ****************************************************************************
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 //require XOOPS_ROOT_PATH.'/kernel/object.php';
 if (!class_exists('myservices_ORM')) {

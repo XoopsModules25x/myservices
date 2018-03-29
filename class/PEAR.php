@@ -42,7 +42,7 @@ define('PEAR_ERROR_EXCEPTION', 32);
 define('PEAR_ZE2', (function_exists('version_compare')
                     && version_compare(zend_version(), '2-dev', 'ge')));
 
-if ('WIN' == substr(PHP_OS, 0, 3)) {
+if ('WIN' === substr(PHP_OS, 0, 3)) {
     define('OS_WINDOWS', true);
     define('OS_UNIX', false);
     define('PEAR_OS', 'Windows');
@@ -546,7 +546,7 @@ class myservices_PEAR
         }
 
         if (isset($this) && isset($this->_expected_errors) && count($this->_expected_errors) > 0 && count($exp = end($this->_expected_errors))) {
-            if ('*' == $exp[0]
+            if ('*' === $exp[0]
                 || (is_int(reset($exp)) && in_array($code, $exp))
                 || (is_string(reset($exp)) && in_array($message, $exp))) {
                 $mode = PEAR_ERROR_RETURN;
@@ -558,7 +558,7 @@ class myservices_PEAR
             if (isset($this) && isset($this->_default_error_mode)) {
                 $mode    = $this->_default_error_mode;
                 $options = $this->_default_error_options;
-                // Global error handler
+            // Global error handler
             } elseif (isset($GLOBALS['_PEAR_default_error_mode'])) {
                 $mode    = $GLOBALS['_PEAR_default_error_mode'];
                 $options = $GLOBALS['_PEAR_default_error_options'];
@@ -763,11 +763,11 @@ class myservices_PEAR
             }
             if (OS_WINDOWS) {
                 $suffix = '.dll';
-            } elseif (PHP_OS == 'HP-UX') {
+            } elseif (PHP_OS === 'HP-UX') {
                 $suffix = '.sl';
-            } elseif (PHP_OS == 'AIX') {
+            } elseif (PHP_OS === 'AIX') {
                 $suffix = '.a';
-            } elseif (PHP_OS == 'OSX') {
+            } elseif (PHP_OS === 'OSX') {
                 $suffix = '.bundle';
             } else {
                 $suffix = '.so';
@@ -917,7 +917,7 @@ class myservices_PEAR_Error
             $msg = $this->getMessage();
             if (is_null($options) || is_int($options)) {
                 $format = '%s';
-                if ("\n" != substr($msg, -1)) {
+                if ("\n" !== substr($msg, -1)) {
                     $msg .= "\n";
                 }
             } else {

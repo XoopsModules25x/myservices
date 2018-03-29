@@ -17,7 +17,7 @@ require_once MYSERVICES_PATH . 'class/myservices_cart.php';
 
 require_once MYSERVICES_PATH . 'class/myservices_paypal.php';
 if (isset($_GET['id'])) {
-    $critere = new Criteria('orders_cancel', $myts->addSlashes($_GET['id']), '=');
+    $critere = new \Criteria('orders_cancel', $myts->addSlashes($_GET['id']), '=');
     $cnt     = 0;
     $tblCmd  = [];
     $cnt     = $hMsOrders->getCount($critere);

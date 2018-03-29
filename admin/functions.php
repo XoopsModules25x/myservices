@@ -9,14 +9,16 @@
  * @param string $breadcrumb
  */
 
+use XoopsModules\Myservices;
+
 function myservices_adminMenu($currentoption = 0, $breadcrumb = '')
 {
     global $xoopsConfig, $xoopsModule;
-    if (file_exists(XOOPS_ROOT_PATH . '/modules/myservices/language/' . $xoopsConfig['language'] . '/modinfo.php')) {
-        require_once XOOPS_ROOT_PATH . '/modules/myservices/language/' . $xoopsConfig['language'] . '/modinfo.php';
-    } else {
-        require_once XOOPS_ROOT_PATH . '/modules/myservices/language/english/modinfo.php';
-    }
+
+    /** @var Myservices\Helper $helper */
+    $helper = Myservices\Helper::getInstance();
+    $helper->loadLanguage('modinfo');
+    
     require XOOPS_ROOT_PATH . '/modules/myservices/admin/menu.php';
 
     echo "<style type=\"text/css\">\n";

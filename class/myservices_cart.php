@@ -7,7 +7,7 @@
  * ****************************************************************************
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 /**
  * Classe responsable de gérer le panier
@@ -208,7 +208,7 @@ class myservices_Cart
         }
 
         $datas = [];
-        if ($exists == -1) {
+        if (-1 == $exists) {
             $datas['number'] = count($tbl_caddie) + 1;    // Rang dans le tableau
         } else {
             $datas['number'] = $exists;    // Rang dans le tableau

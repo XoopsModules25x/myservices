@@ -7,7 +7,7 @@
  * ****************************************************************************
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 //require XOOPS_ROOT_PATH.'/kernel/object.php';
 if (!class_exists('myservices_ORM')) {
@@ -78,7 +78,7 @@ class MyservicesMyservices_ordersHandler extends myservices_ORM
 
         // Récupération des services réservés
         $tblServices = [];
-        $tblServices = $hMsCaddy->getObjects(new Criteria('caddy_orders_id', $cmd_id, '='));
+        $tblServices = $hMsCaddy->getObjects(new \Criteria('caddy_orders_id', $cmd_id, '='));
         foreach ($tblServices as $service) {    // Boucle sur les éléments du panier
             $employee = $product = null;
             $employee = $hMsEmployes->get($service->getVar('caddy_employes_id'));

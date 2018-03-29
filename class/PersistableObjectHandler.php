@@ -7,7 +7,7 @@
  * ****************************************************************************
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 class myservices_Object extends XoopsObject
 {
@@ -80,7 +80,7 @@ class myservices_ORM extends XoopsObjectHandler
      * @param array         $cacheOptions Optional, options for the cache
      *
      */
-    public function __construct(XoopsDatabase $db, $tablename, $classname, $keyname, $idenfierName = '', $cacheOptions = null)
+    public function __construct(\XoopsDatabase $db, $tablename, $classname, $keyname, $idenfierName = '', $cacheOptions = null)
     {
         //        require_once dirname(__DIR__) . '/include/common.php';
         if (!defined('MYSERVICES_CACHE_PATH')) {
@@ -98,7 +98,7 @@ class myservices_ORM extends XoopsObjectHandler
 
         if (is_null($cacheOptions)) {
             $this->setCachingOptions(['cacheDir' => MYSERVICES_CACHE_PATH, 'lifeTime' => null, 'automaticSerialization' => true, 'fileNameProtection' => false, 'caching' => false]);
-            //            $this->setCachingOptions(array('cacheDir' => MYSERVICES_CACHE_PATH, 'lifeTime' => null, 'automaticSerialization' => true, 'fileNameProtection' => false));
+        //            $this->setCachingOptions(array('cacheDir' => MYSERVICES_CACHE_PATH, 'lifeTime' => null, 'automaticSerialization' => true, 'fileNameProtection' => false));
         } else {
             $this->setCachingOptions($cacheOptions);
         }
@@ -151,16 +151,16 @@ class myservices_ORM extends XoopsObjectHandler
     public function get($id, $as_object = true)
     {
         if (is_array($this->keyName)) {
-            $criteria = new CriteriaCompo();
+            $criteria = new \CriteriaCompo();
             $vnb      = count($this->keyName);
             for ($i = 0; $i < $vnb; ++$i) {
-                $criteria->add(new Criteria($this->keyName[$i], (int)$id[$i]));
+                $criteria->add(new \Criteria($this->keyName[$i], (int)$id[$i]));
             }
         } else {
-            $criteria = new Criteria($this->keyName, (int)$id);
+            $criteria = new \Criteria($this->keyName, (int)$id);
         }
         $criteria->setLimit(1);
-        $obj_array = $this->getObjects($criteria, false, $as_object);
+        $obj_array =& $this->getObjects($criteria, false, $as_object);
         if (1 != count($obj_array)) {
             $ret = null;
         } else {
@@ -230,7 +230,7 @@ class myservices_ORM extends XoopsObjectHandler
     protected function convertResultSet($result, $id_as_key = false, $as_object = true, $fields = '*')
     {
         $ret = [];
-        while ($myrow = $this->db->fetchArray($result)) {
+        while (false !== ($myrow = $this->db->fetchArray($result))) {
             $obj = $this->create(false);
             $obj->assignVars($myrow);
             if (!$id_as_key) {
@@ -300,7 +300,7 @@ class myservices_ORM extends XoopsObjectHandler
         if (false === $cacheData) {
             $result = $this->db->query($sql, $limit, $start);
             $ret    = [];
-            while ($myrow = $this->db->fetchArray($result)) {
+            while (false !== ($myrow = $this->db->fetchArray($result))) {
                 $ret[] = $myrow[$this->keyName];
             }
             $Cache_Lite->save($ret);
@@ -356,7 +356,7 @@ class myservices_ORM extends XoopsObjectHandler
             }
 
             $myts = \MyTextSanitizer::getInstance();
-            while ($myrow = $this->db->fetchArray($result)) {
+            while (false !== ($myrow = $this->db->fetchArray($result))) {
                 // identifiers should be textboxes, so sanitize them like that
                 $ret[$myrow[$this->keyName]] = empty($this->identifierName) ? 1 : $myts->htmlSpecialChars($myrow[$this->identifierName]);
             }
@@ -378,8 +378,8 @@ class myservices_ORM extends XoopsObjectHandler
     {
         $ret = [];
         if (is_array($ids) && count($ids) > 0) {
-            $criteria = new Criteria($this->keyName, '(' . implode(',', $ids) . ')', 'IN');
-            $ret      = $this->getObjects($criteria, true);
+            $criteria = new \Criteria($this->keyName, '(' . implode(',', $ids) . ')', 'IN');
+            $ret      =& $this->getObjects($criteria, true);
         }
 
         return $ret;
@@ -431,7 +431,7 @@ class myservices_ORM extends XoopsObjectHandler
                 return $count;
             } else {
                 $ret = [];
-                while (list($id, $count) = $this->db->fetchRow($result)) {
+                while (false !== (list($id, $count) = $this->db->fetchRow($result))) {
                     $ret[$id] = $count;
                 }
                 $Cache_Lite->save($ret);
@@ -492,7 +492,7 @@ class myservices_ORM extends XoopsObjectHandler
      * @param  bool        $force
      * @return bool   FALSE if failed.
      */
-    public function delete(XoopsObject $obj, $force = false)
+    public function delete(\XoopsObject $obj, $force = false)
     {
         if (is_array($this->keyName)) {
             $clause = [];
@@ -549,7 +549,7 @@ class myservices_ORM extends XoopsObjectHandler
      * @return bool   FALSE if failed, TRUE if already present and unchanged or successful
      */
 
-    public function insert(XoopsObject $obj, $force = false, $checkObject = true)
+    public function insert(\XoopsObject $obj, $force = false, $checkObject = true)
     {
         if (false != $checkObject) {
             if (!is_object($obj)) {
@@ -689,11 +689,11 @@ class myservices_ORM extends XoopsObjectHandler
         if (empty($field)) {
             return false;
         }
-        $criteria = new CriteriaCompo();
-        $criteria->add(new Criteria($field, $obj->getVar($field)));
+        $criteria = new \CriteriaCompo();
+        $criteria->add(new \Criteria($field, $obj->getVar($field)));
         //  one more condition if target object exisits in database
         if (!$obj->isNew()) {
-            $criteria->add(new Criteria($this->_key, $obj->getVar($this->_key), '!='));
+            $criteria->add(new \Criteria($this->_key, $obj->getVar($this->_key), '!='));
         }
         if ($this->getCount($criteria)) {
             $obj->setErrors($error);
@@ -777,7 +777,7 @@ class myservices_ORM extends XoopsObjectHandler
             $result = $this->db->query($sql, $limit, $start);
             $ret    = [];
             $obj    = new $this->className();
-            while ($myrow = $this->db->fetchArray($result)) {
+            while (false !== ($myrow = $this->db->fetchArray($result))) {
                 $obj->setVar($field, $myrow[$field]);
                 $ret[$myrow[$this->keyName]] = $obj->getVar($field, $format);
             }
@@ -811,12 +811,12 @@ class myservices_ORM extends XoopsObjectHandler
             }
         }
         $items   = [];
-        $critere = new Criteria($this->keyName, 0, '<>');
+        $critere = new \Criteria($this->keyName, 0, '<>');
         $critere->setLimit($limit);
         $critere->setStart($start);
         $critere->setSort($sort);
         $critere->setOrder($order);
-        $items = $this->getObjects($critere, $idAsKey);
+        $items =& $this->getObjects($critere, $idAsKey);
 
         return $items;
     }

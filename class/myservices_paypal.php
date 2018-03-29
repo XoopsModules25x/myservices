@@ -11,7 +11,7 @@
  * Classe responsable de la gestion de tout ce qui est relatif � Paypal
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 class myservices_paypal
 {

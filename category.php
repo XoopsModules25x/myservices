@@ -62,7 +62,7 @@ $products = [];
 // Comptage du nombre total de produits en ligne dans cette catégorie
 $itemsCount = $hMsProducts->getProductsCountFromCategory($currentCategoryId);
 if ($itemsCount > $limit) {
-    $pagenav = new XoopsPageNav($itemsCount, $limit, $start, 'start');
+    $pagenav = new \XoopsPageNav($itemsCount, $limit, $start, 'start');
     $xoopsTpl->assign('pagenav', $pagenav->renderNav());
 }
 

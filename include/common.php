@@ -7,7 +7,9 @@
  * ****************************************************************************
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+use XoopsModules\Myservices;
+
+defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 if (!defined('MYSERVICES_DIRNAME')) {
     define('MYSERVICES_DIRNAME', 'myservices');
@@ -40,12 +42,9 @@ $hMsPrefs            = xoops_getModuleHandler('myservices_prefs', MYSERVICES_DIR
 
 // Definition des images
 if (!defined('_MYSERVICES_EDIT')) {
-    if (isset($xoopsConfig) && file_exists(MYSERVICES_PATH . 'language/' . $xoopsConfig['language'] . '/main.php')) {
-        require MYSERVICES_PATH . 'language/' . $xoopsConfig['language'] . '/main.php';
-    } else {
-        require MYSERVICES_PATH . 'language/english/main.php';
-    }
-    // xoops_loadLanguage('main', basename(dirname(__DIR__)));
+    /** @var Myservices\Helper $helper */
+    $helper = Myservices\Helper::getInstance();
+    $helper->loadLanguage('main');
 
     $icones = [
         'edit'       => "<img src='" . MYSERVICES_IMAGES_URL . "edit.png' alt='" . _MYSERVICES_EDIT . "' align='middle'>",

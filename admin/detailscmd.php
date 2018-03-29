@@ -30,7 +30,7 @@ if (!is_object($commande)) {
     die(_AM_MYSERVICES_ERROR_15);
 }
 
-$critePanier = new Criteria('caddy_orders_id', $id, '=');
+$critePanier = new \Criteria('caddy_orders_id', $id, '=');
 $tblCaddy    = [];
 $tblCaddy    = $hMsCaddy->getObjects($critePanier);
 echo '<br>' . _AM_MYSERVICES_DATE_ORDER . ' : ' . myservices_utils::sqlDateTimeToFrench($commande->getVar('orders_date')) . '<br><br>';

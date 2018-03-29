@@ -16,7 +16,7 @@ require_once XOOPS_ROOT_PATH . '/header.php';
 
 require_once XOOPS_ROOT_PATH . '/class/template.php';
 
-$myTpl = new XoopsTpl();
+$myTpl = new \XoopsTpl();
 // Module Preferences
 $xoopsTpl->assign('columnsCount', myservices_utils::getModuleOption('columnscount'));
 

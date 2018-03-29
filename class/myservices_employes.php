@@ -7,7 +7,7 @@
  * ****************************************************************************
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 //require XOOPS_ROOT_PATH.'/kernel/object.php';
 if (!class_exists('myservices_ORM')) {
@@ -107,10 +107,10 @@ class MyservicesMyservices_employesHandler extends myservices_ORM
         $peopleList = $employees = [];
         $peopleList = $hMsEmployesproducts->getEmployeesIdForProduct($products_id);
         if (count($peopleList) > 0) {    // On a la liste de toutes les personnes, reste à prendre les personnes actives
-            $criteriaCompo = new CriteriaCompo();
-            $criteriaCompo->add(new Criteria('employes_isactive', 1, '='));
-            $criteriaCompo->add(new Criteria('employes_id', '(' . implode(',', $peopleList) . ')', 'IN'));
-            $employees = $this->getObjects($criteriaCompo, true);
+            $criteriaCompo = new \CriteriaCompo();
+            $criteriaCompo->add(new \Criteria('employes_isactive', 1, '='));
+            $criteriaCompo->add(new \Criteria('employes_id', '(' . implode(',', $peopleList) . ')', 'IN'));
+            $employees =& $this->getObjects($criteriaCompo, true);
         }
 
         return $employees;
@@ -123,7 +123,7 @@ class MyservicesMyservices_employesHandler extends myservices_ORM
      */
     public function getActiveEmployees()
     {
-        $critere = new Criteria('employes_isactive', 1, '=');
+        $critere = new \Criteria('employes_isactive', 1, '=');
         if (isset($this->identifierName) && '' != trim($this->identifierName)) {
             $order = $this->identifierName;
         } else {
@@ -131,7 +131,7 @@ class MyservicesMyservices_employesHandler extends myservices_ORM
         }
         $tblItems = [];
         $critere->setOrder($order);
-        $tblItems = $this->getObjects($critere);
+        $tblItems =& $this->getObjects($critere);
 
         return $tblItems;
     }
@@ -179,11 +179,11 @@ class MyservicesMyservices_employesHandler extends myservices_ORM
             $count = 0;
         }
         /*
-                $criteriaCompo = new CriteriaCompo();
-                $criteriaCompo->add(new Criteria('calendar_status', CALENDAR_STATUS_HOLIDAY, '='));
-                $criteriaCompo->add(new Criteria('calendar_employes_id', $employes_id, '='));
-                $criteriaCompo->add(new Criteria('calendar_start', $requestedDate, '<='));
-                $criteriaCompo->add(new Criteria("'".$requestedDate."'", 'calendar_end', '<='));
+                $criteriaCompo = new \CriteriaCompo();
+                $criteriaCompo->add(new \Criteria('calendar_status', CALENDAR_STATUS_HOLIDAY, '='));
+                $criteriaCompo->add(new \Criteria('calendar_employes_id', $employes_id, '='));
+                $criteriaCompo->add(new \Criteria('calendar_start', $requestedDate, '<='));
+                $criteriaCompo->add(new \Criteria("'".$requestedDate."'", 'calendar_end', '<='));
                 $count = 0;
                 $count = $hMsCalendar->getCount($criteriaCompo);
                 unset($criteriaCompo);
@@ -200,11 +200,11 @@ class MyservicesMyservices_employesHandler extends myservices_ORM
         $timestamp    = mktime($hours, $minutes, $seconds, $month, $day, $year) + ($duration * 3600);
         $calculedDate = date('Y-m-d H:i:s', $timestamp);
 
-        $criteriaCompo = new CriteriaCompo();
-        $criteriaCompo->add(new Criteria('calendar_status', CALENDAR_STATUS_HOLIDAY, '='));
-        $criteriaCompo->add(new Criteria('calendar_employes_id', $employes_id, '='));
-        $criteriaCompo->add(new Criteria('calendar_start', $calculedDate, '>='));
-        $criteriaCompo->add(new Criteria('calendar_end', $calculedDate, '<='));
+        $criteriaCompo = new \CriteriaCompo();
+        $criteriaCompo->add(new \Criteria('calendar_status', CALENDAR_STATUS_HOLIDAY, '='));
+        $criteriaCompo->add(new \Criteria('calendar_employes_id', $employes_id, '='));
+        $criteriaCompo->add(new \Criteria('calendar_start', $calculedDate, '>='));
+        $criteriaCompo->add(new \Criteria('calendar_end', $calculedDate, '<='));
         $count = 0;
         $count = $hMsCalendar->getCount($criteriaCompo);
         if ($count > 0) {
@@ -242,11 +242,11 @@ class MyservicesMyservices_employesHandler extends myservices_ORM
         }
 
         /*
-                $criteriaCompo = new CriteriaCompo();
-                $criteriaCompo->add(new Criteria('calendar_status', CALENDAR_STATUS_WORK, '='));
-                $criteriaCompo->add(new Criteria('calendar_employes_id', $employes_id, '='));
-                $criteriaCompo->add(new Criteria('calendar_start', $requestedDate, '>='));
-                $criteriaCompo->add(new Criteria('calendar_end', $requestedDate, '<='));
+                $criteriaCompo = new \CriteriaCompo();
+                $criteriaCompo->add(new \Criteria('calendar_status', CALENDAR_STATUS_WORK, '='));
+                $criteriaCompo->add(new \Criteria('calendar_employes_id', $employes_id, '='));
+                $criteriaCompo->add(new \Criteria('calendar_start', $requestedDate, '>='));
+                $criteriaCompo->add(new \Criteria('calendar_end', $requestedDate, '<='));
                 $count = 0;
                 $count = $hMsCalendar->getCount($criteriaCompo);
                 unset($criteriaCompo);
@@ -262,11 +262,11 @@ class MyservicesMyservices_employesHandler extends myservices_ORM
         $timestamp    = mktime($hours, $minutes, $seconds, $month, $day, $year);    // timestamp de la date et heure demand�e
         $calculedDate = date('Y-m-d H:i:s', $timestamp + ($duration * 3600));
 
-        $criteriaCompo = new CriteriaCompo();
-        $criteriaCompo->add(new Criteria('calendar_status', CALENDAR_STATUS_WORK, '='));
-        $criteriaCompo->add(new Criteria('calendar_employes_id', $employes_id, '='));
-        $criteriaCompo->add(new Criteria('calendar_start', $calculedDate, '>='));
-        $criteriaCompo->add(new Criteria('calendar_end', $calculedDate, '<='));
+        $criteriaCompo = new \CriteriaCompo();
+        $criteriaCompo->add(new \Criteria('calendar_status', CALENDAR_STATUS_WORK, '='));
+        $criteriaCompo->add(new \Criteria('calendar_employes_id', $employes_id, '='));
+        $criteriaCompo->add(new \Criteria('calendar_start', $calculedDate, '>='));
+        $criteriaCompo->add(new \Criteria('calendar_end', $calculedDate, '<='));
         $count = 0;
         $count = $hMsCalendar->getCount($criteriaCompo);
         if ($count > 0) {
@@ -274,10 +274,10 @@ class MyservicesMyservices_employesHandler extends myservices_ORM
         }
         // 3) Vérifications par rapport au temps de battement et aux réservations déjà faites ce même jour
         unset($criteriaCompo);
-        $criteriaCompo = new CriteriaCompo();
-        $criteriaCompo->add(new Criteria('calendar_status', CALENDAR_STATUS_WORK, '='));
-        $criteriaCompo->add(new Criteria('calendar_employes_id', $employes_id, '='));
-        $criteriaCompo->add(new Criteria('date(calendar_start)', $shortRequestedDate, '='));
+        $criteriaCompo = new \CriteriaCompo();
+        $criteriaCompo->add(new \Criteria('calendar_status', CALENDAR_STATUS_WORK, '='));
+        $criteriaCompo->add(new \Criteria('calendar_employes_id', $employes_id, '='));
+        $criteriaCompo->add(new \Criteria('date(calendar_start)', $shortRequestedDate, '='));
         $reservations = [];
         $reservations = $hMsCalendar->getObjects($criteriaCompo);
         foreach ($reservations as $reservation) {

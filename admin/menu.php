@@ -9,7 +9,7 @@
 
 use XoopsModules\Myservices;
 
-require_once __DIR__ . '/../class/Helper.php';
+// require_once __DIR__ . '/../class/Helper.php';
 //require_once __DIR__ . '/../include/common.php';
 $helper = Myservices\Helper::getInstance();
 

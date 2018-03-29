@@ -76,7 +76,7 @@ class ActiveCalendarWeek extends ActiveCalendar
         if ($this->startOnSun) {
             --$xday;
         }
-        ActiveCalendarWeek::__construct($this->actyear, $this->actmonth, $xday, $this->GMT);
+        self::__construct($this->actyear, $this->actmonth, $xday, $this->GMT);
 
         return $this->showWeeks($numberOfWeeks);
     }
@@ -208,7 +208,7 @@ class ActiveCalendarWeek extends ActiveCalendar
             }
             for ($i = 0; $i <= 6; ++$i) {
                 $out .= $this->mkDay($this->actday);
-                ActiveCalendarWeek::__construct($this->actyear, $this->actmonth, $this->actday + 1, $this->GMT);
+                self::__construct($this->actyear, $this->actmonth, $this->actday + 1, $this->GMT);
                 $this->resetSelectedToToday();
             }
             $out .= "</tr>\n";

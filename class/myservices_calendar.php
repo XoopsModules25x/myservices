@@ -7,7 +7,7 @@
  * ****************************************************************************
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 //require XOOPS_ROOT_PATH.'/kernel/object.php';
 if (!class_exists('myservices_ORM')) {
@@ -70,12 +70,12 @@ class MyservicesMyservices_calendarHandler extends myservices_ORM
         $daysMonth   = date('t', mktime(1, 1, 1, $month, 1, $year));            // Nombre de jours dans le mois
         $startingDay = sprintf('%04d-%02d-01', $year, $month);                // Premier jour du mois
         $endingDay   = sprintf('%04d-%02d-%02d', $year, $month, $daysMonth);    // Dernier jour du mois
-        $criteria    = new CriteriaCompo();
-        $criteria->add(new Criteria('calendar_status', CALENDAR_STATUS_CLOSED, '='));
-        $criteria->add(new Criteria('date(calendar_start)', $startingDay, '>='));
-        $criteria->add(new Criteria('date(calendar_start)', $endingDay, '<='));
-        //$criteria->add(new Criteria('date(calendar_end)', $endingDay, '<='));
-        $closedDates = $this->getObjects($criteria, false, true, 'calendar_start, calendar_end');
+        $criteria    = new \CriteriaCompo();
+        $criteria->add(new \Criteria('calendar_status', CALENDAR_STATUS_CLOSED, '='));
+        $criteria->add(new \Criteria('date(calendar_start)', $startingDay, '>='));
+        $criteria->add(new \Criteria('date(calendar_start)', $endingDay, '<='));
+        //$criteria->add(new \Criteria('date(calendar_end)', $endingDay, '<='));
+        $closedDates =& $this->getObjects($criteria, false, true, 'calendar_start, calendar_end');
         if (count($closedDates) > 0) {
             foreach ($closedDates as $closedDay) {
                 $elementsEndDate   = getdate(strtotime($closedDay->getVar('calendar_end')));
@@ -109,10 +109,10 @@ class MyservicesMyservices_calendarHandler extends myservices_ORM
         $startingDay = sprintf('%04d-%02d-01', $year, $month);                // Premier jour du mois
         $endingDay   = $startingDay;
 
-        $criteria = new CriteriaCompo();
-        $criteria->add(new Criteria('calendar_status', CALENDAR_STATUS_CLOSED, '='));
-        $criteria->add(new Criteria('date(calendar_start)', $startingDay, '>='));
-        $criteria->add(new Criteria('date(calendar_start)', $endingDay, '<='));
+        $criteria = new \CriteriaCompo();
+        $criteria->add(new \Criteria('calendar_status', CALENDAR_STATUS_CLOSED, '='));
+        $criteria->add(new \Criteria('date(calendar_start)', $startingDay, '>='));
+        $criteria->add(new \Criteria('date(calendar_start)', $endingDay, '<='));
         $count = $this->getCount($criteria);
         if ($count > 0) {
             return true;

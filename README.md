@@ -1,7 +1,7 @@
 ![alt XOOPS CMS](https://xoops.org/images/logoXoops4GithubRepository.png)
 ## myServices module for  [XOOPS CMS 2.5.8+](https://xoops.org)
 [![XOOPS CMS Module](https://img.shields.io/badge/XOOPS%20CMS-Module-blue.svg)](https://xoops.org)
-[![Software License](https://img.shields.io/badge/license-GPL-brightgreen.svg?style=flat)](LICENSE)
+[![Software License](https://img.shields.io/badge/license-GPL-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
 
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/mambax7/myservices.svg?style=flat)](https://scrutinizer-ci.com/g/mambax7/myservices/?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/75c75ab42460433a95afa6e2a314974a)](https://www.codacy.com/app/mambax7/myservices_2)

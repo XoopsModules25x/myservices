@@ -7,7 +7,7 @@
  * ****************************************************************************
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 /**
  * Bloc, Liste des salariés actifs
@@ -54,7 +54,7 @@ function b_ms_employes_duplicatable($options)
 {
     $options = explode('|', $options);
     $block   = &b_ms_employes_show($options);
-    $tpl     = new XoopsTpl();
+    $tpl     = new \XoopsTpl();
     $tpl->assign('block', $block);
     $tpl->display('db:myservices_block_employes.tpl');
 }

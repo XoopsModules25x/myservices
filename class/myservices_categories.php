@@ -7,7 +7,7 @@
  * ****************************************************************************
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 //require XOOPS_ROOT_PATH.'/kernel/object.php';
 if (!class_exists('myservices_ORM')) {
@@ -92,7 +92,7 @@ class MyservicesMyservices_categoriesHandler extends myservices_ORM
         require_once XOOPS_ROOT_PATH . '/class/tree.php';
         $allCategories = $tblChilds = [];
         $allCategories = $this->getItems();
-        $mytree        = new XoopsObjectTree($allCategories, 'categories_id', 'categories_pid');
+        $mytree        = new \XoopsObjectTree($allCategories, 'categories_id', 'categories_pid');
         $tblChilds     = $mytree->getAllChild($categories_id);
 
         return $tblChilds;
@@ -106,9 +106,9 @@ class MyservicesMyservices_categoriesHandler extends myservices_ORM
     public function getMotherCategories()
     {
         $tblItems = [];
-        $criteria = new Criteria('categories_pid', 0, '=');
+        $criteria = new \Criteria('categories_pid', 0, '=');
         $criteria->setSort('categories_title');
-        $tblItems = $this->getObjects($criteria, true);
+        $tblItems =& $this->getObjects($criteria, true);
 
         return $tblItems;
     }
@@ -126,7 +126,7 @@ class MyservicesMyservices_categoriesHandler extends myservices_ORM
         $currentCategoryId = $currentCategory->getVar('categories_id');
         $allCategories     = [];
         $allCategories     = $this->getItems();
-        $mytree            = new XoopsObjectTree($allCategories, 'categories_id', 'categories_pid');
+        $mytree            = new \XoopsObjectTree($allCategories, 'categories_id', 'categories_pid');
 
         $tblTmp       = $tblAncestors = [];
         $tblAncestors = $mytree->getAllParent($currentCategoryId);

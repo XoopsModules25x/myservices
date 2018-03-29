@@ -17,7 +17,7 @@ require_once XOOPS_ROOT_PATH . '/header.php';
 $tblProducts = $tblProductsForDisp = $tblCategories = [];
 
 $tblCategories = $hMsCategories->getObjects(null, true);
-$criteria      = new Criteria('products_online', 1, '=');
+$criteria      = new \Criteria('products_online', 1, '=');
 $criteria->setSort('products_categories_id, products_title');
 $tblProducts = $hMsProducts->getObjects($criteria);
 foreach ($tblProducts as $product) {

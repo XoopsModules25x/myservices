@@ -7,7 +7,7 @@
  * ****************************************************************************
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 //require XOOPS_ROOT_PATH.'/kernel/object.php';
 if (!class_exists('myservices_ORM')) {
@@ -40,8 +40,8 @@ class MyservicesMyservices_employesproductsHandler extends myservices_ORM
     public function getEmployeesIdForProduct($products_id)
     {
         $peopleList = [];
-        $critere    = new Criteria('employesproducts_products_id', $products_id, '=');
-        $people     = $this->getObjects($critere, true, true, 'employesproducts_employes_id');
+        $critere    = new \Criteria('employesproducts_products_id', $products_id, '=');
+        $people     =& $this->getObjects($critere, true, true, 'employesproducts_employes_id');
         foreach ($people as $person) {
             $peopleList[] = $person->getVar('employesproducts_employes_id');
         }
@@ -58,8 +58,8 @@ class MyservicesMyservices_employesproductsHandler extends myservices_ORM
     public function getProductsFromEployee($employesproducts_employes_id)
     {
         $return   = $tmp = [];
-        $criteria = new Criteria('employesproducts_employes_id', $employesproducts_employes_id, '=');
-        $tmp      = $this->getObjects($criteria, false, true, 'employesproducts_products_id');
+        $criteria = new \Criteria('employesproducts_employes_id', $employesproducts_employes_id, '=');
+        $tmp      =& $this->getObjects($criteria, false, true, 'employesproducts_products_id');
         if (count($tmp) > 0) {
             foreach ($tmp as $item) {
                 $return[] = $item->getVar('employesproducts_products_id');

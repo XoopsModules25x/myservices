@@ -7,7 +7,7 @@
  * ****************************************************************************
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 /**
  * Liste des catégories
@@ -18,7 +18,7 @@ function b_ms_detcategories_show()
     require_once XOOPS_ROOT_PATH . '/class/template.php';
     $block = [];
 
-    $myTpl = new XoopsTpl();
+    $myTpl = new \XoopsTpl();
     // Préférences du module
     $block['blockColumnsCount'] = myservices_utils::getModuleOption('columnscount');
 
@@ -28,7 +28,7 @@ function b_ms_detcategories_show()
 
     // Recherche des données
     $categories = $datas = [];
-    $criteria   = new Criteria('categories_pid', 0, '=');
+    $criteria   = new \Criteria('categories_pid', 0, '=');
     $criteria->setSort('categories_title');
     $categories = $hMsCategories->getObjects($criteria);
     foreach ($categories as $category) {
@@ -50,7 +50,7 @@ function b_ms_detcategories_duplicatable($options)
 {
     $options = explode('|', $options);
     $block   = &b_ms_detcategories_show($options);
-    $tpl     = new XoopsTpl();
+    $tpl     = new \XoopsTpl();
     $tpl->assign('block', $block);
     $tpl->display('db:myservices_block_detcategories.tpl');
 }

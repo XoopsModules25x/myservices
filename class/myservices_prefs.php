@@ -7,7 +7,7 @@
  * ****************************************************************************
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 /**
  * Classe chargée de gérer les dates de fermeture habituelles du magasin
@@ -65,7 +65,7 @@ class myservices_prefs extends myservices_Object
             $fin1   = 'prefs_j' . $i . 't1fin';
             $debut2 = 'prefs_j' . $i . 't2debut';
             $fin2   = 'prefs_j' . $i . 't2fin';
-            if ('00:00:00' === $this->getVar($debut1, 'e') && '00:00:00' === $this->getVar($fin1, 'e') && '00:00:00' === $this->getVar($debut2, 'e') && '00:00:00' == $this->getVar($fin2, 'e')) {
+            if ('00:00:00' === $this->getVar($debut1, 'e') && '00:00:00' === $this->getVar($fin1, 'e') && '00:00:00' === $this->getVar($debut2, 'e') && '00:00:00' === $this->getVar($fin2, 'e')) {
                 $ret[] = $i;
             }
         }
@@ -191,9 +191,9 @@ class MyservicesMyservices_prefsHandler extends myservices_ORM
     public function getPreference()
     {
         $items    = [];
-        $criteria = new Criteria('prefs_id', 0, '<>');
+        $criteria = new \Criteria('prefs_id', 0, '<>');
 
-        $items = $this->getObjects($criteria);
+        $items =& $this->getObjects($criteria);
         if (0 == count($items)) {
             $items[0] = $this->create(true);
             $this->forceCacheClean();

@@ -174,7 +174,7 @@ class ActiveCalendar
             $this->timetoday = $this->mkActiveTime($h, $m, $s, $mo, $d, $y) + (3600 * ($GMTDiff + $is_dst));
         }
         $this->unixtime = $this->mkActiveTime($h, $m, $s, $month, $day, $year);
-        if ($this->unixtime == -1 || !$year) {
+        if (-1 == $this->unixtime || !$year) {
             $this->unixtime = $this->timetoday;
         }
         $this->daytoday   = $this->mkActiveDate('j');
@@ -533,7 +533,7 @@ class ActiveCalendar
         $curyear = $this->actyear;
         $out     = "<tr>\n";
         for ($x = 1; $x <= 12; ++$x) {
-            ActiveCalendar::__construct($curyear, $stmonth, false, $this->GMTDiff);
+            self::__construct($curyear, $stmonth, false, $this->GMTDiff);
             $out .= "<td valign=\"top\">\n" . $this->showMonth() . "</td>\n";
             if ($x == $TrMaker && $x < 12) {
                 $out     .= '</tr><tr>';

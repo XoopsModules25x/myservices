@@ -455,7 +455,7 @@ class Cache_Lite
         if ($this->_memoryCaching) {
             if (isset($this->_memoryCachingArray[$this->_file])) {
                 unset($this->_memoryCachingArray[$this->_file]);
-                $this->_memoryCachingCounter = $this->_memoryCachingCounter - 1;
+                --$this->_memoryCachingCounter;
             }
             if ($this->_onlyMemoryCaching) {
                 return true;
@@ -645,7 +645,7 @@ class Cache_Lite
             foreach ($this->_memoryCachingArray as $key => $v) {
                 if (false !== strpos($key, $motif)) {
                     unset($this->_memoryCachingArray[$key]);
-                    $this->_memoryCachingCounter = $this->_memoryCachingCounter - 1;
+                    --$this->_memoryCachingCounter;
                 }
             }
             if ($this->_onlyMemoryCaching) {
@@ -657,8 +657,8 @@ class Cache_Lite
         }
         $result = true;
         while (false !== ($file = readdir($dh))) {
-            if (('.' != $file) && ('..' != $file)) {
-                if ('cache_' == substr($file, 0, 6)) {
+            if (('.' !== $file) && ('..' !== $file)) {
+                if ('cache_' === substr($file, 0, 6)) {
                     $file2 = $dir . $file;
                     if (is_file($file2)) {
                         switch (substr($mode, 0, 9)) {
@@ -728,7 +728,7 @@ class Cache_Lite
             $key = array_keys($this->_memoryCachingArray)[0];
             unset($this->_memoryCachingArray[$key]);
         } else {
-            $this->_memoryCachingCounter = $this->_memoryCachingCounter + 1;
+            ++$this->_memoryCachingCounter;
         }
     }
 

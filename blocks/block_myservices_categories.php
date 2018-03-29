@@ -7,7 +7,7 @@
  * ****************************************************************************
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 /**
  * List of the categories
@@ -51,7 +51,7 @@ function b_ms_categories_duplicatable($options)
 {
     $options = explode('|', $options);
     $block   = &b_ms_categories_show($options);
-    $tpl     = new XoopsTpl();
+    $tpl     = new \XoopsTpl();
     $tpl->assign('block', $block);
     $tpl->display('db:myservices_block_categories.tpl');
 }

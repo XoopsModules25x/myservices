@@ -66,7 +66,7 @@ function CheckoutForm($message = false)
     $notFound = true;
     if ($uid > 0) {    // Si c'est un utlisateur enregistré, on recherche dans les anciennes commandes pour pré remplir les champs
         $tblCommand  = [];
-        $critereUser = new Criteria('orders_uid', $uid, '=');
+        $critereUser = new \Criteria('orders_uid', $uid, '=');
         $critereUser->setSort('orders_date');
         $critereUser->setOrder('DESC');    // Pour récupérer sa dernière commande
         $critereUser->setLimit(1);
@@ -84,25 +84,25 @@ function CheckoutForm($message = false)
 
     $currency = myservices_currency::getInstance();
 
-    $sform = new XoopsThemeForm(_MYSERVICES_PLEASE_ENTER, 'informationfrm', MYSERVICES_URL . 'checkout.php', 'post', true);
-    $sform->addElement(new XoopsFormHidden('op', 'paypal'));
-    $sform->addElement(new XoopsFormLabel(_MYSERVICES_TOTAL, $currency->amountForDisplay($commandAmountTTC, 'l')));
-    $sform->addElement(new XoopsFormText(_MYSERVICES_LASTNAME, 'orders_lastname', 50, 255, $commande->getVar('orders_lastname')), true);
-    $sform->addElement(new XoopsFormText(_MYSERVICES_FIRSTNAME, 'orders_firstname', 50, 255, $commande->getVar('orders_firstname')), false);
-    $sform->addElement(new XoopsFormTextArea(_MYSERVICES_STREET, 'orders_address', $commande->getVar('orders_address'), 3, 50), true);
-    $sform->addElement(new XoopsFormText(_MYSERVICES_CP, 'orders_zip', 5, 30, $commande->getVar('orders_zip')), true);
-    $sform->addElement(new XoopsFormText(_MYSERVICES_CITY, 'orders_town', 40, 255, $commande->getVar('orders_town')), true);
-    $sform->addElement(new XoopsFormSelectCountry(_MYSERVICES_COUNTRY, 'orders_country', $commande->getVar('orders_country')), true);
-    $sform->addElement(new XoopsFormText(_MYSERVICES_PHONE, 'orders_telephone', 15, 50, $commande->getVar('orders_telephone')), true);
-    $sform->addElement(new XoopsFormText(_MYSERVICES_EMAIL, 'orders_email', 50, 255, $commande->getVar('orders_email')), true);
+    $sform = new \XoopsThemeForm(_MYSERVICES_PLEASE_ENTER, 'informationfrm', MYSERVICES_URL . 'checkout.php', 'post', true);
+    $sform->addElement(new \XoopsFormHidden('op', 'paypal'));
+    $sform->addElement(new \XoopsFormLabel(_MYSERVICES_TOTAL, $currency->amountForDisplay($commandAmountTTC, 'l')));
+    $sform->addElement(new \XoopsFormText(_MYSERVICES_LASTNAME, 'orders_lastname', 50, 255, $commande->getVar('orders_lastname')), true);
+    $sform->addElement(new \XoopsFormText(_MYSERVICES_FIRSTNAME, 'orders_firstname', 50, 255, $commande->getVar('orders_firstname')), false);
+    $sform->addElement(new \XoopsFormTextArea(_MYSERVICES_STREET, 'orders_address', $commande->getVar('orders_address'), 3, 50), true);
+    $sform->addElement(new \XoopsFormText(_MYSERVICES_CP, 'orders_zip', 5, 30, $commande->getVar('orders_zip')), true);
+    $sform->addElement(new \XoopsFormText(_MYSERVICES_CITY, 'orders_town', 40, 255, $commande->getVar('orders_town')), true);
+    $sform->addElement(new \XoopsFormSelectCountry(_MYSERVICES_COUNTRY, 'orders_country', $commande->getVar('orders_country')), true);
+    $sform->addElement(new \XoopsFormText(_MYSERVICES_PHONE, 'orders_telephone', 15, 50, $commande->getVar('orders_telephone')), true);
+    $sform->addElement(new \XoopsFormText(_MYSERVICES_EMAIL, 'orders_email', 50, 255, $commande->getVar('orders_email')), true);
 
     $label          = "<a href=\"javascript:openWithSelfMain('" . MYSERVICES_URL . "cgv.php','',640,480);\">" . _MYSERVICES_CGV_ACCEPT . '</a>';
-    $yesCGVCheckbox = new XoopsFormCheckBox(_MYSERVICES_CGV, 'cgv');
+    $yesCGVCheckbox = new \XoopsFormCheckBox(_MYSERVICES_CGV, 'cgv');
     $yesCGVCheckbox->addOption(1, $label);
     $sform->addElement($yesCGVCheckbox, true);
 
-    $button_tray = new XoopsFormElementTray('', '');
-    $submit_btn  = new XoopsFormButton('', 'btnsubmit', _MYSERVICES_SAVE, 'submit');    // post
+    $button_tray = new \XoopsFormElementTray('', '');
+    $submit_btn  = new \XoopsFormButton('', 'btnsubmit', _MYSERVICES_SAVE, 'submit');    // post
     $button_tray->addElement($submit_btn);
     $sform->addElement($button_tray);
     // Marquage des champs obligatoires
@@ -195,25 +195,25 @@ switch ($op) {
         $payURL = $myservicesPaypal->getURL();
 
         // Présentation finale avec panier en variables cachées ******************************
-        $sform    = new XoopsThemeForm(_MYSERVICES_PAY_PAYPAL, 'payform', $payURL, 'post', true);
+        $sform    = new \XoopsThemeForm(_MYSERVICES_PAY_PAYPAL, 'payform', $payURL, 'post', true);
         $elements = [];
         $elements = $myservicesPaypal->getFormContent($commande->getVar('orders_id'), $commandAmountTTC, $commande->getVar('orders_email'));
         foreach ($elements as $key => $value) {
-            $sform->addElement(new XoopsFormHidden($key, $value));
+            $sform->addElement(new \XoopsFormHidden($key, $value));
         }
 
-        $sform->addElement(new XoopsFormLabel(_MYSERVICES_TOTAL_TTC, $currency->amountForDisplay($commandAmountTTC, 'l')));
-        $sform->addElement(new XoopsFormLabel(_MYSERVICES_LASTNAME, $commande->getVar('orders_lastname')));
-        $sform->addElement(new XoopsFormLabel(_MYSERVICES_FIRSTNAME, $commande->getVar('orders_firstname')));
-        $sform->addElement(new XoopsFormLabel(_MYSERVICES_STREET, $commande->getVar('orders_address')));
-        $sform->addElement(new XoopsFormLabel(_MYSERVICES_CP, $commande->getVar('orders_zip')));
-        $sform->addElement(new XoopsFormLabel(_MYSERVICES_CITY, $commande->getVar('orders_town')));
-        $sform->addElement(new XoopsFormLabel(_MYSERVICES_COUNTRY, $tbl_country[$commande->getVar('orders_country')]));
-        $sform->addElement(new XoopsFormLabel(_MYSERVICES_PHONE, $commande->getVar('orders_telephone')));
-        $sform->addElement(new XoopsFormLabel(_MYSERVICES_EMAIL, $commande->getVar('orders_email')));
+        $sform->addElement(new \XoopsFormLabel(_MYSERVICES_TOTAL_TTC, $currency->amountForDisplay($commandAmountTTC, 'l')));
+        $sform->addElement(new \XoopsFormLabel(_MYSERVICES_LASTNAME, $commande->getVar('orders_lastname')));
+        $sform->addElement(new \XoopsFormLabel(_MYSERVICES_FIRSTNAME, $commande->getVar('orders_firstname')));
+        $sform->addElement(new \XoopsFormLabel(_MYSERVICES_STREET, $commande->getVar('orders_address')));
+        $sform->addElement(new \XoopsFormLabel(_MYSERVICES_CP, $commande->getVar('orders_zip')));
+        $sform->addElement(new \XoopsFormLabel(_MYSERVICES_CITY, $commande->getVar('orders_town')));
+        $sform->addElement(new \XoopsFormLabel(_MYSERVICES_COUNTRY, $tbl_country[$commande->getVar('orders_country')]));
+        $sform->addElement(new \XoopsFormLabel(_MYSERVICES_PHONE, $commande->getVar('orders_telephone')));
+        $sform->addElement(new \XoopsFormLabel(_MYSERVICES_EMAIL, $commande->getVar('orders_email')));
 
-        $button_tray = new XoopsFormElementTray('', '');
-        $submit_btn  = new XoopsFormButton('', 'btnsubmit', _MYSERVICES_PAY_PAYPAL, 'submit');    // post
+        $button_tray = new \XoopsFormElementTray('', '');
+        $submit_btn  = new \XoopsFormButton('', 'btnsubmit', _MYSERVICES_PAY_PAYPAL, 'submit');    // post
         $button_tray->addElement($submit_btn);
         $sform->addElement($button_tray);
         $xoopsTpl->assign('form', $sform->render());

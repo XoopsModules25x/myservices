@@ -7,7 +7,7 @@
  * ****************************************************************************
  */
 
-defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 //require XOOPS_ROOT_PATH.'/kernel/object.php';
 if (!class_exists('myservices_ORM')) {
@@ -75,7 +75,7 @@ class myservices_products extends myservices_Object
             }
         } else {
             $tblVATs = [];
-            $tblVATs = $hMsVat->getObjects(new Criteria('vat_id', $this->getVar('products_vat_id'), '='));
+            $tblVATs = $hMsVat->getObjects(new \Criteria('vat_id', $this->getVar('products_vat_id'), '='));
             if (count($tblVATs) > 0) {
                 $vat = $tblVATs[0];
             }
@@ -115,7 +115,7 @@ class myservices_products extends myservices_Object
             }
         } else {
             $tblVATs = [];
-            $tblVATs = $hMsVat->getObjects(new Criteria('vat_id', $this->getVar('products_vat_id'), '='));
+            $tblVATs = $hMsVat->getObjects(new \Criteria('vat_id', $this->getVar('products_vat_id'), '='));
             if (count($tblVATs) > 0) {
                 $vat = $tblVATs[0];
             }
@@ -204,7 +204,7 @@ class MyservicesMyservices_productsHandler extends myservices_ORM
             if (!$result) {
                 return $ret;
             }
-            while ($myrow = $this->db->fetchArray($result)) {
+            while (false !== ($myrow = $this->db->fetchArray($result))) {
                 $obj = $this->create(false);
                 $obj->assignVars($myrow);
                 $ret[$myrow['products_categories_id']][] =& $obj;
@@ -226,9 +226,9 @@ class MyservicesMyservices_productsHandler extends myservices_ORM
      */
     public function getProductsCountFromCategory($categoryId)
     {
-        $criteria = new CriteriaCompo();
-        $criteria->add(new Criteria('products_categories_id', $categoryId, '='));
-        $criteria->add(new Criteria('products_online', 1, '='));
+        $criteria = new \CriteriaCompo();
+        $criteria->add(new \Criteria('products_categories_id', $categoryId, '='));
+        $criteria->add(new \Criteria('products_online', 1, '='));
 
         return $this->getCount($criteria);
     }
@@ -244,9 +244,9 @@ class MyservicesMyservices_productsHandler extends myservices_ORM
      */
     public function getProductsFromCategory($categoryId, $start = 0, $limit = 0, $sort = 'products_title')
     {
-        $criteria = new CriteriaCompo();
-        $criteria->add(new Criteria('products_categories_id', $categoryId, '='));
-        $criteria->add(new Criteria('products_online', 1, '='));
+        $criteria = new \CriteriaCompo();
+        $criteria->add(new \Criteria('products_categories_id', $categoryId, '='));
+        $criteria->add(new \Criteria('products_online', 1, '='));
         $criteria->setStart($start);
         $criteria->setLimit($limit);
         $criteria->setSort($sort);
@@ -264,10 +264,10 @@ class MyservicesMyservices_productsHandler extends myservices_ORM
     {
         $ret = [];
         if (is_array($products_id)) {
-            $criteria = new CriteriaCompo();
-            $criteria->add(new Criteria('products_online', 1, '='));
-            $criteria->add(new Criteria('products_id', '(' . implode(',', $products_id) . ')', 'IN'));
-            $ret = $this->getObjects($criteria);
+            $criteria = new \CriteriaCompo();
+            $criteria->add(new \Criteria('products_online', 1, '='));
+            $criteria->add(new \Criteria('products_id', '(' . implode(',', $products_id) . ')', 'IN'));
+            $ret =& $this->getObjects($criteria);
         }
 
         return $ret;

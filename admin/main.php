@@ -7,6 +7,8 @@
  * ****************************************************************************
  */
 
+use XoopsModules\Myservices;
+
 require_once __DIR__ . '/admin_header.php';
 require_once __DIR__ . '/../../../include/cp_header.php';
 require_once __DIR__ . '/../include/common.php';
@@ -47,16 +49,16 @@ function myservices_upload($indice)
             $destname       = myservices_utils::createUploadName($dstpath, $fldname, true);
             $permittedtypes = explode("\n", str_replace("\r", '', myservices_utils::getModuleOption('mimetypes')));
             array_walk($permittedtypes, 'trim');
-            $uploader = new XoopsMediaUploader($dstpath, $permittedtypes, myservices_utils::getModuleOption('maxuploadsize'));
+            $uploader = new \XoopsMediaUploader($dstpath, $permittedtypes, myservices_utils::getModuleOption('maxuploadsize'));
             $uploader->setTargetFileName($destname);
             if ($uploader->fetchMedia($_POST['xoops_upload_file'][$indice])) {
                 if ($uploader->upload()) {
                     return true;
                 } else {
-                    echo _AM_MYSHOP_ERROR_3 . htmlentities($uploader->getErrors());
+                    echo _AM_MYSHOP_ERROR_3 . htmlentities($uploader->getErrors(), ENT_QUOTES | ENT_HTML5);
                 }
             } else {
-                echo htmlentities($uploader->getErrors());
+                echo htmlentities($uploader->getErrors(), ENT_QUOTES | ENT_HTML5);
             }
         }
     }
@@ -75,7 +77,7 @@ function myservices_upload($indice)
  */
 function OneTimeSelect($libelle, $de, $jour, $indice, $debutfin)
 {
-    $per_tray = new XoopsFormElementTray('', '');
+    $per_tray = new \XoopsFormElementTray('', '');
     $debfin   = 'debut';
     if (2 == $debutfin) {
         $debfin = 'fin';
@@ -83,12 +85,12 @@ function OneTimeSelect($libelle, $de, $jour, $indice, $debutfin)
     $nom1 = sprintf('j%dt%d%s1', $jour + 1, $indice, $debfin);
     $nom2 = sprintf('j%dt%d%s2', $jour + 1, $indice, $debfin);
 
-    $heures1 = new XoopsFormSelect($libelle, $nom1, (int)substr($de, 0, 2));        // Ajout des heures
+    $heures1 = new \XoopsFormSelect($libelle, $nom1, (int)substr($de, 0, 2));        // Ajout des heures
     for ($i = 0; $i <= 23; ++$i) {
         $heures1->addOption($i, $i);
     }
     $per_tray->addElement($heures1);
-    $minutes1 = new XoopsFormSelect(' : ', $nom2, (int)substr($de, 3, 2));        // Ajout des minutes
+    $minutes1 = new \XoopsFormSelect(' : ', $nom2, (int)substr($de, 3, 2));        // Ajout des minutes
     for ($i = 0; $i <= 60; ++$i) {
         $minutes1->addOption($i, $i);
     }
@@ -109,20 +111,20 @@ function OneTimeSelect($libelle, $de, $jour, $indice, $debutfin)
 function OneDay($jour, $de1, $a1, $de2, $a2, &$sform)
 {
     global $jours;
-    $day_tray = new XoopsFormElementTray($jours[$jour], '');        // The full tray of day
+    $day_tray = new \XoopsFormElementTray($jours[$jour], '');        // The full tray of day
     // First Period
-    $per1_tray = new XoopsFormElementTray('', '');        // The tray of a full period
+    $per1_tray = new \XoopsFormElementTray('', '');        // The tray of a full period
     $per1_tray->addElement(OneTimeSelect(_AM_MYSERVICES_FROM, $de1, $jour, 1, 1));
     $per1_tray->addElement(OneTimeSelect(_AM_MYSERVICES_TO, $a1, $jour, 1, 2));
     $day_tray->addElement($per1_tray);
-    $day_tray->addElement(new XoopsFormLabel('', '<br>'));
+    $day_tray->addElement(new \XoopsFormLabel('', '<br>'));
 
     // Second Period
-    $per2_tray = new XoopsFormElementTray('', '');        // The tray of a full period
+    $per2_tray = new \XoopsFormElementTray('', '');        // The tray of a full period
     $per2_tray->addElement(OneTimeSelect(_AM_MYSERVICES_FROM, $de2, $jour, 2, 1));
     $per2_tray->addElement(OneTimeSelect(_AM_MYSERVICES_TO, $a2, $jour, 2, 2));
     $day_tray->addElement($per2_tray);
-    $day_tray->addElement(new XoopsFormLabel('', '<br>'));
+    $day_tray->addElement(new \XoopsFormLabel('', '<br>'));
     $sform->addElement($day_tray);
 }
 
@@ -141,17 +143,11 @@ $conf_msg            = myservices_utils::javascriptLinkConfirm(_AM_MYSERVICES_CO
 $myservices_Currency = myservices_currency::getInstance();
 
 global $xoopsConfig;
-if (file_exists(MYSERVICES_PATH . 'language/' . $xoopsConfig['language'] . '/modinfo.php')) {
-    require_once MYSERVICES_PATH . 'language/' . $xoopsConfig['language'] . '/modinfo.php';
-} else {
-    require_once MYSERVICES_PATH . 'language/english/modinfo.php';
-}
+/** @var Myservices\Helper $helper */
+$helper = Myservices\Helper::getInstance();
+$helper->loadLanguage('modinfo');
+$helper->loadLanguage('main');
 
-if (file_exists(MYSERVICES_PATH . 'language/' . $xoopsConfig['language'] . '/main.php')) {
-    require_once MYSERVICES_PATH . 'language/' . $xoopsConfig['language'] . '/main.php';
-} else {
-    require_once MYSERVICES_PATH . 'language/english/main.php';
-}
 
 // ******************************************************************************************************************************************
 // **** Main ********************************************************************************************************************************
@@ -225,7 +221,7 @@ switch ($op) {
         }
         $opRedirect = 'vat';
         // On v�rifie que cette TVA n'est pas utilis�e par un produit
-        $criteria = new Criteria('products_vat_id', $id, '=');
+        $criteria = new \Criteria('products_vat_id', $id, '=');
         $cnt      = $hMsProducts->getCount($criteria);
         if (0 == $cnt) {
             $item = null;
@@ -273,13 +269,13 @@ switch ($op) {
             $label_submit = _AM_MYSERVICES_ADD;
             $edit         = false;
         }
-        $sform = new XoopsThemeForm($title, 'frmadd' . $object, $baseurl);
-        $sform->addElement(new XoopsFormHidden('op', 'saveedit' . $object));
-        $sform->addElement(new XoopsFormHidden('vat_id', $item->getVar('vat_id')));
-        $sform->addElement(new XoopsFormText(_MYSERVICES_RATE, 'vat_rate', 10, 15, $item->getVar('vat_rate', 'e')), true);
+        $sform = new \XoopsThemeForm($title, 'frmadd' . $object, $baseurl);
+        $sform->addElement(new \XoopsFormHidden('op', 'saveedit' . $object));
+        $sform->addElement(new \XoopsFormHidden('vat_id', $item->getVar('vat_id')));
+        $sform->addElement(new \XoopsFormText(_MYSERVICES_RATE, 'vat_rate', 10, 15, $item->getVar('vat_rate', 'e')), true);
 
-        $button_tray = new XoopsFormElementTray('', '');
-        $submit_btn  = new XoopsFormButton('', 'post', $label_submit, 'submit');
+        $button_tray = new \XoopsFormElementTray('', '');
+        $submit_btn  = new \XoopsFormButton('', 'post', $label_submit, 'submit');
         $button_tray->addElement($submit_btn);
         $sform->addElement($button_tray);
         $sform = myservices_utils::formMarkRequiredFields($sform);
@@ -303,7 +299,7 @@ switch ($op) {
         $itemsCount = 0;
         $tblItems   = [];
         $itemsCount = $hMsEmployes->getCount();    // Recherche du nombre total d'�l�ments
-        $pagenav    = new XoopsPageNav($itemsCount, $limit, $start, 'start', 'op=' . $objet);
+        $pagenav    = new \XoopsPageNav($itemsCount, $limit, $start, 'start', 'op=' . $objet);
 
         $tblItems = $hMsEmployes->getItems($start, $limit);
         $class    = '';
@@ -396,7 +392,7 @@ switch ($op) {
         $opRedirect = 'employes';
 
         //  Check that the services of that employee are not used in a command
-        $criteria = new Criteria('caddy_employes_id', $id, '=');
+        $criteria = new \Criteria('caddy_employes_id', $id, '=');
         $cnt      = $hMsCaddy->getCount($criteria);
         if (0 == $cnt) {
             $item = null;
@@ -445,14 +441,14 @@ switch ($op) {
             $edit         = false;
         }
 
-        $sform = new XoopsThemeForm($title, 'frmm' . $objet, $baseurl);
+        $sform = new \XoopsThemeForm($title, 'frmm' . $objet, $baseurl);
         $sform->setExtra('enctype="multipart/form-data"');
-        $sform->addElement(new XoopsFormHidden('op', 'saveedit' . $objet));
-        $sform->addElement(new XoopsFormHidden('employes_id', $item->getVar('employes_id')));
-        $sform->addElement(new XoopsFormText(_MYSERVICES_LASTNAME, 'employes_lastname', 50, 50, $item->getVar('employes_lastname', 'e')), true);
-        $sform->addElement(new XoopsFormText(_MYSERVICES_FIRSTNAME, 'employes_firstname', 50, 50, $item->getVar('employes_firstname', 'e')), true);
-        $sform->addElement(new XoopsFormText(_MYSERVICES_EMAIL, 'employes_email', 50, 150, $item->getVar('employes_email', 'e')), false);
-        $sform->addElement(new XoopsFormRadioYN(_MYSERVICES_ISACTIVE, 'employes_isactive', $item->getVar('employes_isactive')), true);
+        $sform->addElement(new \XoopsFormHidden('op', 'saveedit' . $objet));
+        $sform->addElement(new \XoopsFormHidden('employes_id', $item->getVar('employes_id')));
+        $sform->addElement(new \XoopsFormText(_MYSERVICES_LASTNAME, 'employes_lastname', 50, 50, $item->getVar('employes_lastname', 'e')), true);
+        $sform->addElement(new \XoopsFormText(_MYSERVICES_FIRSTNAME, 'employes_firstname', 50, 50, $item->getVar('employes_firstname', 'e')), true);
+        $sform->addElement(new \XoopsFormText(_MYSERVICES_EMAIL, 'employes_email', 50, 150, $item->getVar('employes_email', 'e')), false);
+        $sform->addElement(new \XoopsFormRadioYN(_MYSERVICES_ISACTIVE, 'employes_isactive', $item->getVar('employes_isactive')), true);
         $editor = myservices_utils::getWysiwygForm(_MYSERVICES_BIO, 'employes_bio', $item->getVar('employes_bio', 'e'), 15, 60, 'bio_hidden');
         if ($editor) {
             $sform->addElement($editor, false);
@@ -460,19 +456,19 @@ switch ($op) {
 
         for ($i = 1; $i <= 5; ++$i) {
             if ($op == 'edit' . $objet && '' != trim($item->getVar('employes_photo' . $i)) && file_exists(XOOPS_UPLOAD_PATH . '/' . trim($item->getVar('employes_photo' . $i)))) {
-                $pictureTray = new XoopsFormElementTray(_AM_MYSERVICES_CURRENT_PICTURE, '<br>');
-                $pictureTray->addElement(new XoopsFormLabel('', "<img src='" . XOOPS_UPLOAD_URL . '/' . $item->getVar('employes_photo' . $i) . "' alt='' border='0'>"));
-                $deleteCheckbox = new XoopsFormCheckBox('', 'delpicture' . $i);
+                $pictureTray = new \XoopsFormElementTray(_AM_MYSERVICES_CURRENT_PICTURE, '<br>');
+                $pictureTray->addElement(new \XoopsFormLabel('', "<img src='" . XOOPS_UPLOAD_URL . '/' . $item->getVar('employes_photo' . $i) . "' alt='' border='0'>"));
+                $deleteCheckbox = new \XoopsFormCheckBox('', 'delpicture' . $i);
                 $deleteCheckbox->addOption(1, _DELETE);
                 $pictureTray->addElement($deleteCheckbox);
                 $sform->addElement($pictureTray);
                 unset($pictureTray, $deleteCheckbox);
             }
-            $sform->addElement(new XoopsFormFile(_AM_MYSERVICES_PICTURE, 'attachedfile' . $i, myservices_utils::getModuleOption('maxuploadsize')), false);
+            $sform->addElement(new \XoopsFormFile(_AM_MYSERVICES_PICTURE, 'attachedfile' . $i, myservices_utils::getModuleOption('maxuploadsize')), false);
         }
 
-        $button_tray = new XoopsFormElementTray('', '');
-        $submit_btn  = new XoopsFormButton('', 'post', $label_submit, 'submit');
+        $button_tray = new \XoopsFormElementTray('', '');
+        $submit_btn  = new \XoopsFormButton('', 'post', $label_submit, 'submit');
         $button_tray->addElement($submit_btn);
         $sform->addElement($button_tray);
 
@@ -501,7 +497,7 @@ switch ($op) {
         myservices_utils::htitle(_MI_MYSERVICES_ADMENU4, 4);
 
         $tblItems    = $hMsCategories->getItems();
-        $mytree      = new XoopsObjectTree($tblItems, 'categories_id', 'categories_pid');
+        $mytree      = new \XoopsObjectTree($tblItems, 'categories_id', 'categories_pid');
         $selectCateg = $mytree->makeSelBox('id', 'categories_title');
 
         echo "<div class='even'><form method='post' name='quickaccess' id='quickaccess' action='$baseurl' >"
@@ -548,26 +544,26 @@ switch ($op) {
         }
         $tblCategories = [];
         $tblCategories = $hMsCategories->getItems();
-        $mytree        = new XoopsObjectTree($tblCategories, 'categories_id', 'categories_pid');
+        $mytree        = new \XoopsObjectTree($tblCategories, 'categories_id', 'categories_pid');
         $selectCateg   = $mytree->makeSelBox('categories_pid', 'categories_title', '-', $item->getVar('categories_pid'), true);
 
-        $sform = new XoopsThemeForm($title, 'frm' . $objet, $baseurl);
+        $sform = new \XoopsThemeForm($title, 'frm' . $objet, $baseurl);
         $sform->setExtra('enctype="multipart/form-data"');
-        $sform->addElement(new XoopsFormHidden('op', 'saveedit' . $objet));
-        $sform->addElement(new XoopsFormHidden('categories_id', $item->getVar('categories_id')));
-        $sform->addElement(new XoopsFormText(_AM_MYSERVICES_CATEG_TITLE, 'categories_title', 50, 255, $item->getVar('categories_title', 'e')), true);
-        $sform->addElement(new XoopsFormLabel(_AM_MYSERVICES_PARENT_CATEG, $selectCateg), true);
+        $sform->addElement(new \XoopsFormHidden('op', 'saveedit' . $objet));
+        $sform->addElement(new \XoopsFormHidden('categories_id', $item->getVar('categories_id')));
+        $sform->addElement(new \XoopsFormText(_AM_MYSERVICES_CATEG_TITLE, 'categories_title', 50, 255, $item->getVar('categories_title', 'e')), true);
+        $sform->addElement(new \XoopsFormLabel(_AM_MYSERVICES_PARENT_CATEG, $selectCateg), true);
 
         if ($op == 'edit' . $objet && '' != trim($item->getVar('categories_imgurl')) && file_exists(XOOPS_UPLOAD_PATH . '/' . trim($item->getVar('categories_imgurl')))) {
-            $pictureTray = new XoopsFormElementTray(_AM_MYSERVICES_CURRENT_PICTURE, '<br>');
-            $pictureTray->addElement(new XoopsFormLabel('', "<img src='" . XOOPS_UPLOAD_URL . '/' . $item->getVar('categories_imgurl') . "' alt='' border='0'>"));
-            $deleteCheckbox = new XoopsFormCheckBox('', 'delpicture');
+            $pictureTray = new \XoopsFormElementTray(_AM_MYSERVICES_CURRENT_PICTURE, '<br>');
+            $pictureTray->addElement(new \XoopsFormLabel('', "<img src='" . XOOPS_UPLOAD_URL . '/' . $item->getVar('categories_imgurl') . "' alt='' border='0'>"));
+            $deleteCheckbox = new \XoopsFormCheckBox('', 'delpicture');
             $deleteCheckbox->addOption(1, _DELETE);
             $pictureTray->addElement($deleteCheckbox);
             $sform->addElement($pictureTray);
             unset($pictureTray, $deleteCheckbox);
         }
-        $sform->addElement(new XoopsFormFile(_AM_MYSERVICES_PICTURE, 'attachedfile', myservices_utils::getModuleOption('maxuploadsize')), false);
+        $sform->addElement(new \XoopsFormFile(_AM_MYSERVICES_PICTURE, 'attachedfile', myservices_utils::getModuleOption('maxuploadsize')), false);
         $editor = myservices_utils::getWysiwygForm(_AM_MYSERVICES_DESCRIPTION, 'categories_description', $item->getVar('categories_description', 'e'), 15, 60, 'description_hidden');
         if ($editor) {
             $sform->addElement($editor, false);
@@ -578,8 +574,8 @@ switch ($op) {
             $sform->addElement($editor2, false);
         }
 
-        $button_tray = new XoopsFormElementTray('', '');
-        $submit_btn  = new XoopsFormButton('', 'post', $label_submit, 'submit');
+        $button_tray = new \XoopsFormElementTray('', '');
+        $submit_btn  = new \XoopsFormButton('', 'post', $label_submit, 'submit');
         $button_tray->addElement($submit_btn);
         $sform->addElement($button_tray);
 
@@ -666,7 +662,7 @@ switch ($op) {
         $lstIds        = '';
         // Search subcategories in this category
         $tblCategories = $hMsCategories->getItems();
-        $mytree        = new XoopsObjectTree($tblCategories, 'categories_id', 'categories_pid');
+        $mytree        = new \XoopsObjectTree($tblCategories, 'categories_id', 'categories_pid');
         $tblChilds     = $mytree->getAllChild($id);
         $tblChidsIds[] = $id;
         if (count($tblChilds) > 0) {
@@ -675,13 +671,13 @@ switch ($op) {
             }
         }
         $lstIds   = implode(',', $tblChidsIds);
-        $criteria = new Criteria('products_categories_id', '(' . $lstIds . ')', 'IN');
+        $criteria = new \Criteria('products_categories_id', '(' . $lstIds . ')', 'IN');
         $cnt      = $hMsProducts->getCount($criteria);
         if (0 == $cnt) {
             $item = null;
             $item = $hMsCategories->get($id);
             if (is_object($item)) {
-                $critere = new Criteria('categories_id', $id, '=');
+                $critere = new \Criteria('categories_id', $id, '=');
                 $res     = $hMsCategories->deleteAll($critere);
                 if ($res) {
                     myservices_utils::updateCache();
@@ -708,7 +704,7 @@ switch ($op) {
         // Get unique data
         $tblCategories = $hMsCategories->getItems();
 
-        $mytree       = new XoopsObjectTree($tblCategories, 'categories_id', 'categories_pid');
+        $mytree       = new \XoopsObjectTree($tblCategories, 'categories_id', 'categories_pid');
         $select_categ = $mytree->makeSelBox('id', 'categories_title');
 
         echo "<form method='post' action='$baseurl' name='frmaddd$objet' id='frmaddd$objet'><input type='hidden' name='op' id='op' value='add$objet'><input type='submit' name='btngo' id='btngo' value='" . _AM_MYSERVICES_ADD_ITEM . "'></form>";
@@ -724,11 +720,11 @@ switch ($op) {
         myservices_utils::htitle(_MI_MYSERVICES_ADMENU5, 4);
 
         $start    = isset($_GET['start']) ? (int)$_GET['start'] : 0;
-        $criteria = new CriteriaCompo();
-        $criteria->add(new Criteria('products_id', 0, '<>'));
+        $criteria = new \CriteriaCompo();
+        $criteria->add(new \Criteria('products_id', 0, '<>'));
 
         $itemsCount = $hMsProducts->getCount($criteria);    // Recherche du nombre total de produits
-        $pagenav    = new XoopsPageNav($itemsCount, $limit, $start, 'start', 'op=' . $objet);
+        $pagenav    = new \XoopsPageNav($itemsCount, $limit, $start, 'start', 'op=' . $objet);
 
         $criteria->setLimit($limit);
         $criteria->setStart($start);
@@ -827,7 +823,7 @@ switch ($op) {
         if (0 == count($tblCategories)) {
             myservices_utils::redirect(_AM_MYSERVICES_ERROR_8, $baseurl, 5);
         }
-        $mytree      = new XoopsObjectTree($tblCategories, 'categories_id', 'categories_pid');
+        $mytree      = new \XoopsObjectTree($tblCategories, 'categories_id', 'categories_pid');
         $selectCateg = $mytree->makeSelBox('products_categories_id', 'categories_title', '-', $item->getVar('products_categories_id'));
 
         // VAT
@@ -851,30 +847,30 @@ switch ($op) {
         }
         // Search for employees who provide this service
         if ($edit) {
-            $criteria            = new Criteria('employesproducts_products_id', $item->getVar('products_id'), '=');
+            $criteria            = new \Criteria('employesproducts_products_id', $item->getVar('products_id'), '=');
             $tblEmployesProducts = $hMsEmployesproducts->getObjects($criteria);
             foreach ($tblEmployesProducts as $item2) {
                 $tblEmployesProductsForm[] = $item2->getVar('employesproducts_employes_id');
             }
         }
 
-        $sform = new XoopsThemeForm($title, 'frm' . $objet, $baseurl);
+        $sform = new \XoopsThemeForm($title, 'frm' . $objet, $baseurl);
         $sform->setExtra('enctype="multipart/form-data"');
 
-        $sform->addElement(new XoopsFormHidden('op', 'saveedit' . $objet));
-        $sform->addElement(new XoopsFormHidden('products_id', $item->getVar('products_id')));
-        $sform->addElement(new XoopsFormText(_MYSERVICES_PRODUCT_TITLE, 'products_title', 50, 255, $item->getVar('products_title', 'e')), true);
+        $sform->addElement(new \XoopsFormHidden('op', 'saveedit' . $objet));
+        $sform->addElement(new \XoopsFormHidden('products_id', $item->getVar('products_id')));
+        $sform->addElement(new \XoopsFormText(_MYSERVICES_PRODUCT_TITLE, 'products_title', 50, 255, $item->getVar('products_title', 'e')), true);
 
         // Category *******************************************************
-        $sform->addElement(new XoopsFormLabel(_MYSERVICES_PRODUCT_CATEGORY, $selectCateg), true);
-        $sform->addElement(new XoopsFormRadioYN(_MYSERVICES_ONLINE, 'products_online', $item->getVar('products_online')), true);
-        $sform->addElement(new XoopsFormText(_MYSERVICES_DURATION, 'products_duration', 5, 10, $item->getVar('products_duration', 'e')), true);
+        $sform->addElement(new \XoopsFormLabel(_MYSERVICES_PRODUCT_CATEGORY, $selectCateg), true);
+        $sform->addElement(new \XoopsFormRadioYN(_MYSERVICES_ONLINE, 'products_online', $item->getVar('products_online')), true);
+        $sform->addElement(new \XoopsFormText(_MYSERVICES_DURATION, 'products_duration', 5, 10, $item->getVar('products_duration', 'e')), true);
 
         // VAT *************************************************************
-        $vatSelect = new XoopsFormSelect(_MYSERVICES_PRODUCT_VAT, 'products_vat_id', $item->getVar('products_vat_id'));
+        $vatSelect = new \XoopsFormSelect(_MYSERVICES_PRODUCT_VAT, 'products_vat_id', $item->getVar('products_vat_id'));
         $vatSelect->addOptionArray($tblVat);
         $sform->addElement($vatSelect, true);
-        $sform->addElement(new XoopsFormText(_AM_MYSERVICES_PRODUCT_PRICE_HT, 'products_price', 20, 20, $item->getVar('products_price', 'e')), true);
+        $sform->addElement(new \XoopsFormText(_AM_MYSERVICES_PRODUCT_PRICE_HT, 'products_price', 20, 20, $item->getVar('products_price', 'e')), true);
         $editor = myservices_utils::getWysiwygForm(_MYSERVICES_PRODUCT_SUMMARY, 'products_summary', $item->getVar('products_summary', 'e'), 15, 60, 'summary_hidden');
         if ($editor) {
             $sform->addElement($editor, true);
@@ -885,10 +881,10 @@ switch ($op) {
             $sform->addElement($editor2, false);
         }
 
-        $sform->addElement(new XoopsFormText(_MYSERVICES_PRODUCT_QUALITY, 'products_quality_link', 50, 255, $item->getVar('products_quality_link', 'e')), false);
+        $sform->addElement(new \XoopsFormText(_MYSERVICES_PRODUCT_QUALITY, 'products_quality_link', 50, 255, $item->getVar('products_quality_link', 'e')), false);
 
         // Employees
-        $employesSelect = new XoopsFormSelect(_MYSERVICES_PRODUCT_EMPLOYES, 'employes', $tblEmployesProductsForm, 5, true);
+        $employesSelect = new \XoopsFormSelect(_MYSERVICES_PRODUCT_EMPLOYES, 'employes', $tblEmployesProductsForm, 5, true);
         $employesSelect->addOptionArray($tblEmployesForm);
         $employesSelect->setDescription(_AM_MYSERVICES_SELECT_HLP);
         $sform->addElement($employesSelect, true);
@@ -898,19 +894,19 @@ switch ($op) {
         $maxUpload = myservices_utils::getModuleOption('maxuploadsize');
         for ($i = 1; $i <= 10; ++$i) {
             if ($op == 'edit' . $objet && '' != trim($item->getVar('products_image' . $i)) && file_exists(XOOPS_UPLOAD_PATH . '/' . trim($item->getVar('products_image' . $i)))) {
-                $pictureTray = new XoopsFormElementTray(_MYSERVICES_CURRENT_PICTURE, '<br>');
-                $pictureTray->addElement(new XoopsFormLabel('', "<img src='" . XOOPS_UPLOAD_URL . '/' . $item->getVar('products_image' . $i) . "' alt='' border='0'>"), false);
-                $deleteCheckbox = new XoopsFormCheckBox('', 'delpicture' . $i);
+                $pictureTray = new \XoopsFormElementTray(_MYSERVICES_CURRENT_PICTURE, '<br>');
+                $pictureTray->addElement(new \XoopsFormLabel('', "<img src='" . XOOPS_UPLOAD_URL . '/' . $item->getVar('products_image' . $i) . "' alt='' border='0'>"), false);
+                $deleteCheckbox = new \XoopsFormCheckBox('', 'delpicture' . $i);
                 $deleteCheckbox->addOption(1, _DELETE);
                 $pictureTray->addElement($deleteCheckbox);
                 $sform->addElement($pictureTray);
                 unset($pictureTray, $deleteCheckbox);
             }
-            $sform->addElement(new XoopsFormFile(_MYSERVICES_CHANGE_PICTURE, 'attachedfile' . $i, $maxUpload), false);
+            $sform->addElement(new \XoopsFormFile(_MYSERVICES_CHANGE_PICTURE, 'attachedfile' . $i, $maxUpload), false);
         }
 
-        $button_tray = new XoopsFormElementTray('', '');
-        $submit_btn  = new XoopsFormButton('', 'post', $label_submit, 'submit');
+        $button_tray = new \XoopsFormElementTray('', '');
+        $submit_btn  = new \XoopsFormButton('', 'post', $label_submit, 'submit');
         $button_tray->addElement($submit_btn);
         $sform->addElement($button_tray);
 
@@ -963,7 +959,7 @@ switch ($op) {
             // People Management  ************************************************
             if ($edit) {
                 // Prior Suppression
-                $criteria = new Criteria('employesproducts_products_id', $id, '=');
+                $criteria = new \Criteria('employesproducts_products_id', $id, '=');
                 $hMsEmployesproducts->deleteAll($criteria);
             }
             //  Then data backup
@@ -1003,7 +999,7 @@ switch ($op) {
                 $newProductId = $newProduct->getVar('products_id');
                 // Copie des employ�s
                 $tblTmp   = [];
-                $criteria = new Criteria('employesproducts_products_id', $product->getVar('products_id'), '=');
+                $criteria = new \Criteria('employesproducts_products_id', $product->getVar('products_id'), '=');
                 $tblTmp   = $hMsEmployesproducts->getObjects($criteria);
                 foreach ($tblTmp as $productEmploye) {
                     $newProductEmploye = $productEmploye->xoopsClone();
@@ -1032,7 +1028,7 @@ switch ($op) {
         $tblTmp = $hMsCaddy->getCommandIdFromProduct($id);
         if (0 == count($tblTmp)) {    // Il n'y a pas de commande rattach�e � ce produit
             // Suppression des personnes qui assurent ce service
-            $criteria = new Criteria('employesproducts_products_id', $id, '=');
+            $criteria = new \Criteria('employesproducts_products_id', $id, '=');
             $hMsEmployesproducts->deleteAll($criteria);
             // Puis le produit
             $item = null;
@@ -1052,7 +1048,7 @@ switch ($op) {
             // myservices_adminMenu(5);
             myservices_utils::htitle(_AM_MYSERVICES_SORRY_NOREMOVE, 4);
             $tblTmp2 = [];
-            $tblTmp2 = $hMsOrders->getObjects(new Criteria('orders_id', '(' . implode(',', $tblTmp) . ')', 'IN'), true);
+            $tblTmp2 = $hMsOrders->getObjects(new \Criteria('orders_id', '(' . implode(',', $tblTmp) . ')', 'IN'), true);
             echo "<table width='100%' cellspacing='1' cellpadding='3' border='0' class='outer'>";
             $class = '';
             echo "<tr><th align='center'>" . _AM_MYSERVICES_ID . "</th><th align='center'>" . _AM_MYSERVICES_DATE . "</th><th align='center'>" . _AM_MYSERVICES_CLIENT . '</th></tr>';
@@ -1092,14 +1088,14 @@ switch ($op) {
         // Search for people on vacation
         $start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
 
-        $critere = new CriteriaCompo();
-        $critere->add(new Criteria('calendar_status', CALENDAR_STATUS_HOLIDAY, '='));
-        $critere->add(new Criteria('calendar_status', CALENDAR_STATUS_WORK, '='), 'OR');
+        $critere = new \CriteriaCompo();
+        $critere->add(new \Criteria('calendar_status', CALENDAR_STATUS_HOLIDAY, '='));
+        $critere->add(new \Criteria('calendar_status', CALENDAR_STATUS_WORK, '='), 'OR');
 
         $itemsCount = 0;
         $tblItems   = $employesList = $tblEmployes = [];
         $itemsCount = $hMsCalendar->getCount($critere);    // Total Search
-        $pagenav    = new XoopsPageNav($itemsCount, $limit, $start, 'start', 'op=' . $objet);
+        $pagenav    = new \XoopsPageNav($itemsCount, $limit, $start, 'start', 'op=' . $objet);
 
         $critere->setSort('calendar_start');
         $critere->setOrder('DESC');
@@ -1111,7 +1107,7 @@ switch ($op) {
             $employesList[] = $item->getVar('calendar_employes_id');
         }
         if (count($employesList) > 0) {
-            $critere     = new Criteria('employes_id', '(' . implode(',', $employesList) . ')', 'IN');
+            $critere     = new \Criteria('employes_id', '(' . implode(',', $employesList) . ')', 'IN');
             $tblEmployes = $hMsEmployes->getObjects($critere, true);
         }
 
@@ -1157,10 +1153,10 @@ switch ($op) {
         $itemsCount = 0;
         $tblItems   = [];
         $start2     = isset($_GET['start2']) ? (int)$_GET['start2'] : 0;
-        $critere    = new Criteria('calendar_status', CALENDAR_STATUS_CLOSED, '=');
+        $critere    = new \Criteria('calendar_status', CALENDAR_STATUS_CLOSED, '=');
         $itemsCount = $hMsCalendar->getCount($critere);    // Recherche du total
         if ($itemsCount > $limit) {
-            $pagenav = new XoopsPageNav($itemsCount, $limit, $start2, 'start2', 'op=' . $objet);
+            $pagenav = new \XoopsPageNav($itemsCount, $limit, $start2, 'start2', 'op=' . $objet);
         }
         $critere->setSort('calendar_start');
         $critere->setOrder('DESC');
@@ -1239,9 +1235,9 @@ switch ($op) {
             $edit = false;
         }
 
-        $sform = new XoopsThemeForm($title, 'frmadd' . $object, $baseurl);
-        $sform->addElement(new XoopsFormHidden('op', 'saveedit' . $object));
-        $sform->addElement(new XoopsFormHidden('calendar_id', $item->getVar('calendar_id')));
+        $sform = new \XoopsThemeForm($title, 'frmadd' . $object, $baseurl);
+        $sform->addElement(new \XoopsFormHidden('op', 'saveedit' . $object));
+        $sform->addElement(new \XoopsFormHidden('calendar_id', $item->getVar('calendar_id')));
 
         if (CALENDAR_STATUS_HOLIDAY == $status || CALENDAR_STATUS_WORK == $status) {
             // Find the list of employees
@@ -1252,31 +1248,31 @@ switch ($op) {
             foreach ($tblEmployes as $oneitem) {
                 $tblEmployesForm[$oneitem->getVar('employes_id')] = xoops_trim($oneitem->getVar('employes_lastname')) . ' ' . xoops_trim($oneitem->getVar('employes_firstname'));
             }
-            $employesSelect = new XoopsFormSelect(_MYSERVICES_EMPLOYE, 'calendar_employes_id', $item->getVar('calendar_employes_id'), 1, false);
+            $employesSelect = new \XoopsFormSelect(_MYSERVICES_EMPLOYE, 'calendar_employes_id', $item->getVar('calendar_employes_id'), 1, false);
             $employesSelect->addOptionArray($tblEmployesForm);
             $sform->addElement($employesSelect, true);
         } else {
-            $sform->addElement(new XoopsFormHidden('employes_id', -1));
+            $sform->addElement(new \XoopsFormHidden('employes_id', -1));
         }
 
         if (CALENDAR_STATUS_CLOSED != $status) {
-            $sform->addElement(new XoopsFormDateTime(_MYSERVICES_STARTING_DATE, 'calendar_start', 15, strtotime($item->getVar('calendar_start', 'e'))), true);
-            $sform->addElement(new XoopsFormDateTime(_MYSERVICES_ENDING_DATE, 'calendar_end', 15, strtotime($item->getVar('calendar_end', 'e'))), true);
+            $sform->addElement(new \XoopsFormDateTime(_MYSERVICES_STARTING_DATE, 'calendar_start', 15, strtotime($item->getVar('calendar_start', 'e'))), true);
+            $sform->addElement(new \XoopsFormDateTime(_MYSERVICES_ENDING_DATE, 'calendar_end', 15, strtotime($item->getVar('calendar_end', 'e'))), true);
         } else {
-            $sform->addElement(new XoopsFormTextDateSelect(_MYSERVICES_STARTING_DATE, 'calendar_start', 15, strtotime($item->getVar('calendar_start', 'e'))), true);
-            $sform->addElement(new XoopsFormTextDateSelect(_MYSERVICES_ENDING_DATE, 'calendar_end', 15, strtotime($item->getVar('calendar_end', 'e'))), true);
+            $sform->addElement(new \XoopsFormTextDateSelect(_MYSERVICES_STARTING_DATE, 'calendar_start', 15, strtotime($item->getVar('calendar_start', 'e'))), true);
+            $sform->addElement(new \XoopsFormTextDateSelect(_MYSERVICES_ENDING_DATE, 'calendar_end', 15, strtotime($item->getVar('calendar_end', 'e'))), true);
         }
 
         if (CALENDAR_STATUS_HOLIDAY == $status || CALENDAR_STATUS_WORK == $status) {
-            $statusRadio = new XoopsFormRadio(_AM_MYSERVICES_STATE, 'calendar_status', $item->getVar('calendar_status', 'e'));
+            $statusRadio = new \XoopsFormRadio(_AM_MYSERVICES_STATE, 'calendar_status', $item->getVar('calendar_status', 'e'));
             $statusRadio->addOptionArray([CALENDAR_STATUS_WORK => _MYSERVICES_STATE_WORK, CALENDAR_STATUS_HOLIDAY => _MYSERVICES_STATE_HOLIDAY]);
             $sform->addElement($statusRadio, true);
         } else {
-            $sform->addElement(new XoopsFormHidden('calendar_status', CALENDAR_STATUS_CLOSED));
+            $sform->addElement(new \XoopsFormHidden('calendar_status', CALENDAR_STATUS_CLOSED));
         }
 
-        $button_tray = new XoopsFormElementTray('', '');
-        $submit_btn  = new XoopsFormButton('', 'post', $label_submit, 'submit');
+        $button_tray = new \XoopsFormElementTray('', '');
+        $submit_btn  = new \XoopsFormButton('', 'post', $label_submit, 'submit');
         $button_tray->addElement($submit_btn);
         $sform->addElement($button_tray);
         $sform = myservices_utils::formMarkRequiredFields($sform);
@@ -1382,8 +1378,8 @@ switch ($op) {
                 $tblEmployesForm[$oneitem->getVar('employes_id')] = xoops_trim($oneitem->getVar('employes_lastname')) . ' ' . xoops_trim($oneitem->getVar('employes_firstname'));
             }
 
-            $criteria = new CriteriaCompo();
-            $criteria->add(new Criteria('calendar_status', CALENDAR_STATUS_HOLIDAY, '='));
+            $criteria = new \CriteriaCompo();
+            $criteria->add(new \Criteria('calendar_status', CALENDAR_STATUS_HOLIDAY, '='));
             $criteria->setSort('calendar_start');
             $criteria->setOrder('DESC');
             $tblItems = $hMsCalendar->getObjects($criteria);
@@ -1427,11 +1423,11 @@ switch ($op) {
         $tblConditions       = [MYSERVICES_ORDER_NOINFORMATION, MYSERVICES_ORDER_VALIDATED, MYSERVICES_ORDER_PENDING, MYSERVICES_ORDER_FAILED, MYSERVICES_ORDER_CANCELED, MYSERVICES_ORDER_FRAUD];
         $selected[$filter3]  = " selected='selected'";
 
-        $criteria = new CriteriaCompo();
-        $criteria->add(new Criteria('orders_id', 0, '<>'));
-        $criteria->add(new Criteria('orders_state', $tblConditions[$filter3], '='));
+        $criteria = new \CriteriaCompo();
+        $criteria->add(new \Criteria('orders_id', 0, '<>'));
+        $criteria->add(new \Criteria('orders_state', $tblConditions[$filter3], '='));
         $commandsCount = $hMsOrders->getCount($criteria);    // Recherche du nombre total de commandes
-        $pagenav       = new XoopsPageNav($commandsCount, $limit, $start, 'start', 'op=' . $objet);
+        $pagenav       = new \XoopsPageNav($commandsCount, $limit, $start, 'start', 'op=' . $objet);
         $criteria->setSort('orders_date');
         $criteria->setOrder('DESC');
         $criteria->setLimit($limit);
@@ -1526,15 +1522,15 @@ switch ($op) {
             }
             fwrite($fp, implode($s, array_merge($entete1, $entete2)) . "\n");
 
-            $criteria = new CriteriaCompo();
-            $criteria->add(new Criteria('orders_id', 0, '<>'));
-            $criteria->add(new Criteria('orders_state', $cmd_type, '='));
+            $criteria = new \CriteriaCompo();
+            $criteria->add(new \Criteria('orders_id', 0, '<>'));
+            $criteria->add(new \Criteria('orders_state', $cmd_type, '='));
             $criteria->setSort('orders_date');
             $criteria->setOrder('DESC');
             $tblCommands = $hMsOrders->getObjects($criteria);
             foreach ($tblCommands as $commande) {
                 $tblTmp = [];
-                $tblTmp = $hMsCaddy->getObjects(new Criteria('caddy_orders_id', $commande->getVar('orders_id'), '='));
+                $tblTmp = $hMsCaddy->getObjects(new \Criteria('caddy_orders_id', $commande->getVar('orders_id'), '='));
                 $ligne  = [];
                 foreach ($tblTmp as $caddy) {
                     foreach ($entete1 as $commandField) {
@@ -1567,12 +1563,12 @@ switch ($op) {
             $res = $hMsOrders->delete($item, true);
             if ($res) {
                 // Delete the associated caddy
-                $criteria = new Criteria('caddy_orders_id', $id, '=');
+                $criteria = new \Criteria('caddy_orders_id', $id, '=');
                 $tblCaddy = [];
                 $tblCaddy = $hMsCaddy->getObjects($criteria);
                 foreach ($tblCaddy as $oneCaddy) {
                     //  Delete the agenda if there is one
-                    $critereAgenda = new Criteria('calendar_id', $oneCaddy->getVar('caddy_calendar_id'), '=');
+                    $critereAgenda = new \Criteria('calendar_id', $oneCaddy->getVar('caddy_calendar_id'), '=');
                     $hMsCalendar->deleteAll($critereAgenda);
                     // Then suppression caddy
                     $hMsCaddy->delete($oneCaddy, true);
@@ -1625,8 +1621,8 @@ switch ($op) {
         require_once MYSERVICES_PATH . 'class/registryfile.php';
         $registry = new myservices_registryfile();
 
-        $sform = new XoopsThemeForm(_MI_MYSERVICES_ADMENU8, 'frmatxt', $baseurl);
-        $sform->addElement(new XoopsFormHidden('op', 'savetexts'));
+        $sform = new \XoopsThemeForm(_MI_MYSERVICES_ADMENU8, 'frmatxt', $baseurl);
+        $sform->addElement(new \XoopsFormHidden('op', 'savetexts'));
         // Cancellation
         $editor1 = myservices_utils::getWysiwygForm(_AM_MYSERVICES_CANCEL, 'text1', $registry->getfile(MYSERVICES_TEXTFILE1), 5, 60, 'hometext1_hidden');
         if ($editor1) {
@@ -1649,8 +1645,8 @@ switch ($op) {
             $sform->addElement($editor4, false);
         }
 
-        $button_tray = new XoopsFormElementTray('', '');
-        $submit_btn  = new XoopsFormButton('', 'post', _AM_MYSERVICES_MODIFY, 'submit');
+        $button_tray = new \XoopsFormElementTray('', '');
+        $submit_btn  = new \XoopsFormButton('', 'post', _AM_MYSERVICES_MODIFY, 'submit');
         $button_tray->addElement($submit_btn);
         $sform->addElement($button_tray);
         $sform = myservices_utils::formMarkRequiredFields($sform);
@@ -1679,9 +1675,9 @@ switch ($op) {
         echo _AM_MYSERVICES_TIMESHEET_HLP . '<br><br>';
         $item  = null;
         $item  = $hMsPrefs->getPreference();
-        $sform = new XoopsThemeForm(_AM_MYSERVICES_WORK_HOURS, 'frmworkinghours', $baseurl);
-        $sform->addElement(new XoopsFormHidden('op', 'saveedithours'));
-        $sform->addElement(new XoopsFormHidden('prefs_id', $item->getVar('prefs_id')));
+        $sform = new \XoopsThemeForm(_AM_MYSERVICES_WORK_HOURS, 'frmworkinghours', $baseurl);
+        $sform->addElement(new \XoopsFormHidden('op', 'saveedithours'));
+        $sform->addElement(new \XoopsFormHidden('prefs_id', $item->getVar('prefs_id')));
         require_once XOOPS_ROOT_PATH . '/language/' . $xoopsConfig['language'] . '/calendar.php';
         $jours = [_CAL_MONDAY, _CAL_TUESDAY, _CAL_WEDNESDAY, _CAL_THURSDAY, _CAL_FRIDAY, _CAL_SATURDAY, _CAL_SUNDAY];
         for ($i = 1; $i <= 7; ++$i) {
@@ -1692,8 +1688,8 @@ switch ($op) {
             $ind  = $i - 1;
             OneDay($ind, $item->getVar($nom1), $item->getVar($nom2), $item->getVar($nom3), $item->getVar($nom4), $sform);
         }
-        $button_tray = new XoopsFormElementTray('', '');
-        $submit_btn  = new XoopsFormButton('', 'post', _AM_MYSERVICES_MODIFY, 'submit');
+        $button_tray = new \XoopsFormElementTray('', '');
+        $submit_btn  = new \XoopsFormButton('', 'post', _AM_MYSERVICES_MODIFY, 'submit');
         $button_tray->addElement($submit_btn);
         $sform->addElement($button_tray);
         $sform = myservices_utils::formMarkRequiredFields($sform);
@@ -1771,11 +1767,11 @@ switch ($op) {
         $start       = isset($_GET['start']) ? (int)$_GET['start'] : 0;
         $tblCommands = [];
 
-        $criteria = new CriteriaCompo();
-        $criteria->add(new Criteria('orders_id', 0, '<>'));
-        $criteria->add(new Criteria('orders_state', MYSERVICES_ORDER_VALIDATED, '='));
+        $criteria = new \CriteriaCompo();
+        $criteria->add(new \Criteria('orders_id', 0, '<>'));
+        $criteria->add(new \Criteria('orders_state', MYSERVICES_ORDER_VALIDATED, '='));
         $commandsCount = $hMsOrders->getCount($criteria);    // Find the total number of orders
-        $pagenav       = new XoopsPageNav($commandsCount, $itemsCount, $start, 'start', 'op=dashboard');
+        $pagenav       = new \XoopsPageNav($commandsCount, $itemsCount, $start, 'start', 'op=dashboard');
         $criteria->setSort('orders_date');
         $criteria->setOrder('DESC');
         $criteria->setLimit($itemsCount);
@@ -1787,7 +1783,7 @@ switch ($op) {
         foreach ($tblCommands as $commande) {
             $class = ('even' === $class) ? 'odd' : 'even';
             // Find the elements of the order (the basket)
-            $critePanier = new Criteria('caddy_orders_id', $commande->getVar('orders_id'), '=');
+            $critePanier = new \Criteria('caddy_orders_id', $commande->getVar('orders_id'), '=');
             $tblCaddy    = [];
             $tblCaddy    = $hMsCaddy->getObjects($critePanier);
             echo "<tr class='" . $class . "'>\n";

@@ -26,7 +26,7 @@ switch ($op) {
             $employee = $hMsEmployes->get($idEmployee);
             if (is_object($employee)) {
                 require_once XOOPS_ROOT_PATH . '/class/template.php';
-                $xoopsTpl = new XoopsTpl();
+                $xoopsTpl = new \XoopsTpl();
                 $xoopsTpl->assign('currentEmployee', $employee->toArray());
                 $resultat = $xoopsTpl->fetch('db:myservices_curemployee.tpl');
             }
@@ -102,7 +102,7 @@ switch ($op) {
         $employee_id = isset($_POST['employee_id']) ? (int)$_POST['employee_id'] : 0;
         $duration    = isset($_POST['duration']) ? (int)$_POST['duration'] : 0;
         $time        = isset($_POST['time']) ? $_POST['time'] : '';
-        $xoopsTpl    = new XoopsTpl();
+        $xoopsTpl    = new \XoopsTpl();
 
         if (empty($products_id) || empty($month) || empty($year) || empty($day) || empty($employee_id) || empty($duration) || empty($time)) {
             $xoopsTpl->assign('additionalBefore', '<b>' . _MYSERVICES_ERROR14 . '</b><br>');
