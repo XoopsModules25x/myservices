@@ -159,7 +159,7 @@ switch ($op) {
         // ****************************************************************************************************************
         xoops_cp_header();
         // myservices_adminMenu(1);
-        $start  = isset($_GET['start']) ? (int)$_GET['start'] : 0;
+        $start  = \Xmf\Request::getInt('start', 0, 'GET');
         $tblVat = [];
         $form   = "<form method='post' action='$baseurl' name='frmaddvat' id='frmaddvat'><input type='hidden' name='op' id='op' value='addvat'><input type='submit' name='btngo' id='btngo' value='" . _AM_MYSERVICES_ADD_ITEM . "'></form>";
         echo $form;
@@ -188,7 +188,7 @@ switch ($op) {
     case 'saveeditvat':    // Save a VAT
         // ****************************************************************************************************************
         xoops_cp_header();
-        $id         = isset($_POST['vat_id']) ? (int)$_POST['vat_id'] : 0;
+        $id         = \Xmf\Request::getInt('vat_id', 0, 'POST');
         $opRedirect = 'vat';
         if (!empty($id)) {
             $edit = true;
@@ -215,7 +215,7 @@ switch ($op) {
     case 'deletevat':    // Delete VAT
         // ****************************************************************************************************************
         xoops_cp_header();
-        $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        $id = \Xmf\Request::getInt('id', 0, 'GET');
         if (empty($id)) {
             myservices_utils::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
         }
@@ -251,7 +251,7 @@ switch ($op) {
         $object = 'vat';
         if ($op == 'edit' . $object) {
             $title = _AM_MYSERVICES_EDIT_VAT;
-            $id    = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+            $id    = \Xmf\Request::getInt('id', 0, 'GET');
             if (empty($id)) {
                 myservices_utils::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
             }
@@ -294,7 +294,7 @@ switch ($op) {
         echo $form;
         myservices_utils::htitle(_MI_MYSERVICES_ADMENU2, 4);
 
-        $start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
+        $start = \Xmf\Request::getInt('start', 0, 'GET');
 
         $itemsCount = 0;
         $tblItems   = [];
@@ -341,7 +341,7 @@ switch ($op) {
     case 'saveeditemployes':    // Save an employee
         // ****************************************************************************************************************
         xoops_cp_header();
-        $id         = isset($_POST['employes_id']) ? (int)$_POST['employes_id'] : 0;
+        $id         = \Xmf\Request::getInt('employes_id', 0, 'POST');
         $opRedirect = 'employes';
         if (!empty($id)) {
             $edit = true;
@@ -385,7 +385,7 @@ switch ($op) {
     case 'deleteemployes':    // Delete an employee
         // ****************************************************************************************************************
         xoops_cp_header();
-        $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        $id = \Xmf\Request::getInt('id', 0, 'GET');
         if (empty($id)) {
             myservices_utils::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
         }
@@ -422,7 +422,7 @@ switch ($op) {
         $objet = 'employes';
         if ($op == 'edit' . $objet) {
             $title = _AM_MYSERVICES_EDIT_EMPL;
-            $id    = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+            $id    = \Xmf\Request::getInt('id', 0, 'GET');
             if (empty($id)) {
                 myservices_utils::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
             }
@@ -524,7 +524,7 @@ switch ($op) {
         $objet = 'categories';
         if ($op == 'edit' . $objet) {
             $title = _AM_MYSERVICES_EDIT_CATEG;
-            $id    = isset($_POST['id']) ? (int)$_POST['id'] : 0;
+            $id    = \Xmf\Request::getInt('id', 0, 'POST');
             if (empty($id)) {
                 myservices_utils::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
             }
@@ -588,7 +588,7 @@ switch ($op) {
     case 'saveeditcategories':    // Save a category
         // ****************************************************************************************************************
         xoops_cp_header();
-        $id         = isset($_POST['categories_id']) ? (int)$_POST['categories_id'] : 0;
+        $id         = \Xmf\Request::getInt('categories_id', 0, 'POST');
         $opRedirect = 'categories';
         if (!empty($id)) {
             $edit = true;
@@ -628,7 +628,7 @@ switch ($op) {
         // ****************************************************************************************************************
         xoops_cp_header();
         // myservices_adminMenu(4);
-        $id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
+        $id = \Xmf\Request::getInt('id', 0, 'POST');
         if (0 == $id) {
             myservices_utils::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
         }
@@ -646,7 +646,7 @@ switch ($op) {
         // ****************************************************************************************************************
         xoops_cp_header();
         // myservices_adminMenu(4);
-        $id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
+        $id = \Xmf\Request::getInt('id', 0, 'POST');
         if (0 == $id) {
             myservices_utils::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
         }
@@ -719,7 +719,7 @@ switch ($op) {
              . "'></form>";
         myservices_utils::htitle(_MI_MYSERVICES_ADMENU5, 4);
 
-        $start    = isset($_GET['start']) ? (int)$_GET['start'] : 0;
+        $start    = \Xmf\Request::getInt('start', 0, 'GET');
         $criteria = new \CriteriaCompo();
         $criteria->add(new \Criteria('products_id', 0, '<>'));
 
@@ -800,7 +800,7 @@ switch ($op) {
 
         if ($op == 'edit' . $objet) {
             $title = _AM_MYSERVICES_EDIT_PRODUCT;
-            $id    = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+            $id    = \Xmf\Request::getInt('id', 0, 'GET');
             if (empty($id)) {
                 myservices_utils::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
             }
@@ -919,7 +919,7 @@ switch ($op) {
     case 'saveeditproducts':    // Save the information of a product
         // ****************************************************************************************************************
         xoops_cp_header();
-        $id    = isset($_POST['products_id']) ? (int)$_POST['products_id'] : 0;
+        $id    = \Xmf\Request::getInt('products_id', 0, 'POST');
         $objet = 'products';
         if ($id > 0) {
             $edit = true;
@@ -982,7 +982,7 @@ switch ($op) {
     case 'copyproducts':    // Copy a product
         // ****************************************************************************************************************
         xoops_cp_header();
-        $id    = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        $id    = \Xmf\Request::getInt('id', 0, 'GET');
         $objet = 'products';
         if (empty($id)) {
             myservices_utils::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
@@ -1019,7 +1019,7 @@ switch ($op) {
     case 'deleteproducts':    // Delete a product
         // ****************************************************************************************************************
         xoops_cp_header();
-        $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        $id = \Xmf\Request::getInt('id', 0, 'GET');
         if (0 == $id) {
             myservices_utils::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
         }
@@ -1086,7 +1086,7 @@ switch ($op) {
         echo " <a href='$baseurl?op=csv$objet'>" . _AM_MYSERVICES_CSV_EXPORT . '</a>';
 
         // Search for people on vacation
-        $start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
+        $start = \Xmf\Request::getInt('start', 0, 'GET');
 
         $critere = new \CriteriaCompo();
         $critere->add(new \Criteria('calendar_status', CALENDAR_STATUS_HOLIDAY, '='));
@@ -1152,7 +1152,7 @@ switch ($op) {
         myservices_utils::htitle(_AM_MYSERVICES_CLOSE_SHOP, 5);
         $itemsCount = 0;
         $tblItems   = [];
-        $start2     = isset($_GET['start2']) ? (int)$_GET['start2'] : 0;
+        $start2     = \Xmf\Request::getInt('start2', 0, 'GET');
         $critere    = new \Criteria('calendar_status', CALENDAR_STATUS_CLOSED, '=');
         $itemsCount = $hMsCalendar->getCount($critere);    // Recherche du total
         if ($itemsCount > $limit) {
@@ -1211,7 +1211,7 @@ switch ($op) {
             } else {
                 $title = _AM_MYSERVICES_EDIT_CLOSE;
             }
-            $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+            $id = \Xmf\Request::getInt('id', 0, 'GET');
             if (empty($id)) {
                 myservices_utils::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
             }
@@ -1284,7 +1284,7 @@ switch ($op) {
     case 'saveeditholiday':    // Save time off / closure
         // ****************************************************************************************************************
         xoops_cp_header();
-        $id         = isset($_POST['calendar_id']) ? (int)$_POST['calendar_id'] : 0;
+        $id         = \Xmf\Request::getInt('calendar_id', 0, 'POST');
         $opRedirect = 'holiday';
         if (!empty($id)) {
             $edit = true;
@@ -1328,7 +1328,7 @@ switch ($op) {
     case 'deleteholiday':    // Save time off / closure
         // ****************************************************************************************************************
         xoops_cp_header();
-        $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        $id = \Xmf\Request::getInt('id', 0, 'GET');
         if (empty($id)) {
             myservices_utils::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
         }
@@ -1409,7 +1409,7 @@ switch ($op) {
         myservices_utils::htitle(_MI_MYSERVICES_ADMENU7, 4);
         $objet = 'orders';
 
-        $start   = isset($_GET['start']) ? (int)$_GET['start'] : 0;
+        $start   = \Xmf\Request::getInt('start', 0, 'GET');
         $filter3 = 0;
         if (isset($_POST['filter3'])) {
             $filter3 = (int)$_POST['filter3'];
@@ -1553,7 +1553,7 @@ switch ($op) {
     // ****************************************************************************************************************
     case 'deleteorders':    // Delete command
         // ****************************************************************************************************************
-        $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        $id = \Xmf\Request::getInt('id', 0, 'GET');
         if (empty($id)) {
             myservices_utils::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
         }
@@ -1585,7 +1585,7 @@ switch ($op) {
     // ****************************************************************************************************************
     case 'validateorders':    // Validation of an order
         // ****************************************************************************************************************
-        $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        $id = \Xmf\Request::getInt('id', 0, 'GET');
         if (empty($id)) {
             myservices_utils::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
         }
@@ -1700,7 +1700,7 @@ switch ($op) {
     case 'saveedithours':    // Save work schedules
         // ****************************************************************************************************************
         xoops_cp_header();
-        $id         = isset($_POST['prefs_id']) ? (int)$_POST['prefs_id'] : 0;
+        $id         = \Xmf\Request::getInt('prefs_id', 0, 'POST');
         $opRedirect = 'dashboard';
         if (!empty($id)) {
             $edit = true;
@@ -1764,7 +1764,7 @@ switch ($op) {
         myservices_utils::htitle(_AM_MYSERVICES_LAST_ORDERS, 4);
         $itemsCount = 15;    // Number of items to display
         // Display the last orders validated x
-        $start       = isset($_GET['start']) ? (int)$_GET['start'] : 0;
+        $start       = \Xmf\Request::getInt('start', 0, 'GET');
         $tblCommands = [];
 
         $criteria = new \CriteriaCompo();

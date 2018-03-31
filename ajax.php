@@ -15,12 +15,12 @@ require_once __DIR__ . '/header.php';
 error_reporting(0);
 @$xoopsLogger->activated = false;
 
-$op       = isset($_POST['op']) ? $_POST['op'] : '';
+$op       = \Xmf\Request::getString('op', '', 'POST');
 $resultat = '';
 
 switch ($op) {
     case 'employee':    // Réaffichage des informations de l'employé(e) sélectionné(e) dans la liste déroulante
-        $idEmployee = isset($_POST['idEmployee']) ? (int)$_POST['idEmployee'] : 0;
+        $idEmployee = \Xmf\Request::getInt('idEmployee', 0, 'POST');
         if ($idEmployee > 0) {
             $employee = null;
             $employee = $hMsEmployes->get($idEmployee);
@@ -34,8 +34,8 @@ switch ($op) {
         break;
 
     case 'calendar':    // Réaffichage du calendrier en fonction du mois et de l'année sélectionnés
-        $year  = isset($_POST['year']) ? (int)$_POST['year'] : 0;
-        $month = isset($_POST['month']) ? (int)$_POST['month'] : 0;
+        $year  = \Xmf\Request::getInt('year', 0, 'POST');
+        $month = \Xmf\Request::getInt('month', 0, 'POST');
         if ($year > 0 && $month > 0) {
             require_once MYSERVICES_PATH . 'class/activecalendar.php';
             require_once XOOPS_ROOT_PATH . '/language/' . $xoopsConfig['language'] . '/calendar.php';
@@ -95,13 +95,13 @@ switch ($op) {
 
     case 'availability':    // Vérifie la disponibilité de la personne pour le produit et la date sélectionnés
         require_once XOOPS_ROOT_PATH . '/class/template.php';
-        $products_id = isset($_POST['products_id']) ? (int)$_POST['products_id'] : 0;
-        $month       = isset($_POST['month']) ? (int)$_POST['month'] : 0;
-        $year        = isset($_POST['year']) ? (int)$_POST['year'] : 0;
-        $day         = isset($_POST['day']) ? (int)$_POST['day'] : 0;
-        $employee_id = isset($_POST['employee_id']) ? (int)$_POST['employee_id'] : 0;
-        $duration    = isset($_POST['duration']) ? (int)$_POST['duration'] : 0;
-        $time        = isset($_POST['time']) ? $_POST['time'] : '';
+        $products_id = \Xmf\Request::getInt('products_id', 0, 'POST');
+        $month       = \Xmf\Request::getInt('month', 0, 'POST');
+        $year        = \Xmf\Request::getInt('year', 0, 'POST');
+        $day         = \Xmf\Request::getInt('day', 0, 'POST');
+        $employee_id = \Xmf\Request::getInt('employee_id', 0, 'POST');
+        $duration    = \Xmf\Request::getInt('duration', 0, 'POST');
+        $time        = \Xmf\Request::getString('time', '', 'POST');
         $xoopsTpl    = new \XoopsTpl();
 
         if (empty($products_id) || empty($month) || empty($year) || empty($day) || empty($employee_id) || empty($duration) || empty($time)) {

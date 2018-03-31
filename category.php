@@ -16,7 +16,7 @@ require_once XOOPS_ROOT_PATH . '/header.php';
 require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
 
 // Catégorie sélectionnée ***************************************************************
-$currentCategoryId = isset($_GET['categories_id']) ? (int)$_GET['categories_id'] : 0;
+$currentCategoryId = \Xmf\Request::getInt('categories_id', 0, 'GET');
 if (0 == $currentCategoryId) {
     myservices_utils::redirect(_MYSERVICES_ERROR1, 'index.php', 5);
 }
@@ -35,7 +35,7 @@ $xoopsTpl->assign('columnsCount', myservices_utils::getModuleOption('columnscoun
 $xoopsTpl->assign('ProductsPerColumn', myservices_utils::getModuleOption('prodperline'));
 
 $limit = myservices_utils::getModuleOption('perpage');
-$start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
+$start = \Xmf\Request::getInt('start', 0, 'GET');
 
 // Lecture de toutes les TVA ************************************************************
 $vatArray = [];

@@ -19,7 +19,7 @@ require_once MYSERVICES_PATH . 'class/activecalendar.php';
 $vatArray = $closedDays = $employees = $employeesSelect = $yearsSelect = [];
 
 // Catégorie sélectionnée ***************************************************************
-$currentProductId = isset($_GET['products_id']) ? (int)$_GET['products_id'] : 0;
+$currentProductId = \Xmf\Request::getInt('products_id', 0, 'GET');
 if (0 == $currentProductId) {
     myservices_utils::redirect(_MYSERVICES_ERROR4, 'index.php', 5);
 }
@@ -80,9 +80,9 @@ require_once MYSERVICES_PATH . 'configs.php';
 $prefMagasin = $hMsPrefs->getPreference();
 $monthNames  = [1 => _CAL_JANUARY, 2 => _CAL_FEBRUARY, 3 => _CAL_MARCH, 4 => _CAL_APRIL, 5 => _CAL_MAY, 6 => _CAL_JUNE, 7 => _CAL_JULY, 8 => _CAL_AUGUST, 9 => _CAL_SEPTEMBER, 10 => _CAL_OCTOBER, 11 => _CAL_NOVEMBER, 12 => _CAL_DECEMBER];
 
-$month       = isset($_GET['month']) ? (int)$_GET['month'] : date('n');
-$year        = isset($_GET['year']) ? (int)$_GET['year'] : date('Y');
-$employes_id = isset($_GET['employes_id']) ? (int)$_GET['employes_id'] : 0;
+$month       = \Xmf\Request::getInt('month', date('n'), 'GET');
+$year        = \Xmf\Request::getInt('year', date('Y'), 'GET');
+$employes_id = \Xmf\Request::getInt('employes_id', 0, 'GET');
 
 if (0 == $employes_id) {    // Si aucun employé n'a été spécifié, on prend le premier
     if (count($employees) > 0) {

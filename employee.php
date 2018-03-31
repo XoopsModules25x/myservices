@@ -14,7 +14,7 @@ require_once __DIR__ . '/header.php';
 $xoopsOption['template_main'] = 'myservices_employe.tpl';
 require_once XOOPS_ROOT_PATH . '/header.php';
 
-$employes_id = isset($_GET['employes_id']) ? (int)$_GET['employes_id'] : 0;
+$employes_id = \Xmf\Request::getInt('employes_id', 0, 'GET');
 if (0 == $employes_id) {
     myservices_utils::redirect(_MYSERVICES_ERROR8, 'index.php', 5);
 }

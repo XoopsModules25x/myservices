@@ -18,7 +18,7 @@ require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
 /**
  * Affiche les détails d'une commande
  */
-$id                  = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$id                  = \Xmf\Request::getInt('id', 0, 'GET');
 $myservices_Currency = myservices_currency::getInstance();
 
 xoops_header(false);
