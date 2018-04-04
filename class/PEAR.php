@@ -281,7 +281,7 @@ class myservices_PEAR
     public function isError($data, $code = null)
     {
         if (is_a($data, 'PEAR_Error')) {
-            if (is_null($code)) {
+            if (null === $code) {
                 return true;
             } elseif (is_string($code)) {
                 return $data->getMessage() == $code;
@@ -592,6 +592,9 @@ class myservices_PEAR
      *
      * @param string $message
      *
+     * @param null   $code
+     * @param null   $userinfo
+     * @return object
      */
     public function &throwError(
         $message = null,
@@ -903,7 +906,7 @@ class myservices_PEAR_Error
             $this->callback = null;
         }
         if ($this->mode & PEAR_ERROR_PRINT) {
-            if (is_null($options) || is_int($options)) {
+            if (null === $options || is_int($options)) {
                 $format = '%s';
             } else {
                 $format = $options;
@@ -915,7 +918,7 @@ class myservices_PEAR_Error
         }
         if ($this->mode & PEAR_ERROR_DIE) {
             $msg = $this->getMessage();
-            if (is_null($options) || is_int($options)) {
+            if (null === $options || is_int($options)) {
                 $format = '%s';
                 if ("\n" !== substr($msg, -1)) {
                     $msg .= "\n";

@@ -364,7 +364,7 @@ class Cache_Lite
                     return false;
                 }
             }
-            if (($doNotTestCacheValidity) || (is_null($this->_refreshTime))) {
+            if (($doNotTestCacheValidity) || (null === $this->_refreshTime)) {
                 if (file_exists($this->_file)) {
                     $data = $this->_read();
                 }
@@ -602,7 +602,7 @@ class Cache_Lite
      */
     public function _setRefreshTime()
     {
-        if (is_null($this->_lifeTime)) {
+        if (null === $this->_lifeTime) {
             $this->_refreshTime = null;
         } else {
             $this->_refreshTime = time() - $this->_lifeTime;
@@ -664,7 +664,7 @@ class Cache_Lite
                         switch (substr($mode, 0, 9)) {
                             case 'old':
                                 // files older than lifeTime get deleted from cache
-                                if (!is_null($this->_lifeTime)) {
+                                if (null !== $this->_lifeTime) {
                                     if ((time() - @filemtime($file2)) > $this->_lifeTime) {
                                         $result = ($result and ($this->_unlink($file2)));
                                     }
@@ -772,10 +772,6 @@ class Cache_Lite
             }
             clearstatcache();
             $length = @filesize($this->_file);
-            $mqr    = get_magic_quotes_runtime();
-            if ($mqr) {
-                set_magic_quotes_runtime(0);
-            }
             if ($this->_readControl) {
                 $hashControl = @fread($fp, 32);
                 $length      = $length - 32;
@@ -790,9 +786,6 @@ class Cache_Lite
             } else {
                 $data = '';
             }
-            if ($mqr) {
-                set_magic_quotes_runtime($mqr);
-            }
             if ($this->_fileLocking) {
                 @flock($fp, LOCK_UN);
             }
@@ -800,7 +793,7 @@ class Cache_Lite
             if ($this->_readControl) {
                 $hashData = $this->_hash($data, $this->_readControlType);
                 if ($hashData != $hashControl) {
-                    if (!(is_null($this->_lifeTime))) {
+                    if (!(null === $this->_lifeTime)) {
                         @touch($this->_file, time() - 2 * abs($this->_lifeTime));
                     } else {
                         @unlink($this->_file);
@@ -833,7 +826,7 @@ class Cache_Lite
                 if (!(@is_dir($root))) {
                     if (@mkdir($root)) {
                         @chmod($root, $this->_hashedDirectoryUmask);
-                        if (!is_null($this->_hashedDirectoryGroup)) {
+                        if (null !== $this->_hashedDirectoryGroup) {
                             @chgrp($root, $this->_hashedDirectoryGroup);
                         }
                     }
@@ -842,7 +835,7 @@ class Cache_Lite
         }
         // if both _cacheFileMode and _cacheFileGroup is null, then we don't need to call
         // file_exists (see below: if ($is_newfile) ...)
-        $is_newfile = (!is_null($this->_cacheFileMode) || !is_null($this->_cacheFileGroup))
+        $is_newfile = (null !== $this->_cacheFileMode || null !== $this->_cacheFileGroup)
                       && !@file_exists($this->_file);
         $fp         = @fopen($this->_file, 'wb');
         if ($fp) {
@@ -850,24 +843,17 @@ class Cache_Lite
                 @flock($fp, LOCK_EX);
             }
             if ($is_newfile) {
-                if (!is_null($this->_cacheFileMode)) {
+                if (null !== $this->_cacheFileMode) {
                     @chmod($this->_file, $this->_cacheFileMode);
                 }
-                if (!is_null($this->_cacheFileGroup)) {
+                if (null !== $this->_cacheFileGroup) {
                     @chgrp($this->_file, $this->_cacheFileGroup);
                 }
             }
             if ($this->_readControl) {
                 @fwrite($fp, $this->_hash($data, $this->_readControlType), 32);
             }
-            $mqr = get_magic_quotes_runtime();
-            if ($mqr) {
-                set_magic_quotes_runtime(0);
-            }
             @fwrite($fp, $data);
-            if ($mqr) {
-                set_magic_quotes_runtime($mqr);
-            }
             if ($this->_fileLocking) {
                 @flock($fp, LOCK_UN);
             }

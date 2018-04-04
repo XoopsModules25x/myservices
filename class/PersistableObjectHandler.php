@@ -96,7 +96,7 @@ class myservices_ORM extends XoopsObjectHandler
         }
         // To disable cache, add this line after the first one : 'caching' => false,
 
-        if (is_null($cacheOptions)) {
+        if (null === $cacheOptions) {
             $this->setCachingOptions(['cacheDir' => MYSERVICES_CACHE_PATH, 'lifeTime' => null, 'automaticSerialization' => true, 'fileNameProtection' => false, 'caching' => false]);
         //            $this->setCachingOptions(array('cacheDir' => MYSERVICES_CACHE_PATH, 'lifeTime' => null, 'automaticSerialization' => true, 'fileNameProtection' => false));
         } else {
