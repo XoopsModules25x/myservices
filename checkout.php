@@ -19,10 +19,7 @@ require_once MYSERVICES_PATH . 'class/myservices_paypal.php';
 require_once MYSERVICES_PATH . 'class/myservices_cart.php';
 require_once MYSERVICES_PATH . 'class/registryfile.php';
 
-$op = 'default';
-if (isset($_POST['op'])) {
-    $op = $_POST['op'];
-}
+$op    = \Xmf\Request::getCmd('op', 'default');
 
 $cartForTemplate = [];
 $emptyCart       = false;
@@ -130,7 +127,7 @@ switch ($op) {
 
         listCart();
         // On vérifie que les CGV sont bien acceptées
-        if (!isset($_POST['cgv']) || (isset($_POST['cgv']) && 1 != (int)$_POST['cgv'])) {
+        if (!isset($_POST['cgv']) || (isset($_POST['cgv']) && 1 != \Xmf\Request::getInt('cgv', 0, 'POST'))) {
             myservices_utils::redirect(_MYSERVICES_CGV_ERROR, 'checkout.php', 4);
         }
 

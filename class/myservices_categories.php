@@ -108,7 +108,7 @@ class MyservicesMyservices_categoriesHandler extends myservices_ORM
         $tblItems = [];
         $criteria = new \Criteria('categories_pid', 0, '=');
         $criteria->setSort('categories_title');
-        $tblItems =& $this->getObjects($criteria, true);
+        $tblItems = $this->getObjects($criteria, true);
 
         return $tblItems;
     }

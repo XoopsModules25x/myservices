@@ -19,14 +19,7 @@ require_once XOOPS_ROOT_PATH . '/class/uploader.php';
 require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
 require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
 
-$op = 'default';
-if (isset($_POST['op'])) {
-    $op = $_POST['op'];
-} else {
-    if (isset($_GET['op'])) {
-        $op = $_GET['op'];
-    }
-}
+$op    = \Xmf\Request::getCmd('op', 'default');
 
 $destname = '';
 $s        = myservices_utils::getModuleOption('csvsep');
@@ -360,7 +353,7 @@ switch ($op) {
         for ($i = 1; $i <= 5; ++$i) {
             $name      = sprintf('employes_photo%d', $i);
             $fieldName = 'delpicture' . $i;
-            if (isset($_POST[$fieldName]) && 1 == (int)$_POST[$fieldName]) {
+            if (isset($_POST[$fieldName]) && 1 == \Xmf\Request::getInt($fieldName, 0, 'POST')) {
                 $item->setVar($name, '');
             }
         }
@@ -597,7 +590,7 @@ switch ($op) {
                 myservices_utils::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
             }
             $item->unsetNew();
-            if ((int)$_POST['categories_pid'] == (int)$_POST['categories_id']) {
+            if (\Xmf\Request::getInt('categories_pid', 0, 'POST') == \Xmf\Request::getInt('categories_id', 0, 'POST')) {
                 myservices_utils::redirect(_AM_MYSERVICES_ERROR_6, $baseurl . '?op=' . $opRedirect, 5);
             }
         } else {
@@ -606,7 +599,7 @@ switch ($op) {
 
         $item->setVars($_POST);
 
-        if (isset($_POST['delpicture']) && 1 == (int)$_POST['delpicture']) {
+        if (isset($_POST['delpicture']) && 1 == \Xmf\Request::getInt('delpicture', 0, 'POST')) {
             $item->setVar('categories_imgurl', '');
         }
 
@@ -940,7 +933,7 @@ switch ($op) {
         // Possible Deleting images
         for ($i = 1; $i <= 10; ++$i) {
             $fieldName = 'delpicture' . $i;
-            if (isset($_POST[$fieldName]) && 1 == (int)$_POST[$fieldName]) {
+            if (isset($_POST[$fieldName]) && 1 == \Xmf\Request::getInt($fieldName, 0, 'POST')) {
                 $name = sprintf('products_image%d', $i);
                 $item->setVar($name, '');
             }
@@ -1197,11 +1190,11 @@ switch ($op) {
         // myservices_adminMenu(3);
         $object = 'holiday';
 
-        if (isset($_POST['status'])) {
-            $status = (int)$_POST['status'];
-        } elseif (isset($_GET['status'])) {
-            $status = (int)$_GET['status'];
-        } else {
+        if (\Xmf\Request::hasVar('status', 'POST')) {
+ $status = \Xmf\Request::getInt('status', 0, 'POST');
+} elseif (\Xmf\Request::hasVar('status', 'GET')) {
+ $status = \Xmf\Request::getInt('status', 0, 'GET');
+} else {
             $status = CALENDAR_STATUS_HOLIDAY;
         }
 
@@ -1298,7 +1291,7 @@ switch ($op) {
         }
 
         $item->setVars($_POST);
-        if (CALENDAR_STATUS_CLOSED == (int)$_POST['calendar_status']) {
+        if (CALENDAR_STATUS_CLOSED == \Xmf\Request::getInt('calendar_status', 0, 'POST')) {
             $date = strtotime($_POST['calendar_start']);
             $item->setVar('calendar_start', myservices_utils::timestampToMysqlDateTime($date));
 
@@ -1411,11 +1404,11 @@ switch ($op) {
 
         $start   = \Xmf\Request::getInt('start', 0, 'GET');
         $filter3 = 0;
-        if (isset($_POST['filter3'])) {
-            $filter3 = (int)$_POST['filter3'];
-        } elseif (isset($_SESSION['filter3'])) {
-            $filter3 = (int)$_SESSION['filter3'];
-        } else {
+        if (\Xmf\Request::hasVar('filter3', 'POST')) {
+ $filter3 = \Xmf\Request::getInt('filter3', 0, 'POST');
+} elseif (\Xmf\Request::hasVar('filter3', 'SESSION')) {
+ $filter3 = \Xmf\Request::getInt('filter3', 0, 'SESSION');
+} else {
             $filter3 = 1;
         }
         $_SESSION['filter3'] = $filter3;
@@ -1505,7 +1498,7 @@ switch ($op) {
         xoops_cp_header();
         // myservices_adminMenu(6);
         myservices_utils::htitle(_MI_MYSERVICES_ADMENU7, 4);
-        $cmd_type = (int)$_GET['cmdtype'];
+        $cmd_type = \Xmf\Request::getInt('cmdtype', 0, 'GET');
         $filename = 'myservices.csv';
         $fp       = fopen(XOOPS_UPLOAD_PATH . '/' . $filename, 'w');
         if ($fp) {
@@ -1728,18 +1721,18 @@ switch ($op) {
                 $nom6 = sprintf('prefs_j%dt%dfin', $i, $j);
 
                 if (isset($_POST[$nom1]) && isset($_POST[$nom2])) {
-                    if (0 == (int)$_POST[$nom1] && 0 == (int)$_POST[$nom2]) {
+                    if (0 == \Xmf\Request::getInt($nom1, 0, 'POST') && 0 == \Xmf\Request::getInt($nom2, 0, 'POST')) {
                         $valdeb = '00:00:00';
                     } else {
-                        $valdeb = sprintf('%02d:%02d:00', (int)$_POST[$nom1], (int)$_POST[$nom2]);
+                        $valdeb = sprintf('%02d:%02d:00', \Xmf\Request::getInt($nom1, 0, 'POST'), \Xmf\Request::getInt($nom2, 0, 'POST'));
                     }
                 }
 
                 if (isset($_POST[$nom3]) && isset($_POST[$nom4])) {
-                    if (0 == (int)$_POST[$nom3] && 0 == (int)$_POST[$nom4]) {
+                    if (0 == \Xmf\Request::getInt($nom3, 0, 'POST') && 0 == \Xmf\Request::getInt($nom4, 0, 'POST')) {
                         $valfin = '00:00:00';
                     } else {
-                        $valfin = sprintf('%02d:%02d:00', (int)$_POST[$nom3], (int)$_POST[$nom4]);
+                        $valfin = sprintf('%02d:%02d:00', \Xmf\Request::getInt($nom3, 0, 'POST'), \Xmf\Request::getInt($nom4, 0, 'POST'));
                     }
                 }
                 $item->setVar($nom5, $valdeb);

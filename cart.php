@@ -19,46 +19,40 @@ $myservicesCart = myservices_Cart::getInstance();    // Pour gérer le panier
 $vatArray       = [];
 $vatArray       = $hMsVat->getItems();
 
-$op = 'default';
-if (isset($_POST['op'])) {
-    $op = $_POST['op'];
-} elseif (isset($_GET['op'])) {
-    $op = $_GET['op'];
+$op    = \Xmf\Request::getCmd('op', 'default');
+
+if (\Xmf\Request::hasVar('products_id', 'POST')) {
+ $products_id = \Xmf\Request::getInt('products_id', 0, 'POST');
+} else {
+ $products_id = \Xmf\Request::getInt('products_id', 0, 'GET');
 }
 
-$products_id = 0;
-if (isset($_POST['products_id'])) {
-    $products_id = (int)$_POST['products_id'];
-} elseif (isset($_GET['products_id'])) {
-    $products_id = (int)$_GET['products_id'];
-}
 
-$employes_id = 0;
-if (isset($_POST['employee'])) {
-    $employes_id = (int)$_POST['employee'];
-} elseif (isset($_GET['employee'])) {
-    $employes_id = (int)$_GET['employee'];
+if (\Xmf\Request::hasVar('employee', 'POST')) {
+ $employes_id = \Xmf\Request::getInt('employee', 0, 'POST');
+} else {
+ $employes_id = \Xmf\Request::getInt('employee', 0, 'GET');
 }
 
 $selectedDay = 0;
-if (isset($_POST['selectedDay'])) {
-    $selectedDay = (int)$_POST['selectedDay'];
-} elseif (isset($_GET['selectedDay'])) {
-    $selectedDay = (int)$_GET['selectedDay'];
+if (\Xmf\Request::hasVar('selectedDay', 'POST')) {
+ $selectedDay = \Xmf\Request::getInt('selectedDay', 0, 'POST');
+} elseif (\Xmf\Request::hasVar('selectedDay', 'GET')) {
+ $selectedDay = \Xmf\Request::getInt('selectedDay', 0, 'GET');
 }
 
-$selectedMonth = 0;
-if (isset($_POST['selectedMonth'])) {
-    $selectedMonth = (int)$_POST['selectedMonth'];
-} elseif (isset($_GET['selectedMonth'])) {
-    $selectedMonth = (int)$_GET['selectedMonth'];
+
+if (\Xmf\Request::hasVar('selectedMonth', 'POST')) {
+ $selectedMonth = \Xmf\Request::getInt('selectedMonth', 0, 'POST');
+} else {
+ $selectedMonth = \Xmf\Request::getInt('selectedMonth', 0, 'GET');
 }
 
-$selectedYear = 0;
-if (isset($_POST['selectedYear'])) {
-    $selectedYear = (int)$_POST['selectedYear'];
-} elseif (isset($_GET['selectedYear'])) {
-    $selectedYear = (int)$_GET['selectedYear'];
+
+if (\Xmf\Request::hasVar('selectedYear', 'POST')) {
+ $selectedYear = \Xmf\Request::getInt('selectedYear', 0, 'POST');
+} else {
+ $selectedYear = \Xmf\Request::getInt('selectedYear', 0, 'GET');
 }
 
 $duration = 0;

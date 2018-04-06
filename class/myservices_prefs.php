@@ -193,7 +193,7 @@ class MyservicesMyservices_prefsHandler extends myservices_ORM
         $items    = [];
         $criteria = new \Criteria('prefs_id', 0, '<>');
 
-        $items =& $this->getObjects($criteria);
+        $items = $this->getObjects($criteria);
         if (0 == count($items)) {
             $items[0] = $this->create(true);
             $this->forceCacheClean();

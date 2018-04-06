@@ -110,7 +110,7 @@ class MyservicesMyservices_employesHandler extends myservices_ORM
             $criteriaCompo = new \CriteriaCompo();
             $criteriaCompo->add(new \Criteria('employes_isactive', 1, '='));
             $criteriaCompo->add(new \Criteria('employes_id', '(' . implode(',', $peopleList) . ')', 'IN'));
-            $employees =& $this->getObjects($criteriaCompo, true);
+            $employees = $this->getObjects($criteriaCompo, true);
         }
 
         return $employees;
@@ -131,7 +131,7 @@ class MyservicesMyservices_employesHandler extends myservices_ORM
         }
         $tblItems = [];
         $critere->setOrder($order);
-        $tblItems =& $this->getObjects($critere);
+        $tblItems = $this->getObjects($critere);
 
         return $tblItems;
     }

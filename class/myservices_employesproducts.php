@@ -41,7 +41,7 @@ class MyservicesMyservices_employesproductsHandler extends myservices_ORM
     {
         $peopleList = [];
         $critere    = new \Criteria('employesproducts_products_id', $products_id, '=');
-        $people     =& $this->getObjects($critere, true, true, 'employesproducts_employes_id');
+        $people     = $this->getObjects($critere, true, true, 'employesproducts_employes_id');
         foreach ($people as $person) {
             $peopleList[] = $person->getVar('employesproducts_employes_id');
         }
@@ -59,7 +59,7 @@ class MyservicesMyservices_employesproductsHandler extends myservices_ORM
     {
         $return   = $tmp = [];
         $criteria = new \Criteria('employesproducts_employes_id', $employesproducts_employes_id, '=');
-        $tmp      =& $this->getObjects($criteria, false, true, 'employesproducts_products_id');
+        $tmp      = $this->getObjects($criteria, false, true, 'employesproducts_products_id');
         if (count($tmp) > 0) {
             foreach ($tmp as $item) {
                 $return[] = $item->getVar('employesproducts_products_id');

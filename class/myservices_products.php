@@ -267,7 +267,7 @@ class MyservicesMyservices_productsHandler extends myservices_ORM
             $criteria = new \CriteriaCompo();
             $criteria->add(new \Criteria('products_online', 1, '='));
             $criteria->add(new \Criteria('products_id', '(' . implode(',', $products_id) . ')', 'IN'));
-            $ret =& $this->getObjects($criteria);
+            $ret = $this->getObjects($criteria);
         }
 
         return $ret;

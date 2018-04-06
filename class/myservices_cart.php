@@ -143,7 +143,7 @@ class myservices_Cart
                 $number = $produit['number'];
                 $name   = 'qty_' . $number;
                 if (isset($_POST[$name])) {
-                    $valeur = (int)$_POST[$name];
+                    $valeur = \Xmf\Request::getInt($name, 0, 'POST');
                     if ($valeur > 0) {
                         $product_id = $produit['id'];
                         $product    = null;

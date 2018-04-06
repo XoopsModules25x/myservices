@@ -59,7 +59,7 @@ if ($fp) {
             }
             $montant = $_POST['mc_gross'];
             if ($paypalok) {
-                $ref      = (int)$_POST['custom'];    // Num�ro de la commande
+                $ref      = \Xmf\Request::getInt('custom', 0, 'POST');    // Num�ro de la commande
                 $commande = null;
                 $commande = $hMsOrders->get($ref);
                 if (is_object($commande)) {
@@ -90,7 +90,7 @@ if ($fp) {
                 }
             } else {
                 if (isset($_POST['custom'])) {
-                    $ref                 = (int)$_POST['custom'];
+                    $ref                 = \Xmf\Request::getInt('custom', 0, 'POST');
                     $msg['NUM_COMMANDE'] = $ref;
                     $commande            = null;
                     $commande            = $hMsOrders->get($ref);
