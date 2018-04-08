@@ -11,7 +11,7 @@
  * Affiche la liste de tous les employés actifs
  */
 require_once __DIR__ . '/header.php';
-$xoopsOption['template_main'] = 'myservices_employes.tpl';
+$GLOBALS['xoopsOption']['template_main'] = 'myservices_employes.tpl';
 require_once XOOPS_ROOT_PATH . '/header.php';
 
 $tblEmployes = [];

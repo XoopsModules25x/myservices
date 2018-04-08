@@ -11,7 +11,7 @@
  * Affiche la liste de tous les produits
  */
 require_once __DIR__ . '/header.php';
-$xoopsOption['template_main'] = 'myservices_products.tpl';
+$GLOBALS['xoopsOption']['template_main'] = 'myservices_products.tpl';
 require_once XOOPS_ROOT_PATH . '/header.php';
 
 $tblProducts = $tblProductsForDisp = $tblCategories = [];

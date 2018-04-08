@@ -62,11 +62,11 @@ class myservices_utils
                 $retval = $xoopsModuleConfig[$option];
             }
         } else {
-            $module_handler = xoops_getHandler('module');
-            $module         =& $module_handler->getByDirname($repmodule);
-            $config_handler = xoops_getHandler('config');
+            $moduleHandler = xoops_getHandler('module');
+            $module         = $moduleHandler->getByDirname($repmodule);
+            $configHandler = xoops_getHandler('config');
             if ($module) {
-                $moduleConfig =& $config_handler->getConfigsByCat(0, $module->getVar('mid'));
+                $moduleConfig = $configHandler->getConfigsByCat(0, $module->getVar('mid'));
                 if (isset($moduleConfig[$option])) {
                     $retval = $moduleConfig[$option];
                 }
@@ -352,8 +352,8 @@ class myservices_utils
         $tpllist = [];
         require_once XOOPS_ROOT_PATH . '/class/xoopsblock.php';
         require_once XOOPS_ROOT_PATH . '/class/template.php';
-        $tplfile_handler = xoops_getHandler('tplfile');
-        $tpllist         = $tplfile_handler->find(null, null, null, $folder);
+        $tplfileHandler = xoops_getHandler('tplfile');
+        $tpllist         = $tplfileHandler->find(null, null, null, $folder);
         xoops_template_clear_module_cache($xoopsModule->getVar('mid'));            // Clear module's blocks cache
 
         foreach ($tpllist as $onetemplate) {    // Remove cache for each page.
@@ -443,8 +443,8 @@ class myservices_utils
     public static function getUsersFromGroup($groupId)
     {
         $tblUsers       = [];
-        $member_handler = xoops_getHandler('member');
-        $tblUsers       = $member_handler->getUsersByGroup($groupId, true);
+        $memberHandler = xoops_getHandler('member');
+        $tblUsers       = $memberHandler->getUsersByGroup($groupId, true);
 
         return $tblUsers;
     }
@@ -683,8 +683,8 @@ class myservices_utils
 
         $tmp = [];
         //  Search for the "Minimum keyword length"
-        $config_handler    = xoops_getHandler('config');
-        $xoopsConfigSearch =& $config_handler->getConfigsByCat(XOOPS_CONF_SEARCH);
+        $configHandler    = xoops_getHandler('config');
+        $xoopsConfigSearch = $configHandler->getConfigsByCat(XOOPS_CONF_SEARCH);
         $limit             = $xoopsConfigSearch['keyword_min'];
 
         $myts            = \MyTextSanitizer::getInstance();
@@ -720,10 +720,10 @@ class myservices_utils
         if (count($tmp) > 0) {
             return implode(',', $tmp);
         } else {
-            if (!isset($config_handler) || !is_object($config_handler)) {
-                $config_handler = xoops_getHandler('config');
+            if (!isset($configHandler) || !is_object($configHandler)) {
+                $configHandler = xoops_getHandler('config');
             }
-            $xoopsConfigMetaFooter =& $config_handler->getConfigsByCat(XOOPS_CONF_METAFOOTER);
+            $xoopsConfigMetaFooter = $configHandler->getConfigsByCat(XOOPS_CONF_METAFOOTER);
             if (isset($xoopsConfigMetaFooter['meta_keywords'])) {
                 return $xoopsConfigMetaFooter['meta_keywords'];
             } else {

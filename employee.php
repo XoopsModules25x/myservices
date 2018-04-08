@@ -11,7 +11,7 @@
  * Affiche les informations d'un salarié
  */
 require_once __DIR__ . '/header.php';
-$xoopsOption['template_main'] = 'myservices_employe.tpl';
+$GLOBALS['xoopsOption']['template_main'] = 'myservices_employe.tpl';
 require_once XOOPS_ROOT_PATH . '/header.php';
 
 $employes_id = \Xmf\Request::getInt('employes_id', 0, 'GET');

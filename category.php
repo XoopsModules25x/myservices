@@ -11,7 +11,7 @@
  * Liste des produits d'une catégorie ainsi que de ses sous-catégrories
  */
 require_once __DIR__ . '/header.php';
-$xoopsOption['template_main'] = 'myservices_category.tpl';
+$GLOBALS['xoopsOption']['template_main'] = 'myservices_category.tpl';
 require_once XOOPS_ROOT_PATH . '/header.php';
 require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
 

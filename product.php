@@ -11,7 +11,7 @@
  * Affichage d'un produit
  */
 require_once __DIR__ . '/header.php';
-$xoopsOption['template_main'] = 'myservices_product.tpl';
+$GLOBALS['xoopsOption']['template_main'] = 'myservices_product.tpl';
 require_once XOOPS_ROOT_PATH . '/header.php';
 require_once MYSERVICES_PATH . 'class/activecalendar.php';
 

@@ -11,7 +11,7 @@
  * Page appelée par Paypal dans le cas de l'annulation d'une commande
  */
 require_once __DIR__ . '/header.php';
-$xoopsOption['template_main'] = 'myservices_cancelpurchase.tpl';
+$GLOBALS['xoopsOption']['template_main'] = 'myservices_cancelpurchase.tpl';
 require_once XOOPS_ROOT_PATH . '/header.php';
 require_once MYSERVICES_PATH . 'class/myservices_cart.php';
 

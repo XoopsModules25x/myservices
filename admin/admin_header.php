@@ -49,4 +49,4 @@ xoops_loadLanguage('modinfo', $moduleDirName);
 xoops_loadLanguage('main', $moduleDirName);
 
 //xoops_cp_header();
-$adminObject = new ModuleAdmin();
+$adminObject = \Xmf\Module\Admin::getInstance();

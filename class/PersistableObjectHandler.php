@@ -505,7 +505,7 @@ class myservices_ORM extends XoopsObjectHandler
             $whereclause = $this->keyName . ' = ' . $obj->getVar($this->keyName);
         }
         $sql = 'DELETE FROM ' . $this->table . ' WHERE ' . $whereclause;
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);
@@ -521,7 +521,7 @@ class myservices_ORM extends XoopsObjectHandler
     }
 
     /**
-     * Quickly insert a record like this $myobject_handler->quickInsert('field1' => field1value, 'field2' => $field2value)
+     * Quickly insert a record like this $myobjectHandler->quickInsert('field1' => field1value, 'field2' => $field2value)
      *
      * @param  array $vars  Array containing the fields name and value
      * @param  bool  $force whether to force the query execution despite security settings
@@ -551,7 +551,7 @@ class myservices_ORM extends XoopsObjectHandler
 
     public function insert(\XoopsObject $obj, $force = false, $checkObject = true)
     {
-        if (false != $checkObject) {
+        if (false !== $checkObject) {
             if (!is_object($obj)) {
                 trigger_error('Error, not object');
 
@@ -624,7 +624,7 @@ class myservices_ORM extends XoopsObjectHandler
             $sql .= ' WHERE ' . $whereclause;
         }
 
-        if (false != $force) {
+        if (false !== $force) {
             $result = $this->db->queryF($sql);
         } else {
             $result = $this->db->query($sql);

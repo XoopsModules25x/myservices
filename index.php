@@ -11,7 +11,7 @@
  * Liste des catégories mères du module
  */
 require_once __DIR__ . '/header.php';
-$xoopsOption['template_main'] = 'myservices_index.tpl';
+$GLOBALS['xoopsOption']['template_main'] = 'myservices_index.tpl';
 require_once XOOPS_ROOT_PATH . '/header.php';
 
 require_once XOOPS_ROOT_PATH . '/class/template.php';

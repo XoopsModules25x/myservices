@@ -225,8 +225,8 @@ $cpto = 0;
 
 // default admin editor
 xoops_load('XoopsEditorHandler');
-$editor_handler              = XoopsEditorHandler::getInstance();
-$editorList                  = array_flip($editor_handler->getList());
+$editorHandler              = XoopsEditorHandler::getInstance();
+$editorList                  = array_flip($editorHandler->getList());
 $modversion['config'][$cpto] = [
     'name'        => 'form_options',
     'title'       => '_MI_MYSERVICES_FORM_OPTIONS',

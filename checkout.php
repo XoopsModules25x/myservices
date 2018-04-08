@@ -11,7 +11,7 @@
  * Saisie des données du client + affichage des informations saisies pour validation avec redirection vers Paypal
  */
 require_once __DIR__ . '/header.php';
-$xoopsOption['template_main'] = 'myservices_order.tpl';
+$GLOBALS['xoopsOption']['template_main'] = 'myservices_order.tpl';
 require_once XOOPS_ROOT_PATH . '/header.php';
 require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
 require_once XOOPS_ROOT_PATH . '/class/xoopslists.php';
