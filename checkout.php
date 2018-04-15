@@ -40,7 +40,7 @@ function listCart()
     $myservicesCart->computeCart($cartForTemplate, $emptyCart, $commandAmount, $vatAmount, $commandAmountTTC);
 }
 
-$tbl_country = XoopsLists::getCountryList();
+$tbl_country = \XoopsLists::getCountryList();
 if (is_object($xoopsUser)) {
     $uid = $xoopsUser->getVar('uid');
 } else {

@@ -9,7 +9,7 @@
 
 defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
-class myservices_Object extends XoopsObject
+class myservices_Object extends \XoopsObject
 {
     public function toArray($format = 's')
     {
@@ -56,7 +56,7 @@ class myservices_Object extends XoopsObject
  * of derived class objects. Original Author : Mithrandir
  *
  */
-class myservices_ORM extends XoopsObjectHandler
+class myservices_ORM extends \XoopsObjectHandler
 {
     /**#@+
      * Information about the class, the handler is managing
