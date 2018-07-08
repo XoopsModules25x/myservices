@@ -18,7 +18,7 @@ require_once XOOPS_ROOT_PATH . '/class/template.php';
 
 $myTpl = new \XoopsTpl();
 // Module Preferences
-$xoopsTpl->assign('columnsCount', myservices_utils::getModuleOption('columnscount'));
+$xoopsTpl->assign('columnsCount',\XoopsModules\Myservices\Utilities::getModuleOption('columnscount'));
 
 // Lecture de toutes les TVA ************************************************************
 $vatArray = [];
@@ -36,5 +36,5 @@ $xoopsTpl->assign('categories', $datas);
 unset($myTpl);
 
 // Titre de page
-myservices_utils::setMetas(_MYSERVICES_CATEGORIES, _MYSERVICES_CATEGORIES);
+\XoopsModules\Myservices\Utilities::setMetas(_MYSERVICES_CATEGORIES, _MYSERVICES_CATEGORIES);
 require_once XOOPS_ROOT_PATH . '/footer.php';

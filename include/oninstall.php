@@ -29,9 +29,13 @@
 
 use XoopsModules\Myservices;
 
+/**
+ * @param \XoopsModule $module
+ * @return bool
+ */
 function xoops_module_pre_install_myservices(\XoopsModule $module)
 {
-    include  dirname(__DIR__) . '/preloads/autoloader.php';
+    require_once dirname(__DIR__) . '/preloads/autoloader.php';
     /** @var Myservices\Utility $utility */
     $utility = new \XoopsModules\Myservices\Utility();
     $xoopsSuccess = $utility::checkVerXoops($module);
@@ -61,9 +65,10 @@ function xoops_module_install_myservices(\XoopsModule $module)
 
     $moduleDirName = basename(dirname(__DIR__));
 
-    $helper       = Myservices\Helper::getInstance();
+    /** @var Myservices\Helper $helper */
+    $helper = Myservices\Helper::getInstance();
     $utility      = new Myservices\Utility();
-    $configurator = new Myservices\Common\Common\Configurator();
+    $configurator = new Myservices\Common\Configurator();
     // Load language files
     $helper->loadLanguage('admin');
     $helper->loadLanguage('modinfo');

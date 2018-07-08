@@ -1,4 +1,5 @@
-<?php
+<?php namespace XoopsModules\Myservices;
+
 /**
  * ****************************************************************************
  * catads - MODULE FOR XOOPS
@@ -7,48 +8,11 @@
  * ****************************************************************************
  */
 
+use XoopsModules\Myservices;
+
 defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
-class myservices_Object extends \XoopsObject
-{
-    public function toArray($format = 's')
-    {
-        $ret = [];
-        foreach ($this->vars as $k => $v) {
-            $ret[$k] = $this->getVar($k, $format);
-        }
 
-        return $ret;
-    }
-
-    // TODO: Rajouter une méthode intsert() et delete()
-
-    /**
-     * Permet de valoriser un champ de la table comme si c'était une propriété de la classe
-     *
-     * @example $enregistrement->nom_du_champ = 'ma chaine'
-     *
-     * @param string $key   Le nom du champ à traiter
-     * @param mixed  $value La valeur à lui attribuer
-     */
-    public function __set($key, $value)
-    {
-        return $this->setVar($key, $value);
-    }
-
-    /**
-     * Permet d'accéder aux champs de la table comme à des propriétés de la classe
-     *
-     * @example echo $enregistrement->nom_du_champ;
-     *
-     * @param string $key Le nom du champ que l'on souhaite récupérer
-     * @return mixed
-     */
-    public function __get($key)
-    {
-        return $this->getVar($key);
-    }
-}
 
 /**
  * Persistable Object Handler class.
@@ -56,7 +20,7 @@ class myservices_Object extends \XoopsObject
  * of derived class objects. Original Author : Mithrandir
  *
  */
-class myservices_ORM extends \XoopsObjectHandler
+class ServiceORM extends \XoopsObjectHandler
 {
     /**#@+
      * Information about the class, the handler is managing
@@ -72,13 +36,13 @@ class myservices_ORM extends \XoopsObjectHandler
 
     /**
      * Constructor - called from child classes
-     * @param XoopsDatabase $db           {@link XoopsDatabase} object
-     * @param string        $tablename    Name of database table
-     * @param string        $classname    Name of Class, this handler is managing
-     * @param string        $keyname      Name of the property, holding the key
-     * @param string        $idenfierName Name of the property, holding the label
-     * @param array         $cacheOptions Optional, options for the cache
-     *
+     * @param \XoopsDatabase $db           {@link XoopsDatabase}
+     *                                     object
+     * @param string         $tablename    Name of database table
+     * @param string         $classname    Name of Class, this handler is managing
+     * @param string         $keyname      Name of the property, holding the key
+     * @param string         $idenfierName Name of the property, holding the label
+     * @param array          $cacheOptions Optional, options for the cache
      */
     public function __construct(\XoopsDatabase $db, $tablename, $classname, $keyname, $idenfierName = '', $cacheOptions = null)
     {
@@ -104,6 +68,9 @@ class myservices_ORM extends \XoopsObjectHandler
         }
     }
 
+    /**
+     * @param $cacheOptions
+     */
     public function setCachingOptions($cacheOptions)
     {
         $this->cacheOptions = $cacheOptions;
@@ -173,7 +140,7 @@ class myservices_ORM extends \XoopsObjectHandler
     /**
      * retrieve objects from the database
      *
-     * @param null|CriteriaElement $criteria  {@link CriteriaElement} conditions to be met
+     * @param null|\CriteriaElement $criteria  {@link CriteriaElement} conditions to be met
      * @param bool                 $id_as_key use the ID as key for the array?
      * @param bool                 $as_object return an array of objects?
      *
@@ -181,13 +148,13 @@ class myservices_ORM extends \XoopsObjectHandler
      * @param bool                 $autoSort
      * @return array
      */
-    public function &getObjects(CriteriaElement $criteria = null, $id_as_key = false, $as_object = true, $fields = '*', $autoSort = true)
+    public function &getObjects(\CriteriaElement $criteria = null, $id_as_key = false, $as_object = true, $fields = '*', $autoSort = true)
     {
-        require_once __DIR__ . '/lite.php';
+        // require_once __DIR__ . '/lite.php';
         $ret   = [];
         $limit = $start = 0;
         $sql   = 'SELECT ' . $fields . ' FROM ' . $this->table;
-        if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
+        if ($criteria !== null && is_subclass_of($criteria, 'CriteriaElement')) {
             $sql .= ' ' . $criteria->renderWhere();
             if ('' != $criteria->groupby) {
                 $sql .= $criteria->getGroupby();
@@ -200,16 +167,16 @@ class myservices_ORM extends \XoopsObjectHandler
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
-        $Cache_Lite = new Cache_Lite($this->cacheOptions);
+        $CacheLite = new CacheLite($this->cacheOptions);
         $id         = $this->_getIdForCache($sql, $start, $limit);
-        $cacheData  = $Cache_Lite->get($id);
+        $cacheData  = $CacheLite->get($id);
         if (false === $cacheData) {
             $result = $this->db->query($sql, $limit, $start);
             if (!$result) {
                 return $ret;
             }
             $ret = $this->convertResultSet($result, $id_as_key, $as_object, $fields);
-            $Cache_Lite->save($ret);
+            $CacheLite->save($ret);
 
             return $ret;
         } else {
@@ -276,10 +243,10 @@ class myservices_ORM extends \XoopsObjectHandler
      */
     public function getIds($criteria = null)
     {
-        require_once __DIR__ . '/lite.php';
+        // require_once __DIR__ . '/lite.php';
         $limit = $start = 0;
 
-        $Cache_Lite = new Cache_Lite($this->cacheOptions);
+        $CacheLite = new CacheLite($this->cacheOptions);
         $sql        = 'SELECT ' . $this->keyName . ' FROM ' . $this->table;
         if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
             $sql .= ' ' . $criteria->renderWhere();
@@ -296,14 +263,14 @@ class myservices_ORM extends \XoopsObjectHandler
         }
 
         $id        = $this->_getIdForCache($sql, $start, $limit);
-        $cacheData = $Cache_Lite->get($id);
+        $cacheData = $CacheLite->get($id);
         if (false === $cacheData) {
             $result = $this->db->query($sql, $limit, $start);
             $ret    = [];
             while (false !== ($myrow = $this->db->fetchArray($result))) {
                 $ret[] = $myrow[$this->keyName];
             }
-            $Cache_Lite->save($ret);
+            $CacheLite->save($ret);
 
             return $ret;
         } else {
@@ -319,9 +286,9 @@ class myservices_ORM extends \XoopsObjectHandler
      */
     public function getList($criteria = null)
     {
-        require_once __DIR__ . '/lite.php';
+        // require_once __DIR__ . '/lite.php';
         $limit      = $start = 0;
-        $Cache_Lite = new Cache_Lite($this->cacheOptions);
+        $CacheLite = new CacheLite($this->cacheOptions);
 
         $ret = [];
 
@@ -346,11 +313,11 @@ class myservices_ORM extends \XoopsObjectHandler
         }
 
         $id        = $this->_getIdForCache($sql, $start, $limit);
-        $cacheData = $Cache_Lite->get($id);
+        $cacheData = $CacheLite->get($id);
         if (false === $cacheData) {
             $result = $this->db->query($sql, $limit, $start);
             if (!$result) {
-                $Cache_Lite->save($ret);
+                $CacheLite->save($ret);
 
                 return $ret;
             }
@@ -360,7 +327,7 @@ class myservices_ORM extends \XoopsObjectHandler
                 // identifiers should be textboxes, so sanitize them like that
                 $ret[$myrow[$this->keyName]] = empty($this->identifierName) ? 1 : $myts->htmlSpecialChars($myrow[$this->identifierName]);
             }
-            $Cache_Lite->save($ret);
+            $CacheLite->save($ret);
 
             return $ret;
         } else {
@@ -396,7 +363,7 @@ class myservices_ORM extends \XoopsObjectHandler
         $field   = '';
         $groupby = false;
         $limit   = $start = 0;
-        require_once __DIR__ . '/lite.php';
+        // require_once __DIR__ . '/lite.php';
 
         if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
             if ('' != $criteria->groupby) {
@@ -413,20 +380,20 @@ class myservices_ORM extends \XoopsObjectHandler
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
-        $Cache_Lite = new Cache_Lite($this->cacheOptions);
+        $CacheLite = new CacheLite($this->cacheOptions);
         $id         = $this->_getIdForCache($sql, $start, $limit);
-        $cacheData  = $Cache_Lite->get($id);
+        $cacheData  = $CacheLite->get($id);
         if (false === $cacheData) {
             $result = $this->db->query($sql, $limit, $start);
             if (!$result) {
                 $ret = 0;
-                $Cache_Lite->save($ret);
+                $CacheLite->save($ret);
 
                 return $ret;
             }
             if (false === $groupby) {
                 list($count) = $this->db->fetchRow($result);
-                $Cache_Lite->save($count);
+                $CacheLite->save($count);
 
                 return $count;
             } else {
@@ -434,7 +401,7 @@ class myservices_ORM extends \XoopsObjectHandler
                 while (false !== (list($id, $count) = $this->db->fetchRow($result))) {
                     $ret[$id] = $count;
                 }
-                $Cache_Lite->save($ret);
+                $CacheLite->save($ret);
 
                 return $ret;
             }
@@ -453,7 +420,7 @@ class myservices_ORM extends \XoopsObjectHandler
     public function getSum($field, $criteria = null)
     {
         $limit = $start = 0;
-        require_once __DIR__ . '/lite.php';
+        // require_once __DIR__ . '/lite.php';
 
         $sql = 'SELECT Sum(' . $field . ') as cpt FROM ' . $this->table;
         if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
@@ -464,20 +431,20 @@ class myservices_ORM extends \XoopsObjectHandler
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
-        $Cache_Lite = new catads_Cache_Lite($this->cacheOptions);
+        $CacheLite = new \XoopsModules\Myservices\CacheLite($this->cacheOptions);
         $id         = $this->_getIdForCache($sql, $start, $limit);
-        $cacheData  = $Cache_Lite->get($id);
+        $cacheData  = $CacheLite->get($id);
         if (false === $cacheData) {
             $result = $this->db->query($sql, $limit, $start);
             if (!$result) {
                 $ret = 0;
-                $Cache_Lite->save($ret);
+                $CacheLite->save($ret);
 
                 return $ret;
             }
             $row   = $this->db->fetchArray($result);
             $count = $row['cpt'];
-            $Cache_Lite->save($count);
+            $CacheLite->save($count);
 
             return $count;
         } else {
@@ -488,7 +455,7 @@ class myservices_ORM extends \XoopsObjectHandler
     /**
      * delete an object from the database
      *
-     * @param  XoopsObject $obj reference to the object to delete
+     * @param \XoopsObject $obj reference to the object to delete
      * @param  bool        $force
      * @return bool   FALSE if failed.
      */
@@ -543,7 +510,7 @@ class myservices_ORM extends \XoopsObjectHandler
     /**
      * insert a new object in the database
      *
-     * @param  XoopsObject $obj         reference to the object
+     * @param \XoopsObject $obj         reference to the object
      * @param  bool        $force       whether to force the query execution despite security settings
      * @param  bool        $checkObject check if the object is dirty and clean the attributes
      * @return bool   FALSE if failed, TRUE if already present and unchanged or successful
@@ -636,7 +603,7 @@ class myservices_ORM extends \XoopsObjectHandler
         if (!$result) {
             return false;
         }
-        if ($obj->isNew() && !is_array($this->keyName)) {
+        if (!is_array($this->keyName) && $obj->isNew()) {
             $obj->assignVar($this->keyName, $this->db->getInsertId());
         }
 
@@ -647,7 +614,7 @@ class myservices_ORM extends \XoopsObjectHandler
      * Change a value for objects with a certain criteria
      *
      * @param string $fieldname  Name of the field
-     * @param string $fieldvalue Value to write
+     * @param string|array $fieldvalue Value to write
      * @param object $criteria   {@link CriteriaElement}
      *
      * @param bool   $force
@@ -684,6 +651,13 @@ class myservices_ORM extends \XoopsObjectHandler
     }
 
     //  check if target object is attempting to use duplicated info
+
+    /**
+     * @param        $obj
+     * @param string $field
+     * @param string $error
+     * @return bool
+     */
     public function isDuplicated(&$obj, $field = '', $error = '')
     {
         if (empty($field)) {
@@ -732,8 +706,8 @@ class myservices_ORM extends \XoopsObjectHandler
     /**
      * Compare two objects and returns, in an array, the differences
      *
-     * @param  XoopsObject $old_object The first object to compare
-     * @param  XoopsObject $new_object The new object
+     * @param  \XoopsObject $old_object The first object to compare
+     * @param  \XoopsObject $new_object The new object
      * @return array       differences  key = fieldname, value = array('old_value', 'new_value')
      */
     public function compareObjects($old_object, $new_object)
@@ -760,7 +734,7 @@ class myservices_ORM extends \XoopsObjectHandler
      */
     public function getDistincts($field, $criteria = null, $format = 's')
     {
-        require_once __DIR__ . '/lite.php';
+        // require_once __DIR__ . '/lite.php';
         $limit = $start = 0;
         $sql   = 'SELECT ' . $this->keyName . ', ' . $field . ' FROM ' . $this->table;
         if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
@@ -770,9 +744,9 @@ class myservices_ORM extends \XoopsObjectHandler
         }
         $sql .= ' GROUP BY ' . $field . ' ORDER BY ' . $field;
 
-        $Cache_Lite = new Cache_Lite($this->cacheOptions);
+        $CacheLite = new CacheLite($this->cacheOptions);
         $id         = $this->_getIdForCache($sql, $start, $limit);
-        $cacheData  = $Cache_Lite->get($id);
+        $cacheData  = $CacheLite->get($id);
         if (false === $cacheData) {
             $result = $this->db->query($sql, $limit, $start);
             $ret    = [];
@@ -781,7 +755,7 @@ class myservices_ORM extends \XoopsObjectHandler
                 $obj->setVar($field, $myrow[$field]);
                 $ret[$myrow[$this->keyName]] = $obj->getVar($field, $format);
             }
-            $Cache_Lite->save($ret);
+            $CacheLite->save($ret);
 
             return $ret;
         } else {
@@ -826,8 +800,8 @@ class myservices_ORM extends \XoopsObjectHandler
      */
     public function forceCacheClean()
     {
-        require_once __DIR__ . '/lite.php';
-        $Cache_Lite = new Cache_Lite($this->cacheOptions);
-        $Cache_Lite->clean();
+        // require_once __DIR__ . '/lite.php';
+        $CacheLite = new CacheLite($this->cacheOptions);
+        $CacheLite->clean();
     }
 }

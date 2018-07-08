@@ -1,4 +1,5 @@
-<?php
+<?php namespace XoopsModules\Myservices;
+
 /**
  * ****************************************************************************
  * myservices - MODULE FOR XOOPS
@@ -11,9 +12,15 @@
  * Classe responsable de la gestion de tout ce qui est relatif � Paypal
  */
 
+use XoopsModules\Myservices;
+
 defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
-class myservices_paypal
+/**
+ * Class Paypal
+ * @package XoopsModules\Myservices
+ */
+class Paypal
 {
     public $testMode;
     public $email;
@@ -21,6 +28,14 @@ class myservices_paypal
     public $useIpn;
     public $passwordCancel;
 
+    /**
+     * Paypal constructor.
+     * @param        $testMode
+     * @param        $emailPaypal
+     * @param        $moneyCode
+     * @param bool   $ipn
+     * @param string $passwordCancel
+     */
     public function __construct($testMode, $emailPaypal, $moneyCode, $ipn = false, $passwordCancel = '')
     {
         $this->testMode       = $testMode;

@@ -1,4 +1,5 @@
-<?php
+<?php namespace XoopsModules\Myservices;
+
 /**
  * ****************************************************************************
  * myservices - MODULE FOR XOOPS
@@ -7,14 +8,20 @@
  * ****************************************************************************
  */
 
+use XoopsModules\Myservices;
+
 defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
-//require XOOPS_ROOT_PATH.'/kernel/object.php';
-if (!class_exists('myservices_ORM')) {
-    require XOOPS_ROOT_PATH . '/modules/myservices/class/PersistableObjectHandler.php';
-}
+//require_once XOOPS_ROOT_PATH.'/kernel/object.php';
+//if (!class_exists('myservices_ORM')) {
+//    require_once XOOPS_ROOT_PATH . '/modules/myservices/class/PersistableObjectHandler.php';
+//}
 
-class myservices_products extends myservices_Object
+/**
+ * Class Products
+ * @package XoopsModules\Myservices
+ */
+class Products extends Myservices\ServiceObject
 {
     public function __construct()
     {
@@ -53,8 +60,8 @@ class myservices_products extends myservices_Object
         $products_title = $this->getVar('products_title', 'n');
         $url            = '';
 
-        if (1 == myservices_utils::getModuleOption('urlrewriting')) {    // On utilise l'url rewriting
-            $url = MYSERVICES_URL . 'product-' . (int)$products_id . myservices_utils::makeSeoUrl($products_title) . '.html';
+        if (1 ==\XoopsModules\Myservices\Utilities::getModuleOption('urlrewriting')) {    // On utilise l'url rewriting
+            $url = MYSERVICES_URL . 'product-' . (int)$products_id .\XoopsModules\Myservices\Utilities::makeSeoUrl($products_title) . '.html';
         } else {    // Pas d'utilisation de l'url rewriting
             $url = MYSERVICES_URL . 'product.php?products_id=' . (int)$products_id;
         }
@@ -104,7 +111,7 @@ class myservices_products extends myservices_Object
     /**
      * Renvoie le taux de TVA associ� au produit courant
      *
-     * @return floatval Le taux de TVA
+     * @return float Le taux de TVA
      */
     public function getVATRate()
     {
@@ -140,11 +147,11 @@ class myservices_products extends myservices_Object
         }
         $ret['products_url']        = $this->getProductLink();
         $ret['products_ttc']        = $this->getTTC();
-        $ret['products_href_title'] = myservices_utils::makeHrefTitle($this->getVar('products_title'));
+        $ret['products_href_title'] =\XoopsModules\Myservices\Utilities::makeHrefTitle($this->getVar('products_title'));
         $quantity                   = $this->getVar('products_duration');
 
         // Formattage des monnaies
-        $currency = myservices_currency::getInstance();
+        $currency = \XoopsModules\Myservices\Currency::getInstance();
 
         // La TVA formatée avec le bon nombre de décimales (sans signe monétaire)
         $ret['products_formatted_vatrate'] = $currency->amountInCurrency($this->getVATRate());
@@ -171,103 +178,6 @@ class myservices_products extends myservices_Object
             } else {
                 $ret[$imageUrlName] = MYSERVICES_IMAGES_URL . 'blank.gif';
             }
-        }
-
-        return $ret;
-    }
-}
-
-class MyservicesMyservices_productsHandler extends myservices_ORM
-{
-    public function __construct($db)
-    {    //                             Table                   Classe              Id          Description
-        parent::__construct($db, 'myservices_products', 'myservices_products', 'products_id', 'products_title');
-    }
-
-    /**
-     * Renvoie la liste des produits mais par catégorie
-     *
-     * @return array La liste des produits avec regroupement par catégorie
-     */
-    public function getProductsPerCategory()
-    {
-        require_once __DIR__ . '/lite.php';
-        $limit = $start = 0;
-        $ret   = [];
-        $sql   = 'SELECT * FROM ' . $this->table . ' WHERE products_online = 1 ORDER BY products_categories_id, products_title';
-
-        $Cache_Lite = new Cache_Lite($this->cacheOptions);
-        $id         = $this->_getIdForCache($sql, $start, $limit);
-        $cacheData  = $Cache_Lite->get($id);
-        if (false === $cacheData) {
-            $result = $this->db->query($sql);
-            if (!$result) {
-                return $ret;
-            }
-            while (false !== ($myrow = $this->db->fetchArray($result))) {
-                $obj = $this->create(false);
-                $obj->assignVars($myrow);
-                $ret[$myrow['products_categories_id']][] =& $obj;
-                unset($obj);
-            }
-            $Cache_Lite->save($ret);
-
-            return $ret;
-        } else {
-            return $cacheData;
-        }
-    }
-
-    /**
-     * Renvoie le nombre total de produits appartenants à une catégorie donnée
-     *
-     * @param int $categoryId Indentifiant de la catégorie
-     * @return int Le nombre de produits de cette catégorie
-     */
-    public function getProductsCountFromCategory($categoryId)
-    {
-        $criteria = new \CriteriaCompo();
-        $criteria->add(new \Criteria('products_categories_id', $categoryId, '='));
-        $criteria->add(new \Criteria('products_online', 1, '='));
-
-        return $this->getCount($criteria);
-    }
-
-    /**
-     * Renvoie la liste des produits appartenants à une catégorie spécifique
-     *
-     * @param integer $categoryId Identifiant de la catégorie dont on veut récupérer les produits
-     * @param integer $start      Position de départ
-     * @param integer $limit      Nombre maximum de produits à renvoyer
-     * @param string  $sort       Champ à utiliser pour trier les produits
-     * @return array La liste des produits de la catégorie
-     */
-    public function getProductsFromCategory($categoryId, $start = 0, $limit = 0, $sort = 'products_title')
-    {
-        $criteria = new \CriteriaCompo();
-        $criteria->add(new \Criteria('products_categories_id', $categoryId, '='));
-        $criteria->add(new \Criteria('products_online', 1, '='));
-        $criteria->setStart($start);
-        $criteria->setLimit($limit);
-        $criteria->setSort($sort);
-
-        return $this->getObjects($criteria);
-    }
-
-    /**
-     * Renvoie la liste des produits actifs parmi une liste de produits (via leur ID)
-     *
-     * @param  array $products_id Liste des produits sous la forme d'un tableau
-     * @return array La liste des produits actifs (sous la forme d'objets)
-     */
-    public function getOnlineProductsFromId($products_id)
-    {
-        $ret = [];
-        if (is_array($products_id)) {
-            $criteria = new \CriteriaCompo();
-            $criteria->add(new \Criteria('products_online', 1, '='));
-            $criteria->add(new \Criteria('products_id', '(' . implode(',', $products_id) . ')', 'IN'));
-            $ret = $this->getObjects($criteria);
         }
 
         return $ret;

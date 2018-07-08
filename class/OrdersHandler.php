@@ -1,4 +1,5 @@
-<?php
+<?php namespace XoopsModules\Myservices;
+
 /**
  * ****************************************************************************
  * myservices - MODULE FOR XOOPS
@@ -7,12 +8,14 @@
  * ****************************************************************************
  */
 
+use XoopsModules\Myservices;
+
 defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
-//require XOOPS_ROOT_PATH.'/kernel/object.php';
-if (!class_exists('myservices_ORM')) {
-    require XOOPS_ROOT_PATH . '/modules/myservices/class/PersistableObjectHandler.php';
-}
+//require_once XOOPS_ROOT_PATH.'/kernel/object.php';
+//if (!class_exists('myservices_ORM')) {
+//    require_once XOOPS_ROOT_PATH . '/modules/myservices/class/PersistableObjectHandler.php';
+//}
 
 define('MYSERVICES_ORDER_NOINFORMATION', 0);    // Pas encore d'informations sur la commande
 define('MYSERVICES_ORDER_VALIDATED', 1);        //  Commande validée par Paypal
@@ -21,35 +24,19 @@ define('MYSERVICES_ORDER_FAILED', 3);            // Echec
 define('MYSERVICES_ORDER_CANCELED', 4);            // Annulée
 define('MYSERVICES_ORDER_FRAUD', 5);            // Fraude
 
-class myservices_orders extends myservices_Object
+/**
+ * Class OrdersHandler
+ * @package XoopsModules\Myservices
+ */
+class OrdersHandler extends Myservices\ServiceORM
 {
-    public function __construct()
-    {
-        $this->initVar('orders_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('orders_uid', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('orders_date', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('orders_state', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('orders_ip', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('orders_firstname', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('orders_lastname', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('orders_address', XOBJ_DTYPE_TXTAREA, null, false);
-        $this->initVar('orders_zip', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('orders_town', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('orders_country', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('orders_telephone', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('orders_email', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('orders_articles_count', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('orders_total', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('orders_password', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('orders_cancel', XOBJ_DTYPE_TXTBOX, null, false);
-    }
-}
-
-class MyservicesMyservices_ordersHandler extends myservices_ORM
-{
+    /**
+     * OrdersHandler constructor.
+     * @param $db
+     */
     public function __construct($db)
     {    //                         Table                   Classe              Id
-        parent::__construct($db, 'myservices_orders', 'myservices_orders', 'orders_id');
+        parent::__construct($db, 'myservices_orders', Orders::class, 'orders_id');
     }
 
     /**
@@ -61,7 +48,7 @@ class MyservicesMyservices_ordersHandler extends myservices_ORM
      */
     public function validateOrder($cmd_id, &$qualityLinks)
     {
-        global $hMsCaddy, $hMsCalendar, $hMsEmployes, $hMsProducts, $hMsVat, $hMsPrefs;
+        global $hMsCaddy, $hMsCalendar, $hMsEmployees, $hMsProducts, $hMsVat, $hMsPrefs;
         $cmd_id   = (int)$cmd_id;
         $retval   = $elementsCommande = [];
         $commande = null;
@@ -81,12 +68,12 @@ class MyservicesMyservices_ordersHandler extends myservices_ORM
         $tblServices = $hMsCaddy->getObjects(new \Criteria('caddy_orders_id', $cmd_id, '='));
         foreach ($tblServices as $service) {    // Boucle sur les éléments du panier
             $employee = $product = null;
-            $employee = $hMsEmployes->get($service->getVar('caddy_employes_id'));
+            $employee = $hMsEmployees->get($service->getVar('caddy_employees_id'));
             $product  = $hMsProducts->get($service->getVar('caddy_products_id'));
 
             $calendar = $hMsCalendar->create(true);
             $calendar->setVar('calendar_status', CALENDAR_STATUS_WORK);
-            $calendar->setVar('calendar_employes_id', $service->getVar('caddy_employes_id'));
+            $calendar->setVar('calendar_employees_id', $service->getVar('caddy_employees_id'));
             $calendar->setVar('calendar_start', $service->getVar('caddy_start'));
             $calendar->setVar('calendar_end', $service->getVar('caddy_end'));
             $calendar->setVar('calendar_products_id', $service->getVar('caddy_products_id'));
@@ -99,22 +86,22 @@ class MyservicesMyservices_ordersHandler extends myservices_ORM
             // Liens vers les formulaires de qualité
             $qualityLinks[] = $product->getVar('products_quality_link');
             // Doit on prévenir les salariés ?
-            if (1 == myservices_utils::getModuleOption('email_employees') && '' != xoops_trim($employee->getVar('employes_email'))) {
+            if (1 ==\XoopsModules\Myservices\Utilities::getModuleOption('email_employees') && '' != xoops_trim($employee->getVar('employees_email'))) {
                 $recipients   = $msg = $elementsService = [];
-                $recipients   = myservices_utils::getEmailsFromGroup(myservices_utils::getModuleOption('grp_sold'));    // Copie aux responsables du site
-                $recipients[] = $employee->getVar('employes_email'); // Plus le (la) salarié(e)
+                $recipients   =\XoopsModules\Myservices\Utilities::getEmailsFromGroup(\XoopsModules\Myservices\Utility::getModuleOption('grp_sold'));    // Copie aux responsables du site
+                $recipients[] = $employee->getVar('employees_email'); // Plus le (la) salarié(e)
 
                 $elementsService[] = _MYSERVICES_SERVICE . ' : ' . $product->getVar('products_title');
-                $elementsService[] = _MYSERVICES_STARTING_DATE . ' : ' . myservices_utils::sqlDateTimeToFrench($service->getVar('caddy_start'));
-                $elementsService[] = _MYSERVICES_ENDING_DATE . ' : ' . myservices_utils::sqlDateTimeToFrench($service->getVar('caddy_end'));
+                $elementsService[] = _MYSERVICES_STARTING_DATE . ' : ' .\XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($service->getVar('caddy_start'));
+                $elementsService[] = _MYSERVICES_ENDING_DATE . ' : ' .\XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($service->getVar('caddy_end'));
 
                 $msg['DETAIL'] = implode("\n", $elementsCommande) . "\n\n" . implode("\n", $elementsService);
-                $msg['DETAIL'] = myservices_utils::textForEmail($msg['DETAIL']);
-                myservices_utils::sendEmailFromTpl('employee_service.tpl', $recipients, _MYSERVICES_ALERT, $msg);
+                $msg['DETAIL'] =\XoopsModules\Myservices\Utilities::textForEmail($msg['DETAIL']);
+               \XoopsModules\Myservices\Utilities::sendEmailFromTpl('employee_service.tpl', $recipients, _MYSERVICES_ALERT, $msg);
             }
             $retval[] = _MYSERVICES_SERVICE . ' : ' . $product->getVar('products_title');
-            $retval[] = _MYSERVICES_STARTING_DATE . ' : ' . myservices_utils::sqlDateTimeToFrench($service->getVar('caddy_start'));
-            $retval[] = _MYSERVICES_ENDING_DATE . ' : ' . myservices_utils::sqlDateTimeToFrench($service->getVar('caddy_end'));
+            $retval[] = _MYSERVICES_STARTING_DATE . ' : ' .\XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($service->getVar('caddy_start'));
+            $retval[] = _MYSERVICES_ENDING_DATE . ' : ' .\XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($service->getVar('caddy_end'));
             $retval[] = _MYSERVICES_PRODUCT_PRICETTC . ' : ' . $service->getVar('caddy_price');
             $retval[] = "\n";
         }

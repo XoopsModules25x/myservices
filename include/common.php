@@ -9,7 +9,16 @@
 
 use XoopsModules\Myservices;
 
-defined('XOOPS_ROOT_PATH') || die('Restricted access');
+include dirname(__DIR__) . '/preloads/autoloader.php';
+
+//defined('XOOPS_ROOT_PATH') || die('Restricted access');
+
+/** @var \XoopsDatabase $db */
+/** @var \XoopsModules\Myservices\Helper $helper */
+/** @var \XoopsModules\Myservices\Utility $utility */
+$db      = \XoopsDatabaseFactory::getDatabaseConnection();
+$helper  = \XoopsModules\Myservices\Helper::getInstance();
+$utility = new \XoopsModules\Myservices\Utility();
 
 if (!defined('MYSERVICES_DIRNAME')) {
     define('MYSERVICES_DIRNAME', 'myservices');
@@ -25,20 +34,20 @@ if (!defined('MYSERVICES_DIRNAME')) {
 $myts = \MyTextSanitizer::getInstance();
 
 // Chargement des handler et des autres classes
-require_once MYSERVICES_PATH . 'class/myservices_utils.php';
-require_once MYSERVICES_PATH . 'class/myservices_currency.php';
+require_once MYSERVICES_PATH . 'class/Utilities.php';
+require_once MYSERVICES_PATH . 'class/Currency.php';
 require_once MYSERVICES_PATH . 'class/PEAR.php';
 
 // Handlers des tables
-$hMsCaddy            = xoops_getModuleHandler('myservices_caddy', MYSERVICES_DIRNAME);
-$hMsCalendar         = xoops_getModuleHandler('myservices_calendar', MYSERVICES_DIRNAME);
-$hMsCategories       = xoops_getModuleHandler('myservices_categories', MYSERVICES_DIRNAME);
-$hMsEmployes         = xoops_getModuleHandler('myservices_employes', MYSERVICES_DIRNAME);
-$hMsEmployesproducts = xoops_getModuleHandler('myservices_employesproducts', MYSERVICES_DIRNAME);
-$hMsOrders           = xoops_getModuleHandler('myservices_orders', MYSERVICES_DIRNAME);
-$hMsProducts         = xoops_getModuleHandler('myservices_products', MYSERVICES_DIRNAME);
-$hMsVat              = xoops_getModuleHandler('myservices_vat', MYSERVICES_DIRNAME);
-$hMsPrefs            = xoops_getModuleHandler('myservices_prefs', MYSERVICES_DIRNAME);
+$hMsCaddy            = $helper->getHandler('Caddy');
+$hMsCalendar         = $helper->getHandler('Calendar');
+$hMsCategories       = $helper->getHandler('Categories');
+$hMsEmployees         = $helper->getHandler('Employees');
+$hMsEmployeesProducts = $helper->getHandler('EmployeesProducts');
+$hMsOrders           = $helper->getHandler('Orders');
+$hMsProducts         = $helper->getHandler('Products');
+$hMsVat              = $helper->getHandler('Vat');
+$hMsPrefs            = $helper->getHandler('Preferences');
 
 // Definition des images
 if (!defined('_MYSERVICES_EDIT')) {

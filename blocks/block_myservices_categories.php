@@ -7,6 +7,8 @@
  * ****************************************************************************
  */
 
+use XoopsModules\Myservices;
+
 defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 /**
@@ -17,13 +19,13 @@ defined('XOOPS_ROOT_PATH') || die('Restricted access');
 function b_ms_categories_show($options)
 {
     // Options = Nombre d'éléments visibles simultanément dans la liste
-    require XOOPS_ROOT_PATH . '/modules/myservices/include/common.php';
-    require_once MYSERVICES_PATH . 'class/tree.php';
+    require_once XOOPS_ROOT_PATH . '/modules/myservices/include/common.php';
+    // require_once MYSERVICES_PATH . 'class/tree.php';
     $block      = [];
     $itemsCount = (int)$options[0];
     $tblItems   = [];
     $tblItems   = $hMsCategories->getItems();
-    $mytree     = new myservices_XoopsObjectTree($tblItems, 'categories_id', 'categories_pid');
+    $mytree     = new Myservices\Tree($tblItems, 'categories_id', 'categories_pid');
 
     $jump                  = MYSERVICES_URL . 'category.php?categories_id=';
     $additional            = "size='" . $itemsCount . "' onchange='location=\"" . $jump . "\"+this.options[this.selectedIndex].value'";
@@ -34,6 +36,10 @@ function b_ms_categories_show($options)
     return $block;
 }
 
+/**
+ * @param $options
+ * @return string
+ */
 function b_ms_categories_edit($options)
 {
     // Options = Count of visible elements

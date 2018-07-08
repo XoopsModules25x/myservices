@@ -1,4 +1,5 @@
-<?php
+<?php namespace XoopsModules\Myservices;
+
 /**
  * ****************************************************************************
  * myservices - MODULE FOR XOOPS
@@ -6,6 +7,8 @@
  * Created on 20 oct. 07 at 14:38:20
  * ****************************************************************************
  */
+
+use XoopsModules\Myservices;
 
 defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
@@ -17,7 +20,7 @@ defined('XOOPS_ROOT_PATH') || die('Restricted access');
  * @copyright (c) Instant Zero
  * @todo          Utiliser un registre
  */
-class myservices_Cart
+class Cart
 {
     const CADDY_NAME = 'myservices_cart';    // Nom du panier en session
 
@@ -58,7 +61,7 @@ class myservices_Cart
      */
     public function computeCart(&$cartForTemplate, &$emptyCart, &$commandAmount, &$vatAmount, &$commandAmountTTC)
     {
-        global $hMsCalendar, $hMsCategories, $hMsEmployes, $hMsEmployesproducts, $hMsProducts, $hMsVat, $hMsPrefs;
+        global $hMsCalendar, $hMsCategories, $hMsEmployees, $hMsEmployeesProducts, $hMsProducts, $hMsVat, $hMsPrefs;
         if ($this->isCartEmpty()) {    // Pas de caddie
             $emptyCart = true;
         } else {
@@ -67,13 +70,13 @@ class myservices_Cart
             $tblCaddie  = isset($_SESSION[self::CADDY_NAME]) ? $_SESSION[self::CADDY_NAME] : [];
             $caddyCount = count($tblCaddie);
             if ($caddyCount > 0) {
-                $currency = myservices_currency::getInstance();
+                $currency = \XoopsModules\Myservices\Currency::getInstance();
 
                 foreach ($tblCaddie as $caddyElement) {
                     $datas          = [];
                     $produit_number = $caddyElement['number'];    // Numéro séquentiel
                     $produit_id     = $caddyElement['id'];            // Identifiant Produit
-                    $employes_id    = $caddyElement['empid'];        // Identifiant employé(e)
+                    $employees_id    = $caddyElement['empid'];        // Identifiant employé(e)
                     $startingHour   = $caddyElement['hour'];        // Heure de début
                     $date           = $caddyElement['date'];                // Date de réservation
                     $produit_qty    = $caddyElement['qty'];        // Durée en heures
@@ -87,7 +90,7 @@ class myservices_Cart
                     }
                     // Puis l'employé(e)
                     $employee = null;
-                    $employee = $hMsEmployes->get($employes_id);
+                    $employee = $hMsEmployees->get($employees_id);
                     if (!is_object($employee)) {
                         trigger_error(_MYSERVICES_ERROR11, E_USER_ERROR);
 
@@ -96,8 +99,8 @@ class myservices_Cart
 
                     $datas                               = $product->toArray();
                     $datas['id']                         = $produit_id;
-                    $datas['empid']                      = $employes_id;
-                    $datas['products_reserved_date']     = myservices_utils::SQLDateToHuman($date, 's');
+                    $datas['empid']                      = $employees_id;
+                    $datas['products_reserved_date']     =\XoopsModules\Myservices\Utilities::SQLDateToHuman($date, 's');
                     $datas['products_reserved_time']     = $startingHour;
                     $datas['products_reserved_duration'] = $produit_qty;
                     $datas['employee']                   = $employee->toArray();
@@ -135,7 +138,7 @@ class myservices_Cart
      */
     public function updateQuantites()
     {
-        global $hMsCalendar, $hMsCategories, $hMsEmployes, $hMsEmployesproducts, $hMsProducts, $hMsVat, $hMsPrefs;
+        global $hMsCalendar, $hMsCategories, $hMsEmployees, $hMsEmployeesProducts, $hMsProducts, $hMsVat, $hMsPrefs;
         $tbl_caddie = $tbl_caddie2 = [];
         if (isset($_SESSION[self::CADDY_NAME])) {
             $tbl_caddie = $_SESSION[self::CADDY_NAME];

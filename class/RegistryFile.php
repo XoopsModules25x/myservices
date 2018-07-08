@@ -1,4 +1,4 @@
-<?php
+<?php namespace XoopsModules\Myservices;
 
 /**
  * ****************************************************************************
@@ -7,7 +7,14 @@
  * Created on 20 oct. 07 at 14:38:20
  * ****************************************************************************
  */
-class myservices_registryfile
+
+use XoopsModules\Myservices;
+
+/**
+ * Class RegistryFile
+ * @package XoopsModules\Myservices
+ */
+class RegistryFile
 {
     public $filename;    // Nom du fichier à traiter
 
@@ -19,7 +26,7 @@ class myservices_registryfile
      * @static
      * @staticvar   object
      */
-    public function getInstance()
+    public static function getInstance()
     {
         static $instance;
         if (null === $instance) {
@@ -29,11 +36,18 @@ class myservices_registryfile
         return $instance;
     }
 
+    /**
+     * RegistryFile constructor.
+     * @param null $fichier
+     */
     public function __construct($fichier = null)
     {
         $this->setfile($fichier);
     }
 
+    /**
+     * @param null $fichier
+     */
     public function setfile($fichier = null)
     {
         if ($fichier) {
@@ -41,6 +55,10 @@ class myservices_registryfile
         }
     }
 
+    /**
+     * @param null $fichier
+     * @return bool|string
+     */
     public function getfile($fichier = null)
     {
         $fw = '';
@@ -56,6 +74,11 @@ class myservices_registryfile
         }
     }
 
+    /**
+     * @param      $content
+     * @param null $fichier
+     * @return bool
+     */
     public function savefile($content, $fichier = null)
     {
         $fw = '';

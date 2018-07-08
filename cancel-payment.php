@@ -7,16 +7,18 @@
  * ****************************************************************************
  */
 
+use XoopsModules\Myservices;
+
 /**
  * Page appelée par Paypal dans le cas de l'annulation d'une commande
  */
 require_once __DIR__ . '/header.php';
 $GLOBALS['xoopsOption']['template_main'] = 'myservices_cancelpurchase.tpl';
 require_once XOOPS_ROOT_PATH . '/header.php';
-require_once MYSERVICES_PATH . 'class/myservices_cart.php';
+// require_once MYSERVICES_PATH . 'class/myservices_cart.php';
 
-require_once MYSERVICES_PATH . 'class/myservices_paypal.php';
-if (isset($_GET['id'])) {
+// require_once MYSERVICES_PATH . 'class/Paypal.php';
+if (\Xmf\Request::hasVar('id', 'GET')) {
     $critere = new \Criteria('orders_cancel', $myts->addSlashes($_GET['id']), '=');
     $cnt     = 0;
     $tblCmd  = [];
@@ -31,15 +33,15 @@ if (isset($_GET['id'])) {
                 $hMsOrders->insert($commande, true);
                 $msg                 = [];
                 $msg['NUM_COMMANDE'] = $commande->getVar('orders_id');
-                myservices_utils::sendEmailFromTpl('command_shop_cancel.tpl', myservices_utils::getEmailsFromGroup(myservices_utils::getModuleOption('grp_sold')), _MYSERVICES_PAYPAL_CANCELED, $msg);
-                myservices_utils::sendEmailFromTpl('command_client_cancel.tpl', $commande->getVar('cmd_email'), _MYSERVICES_PAYPAL_CANCELED, $msg);
+               \XoopsModules\Myservices\Utilities::sendEmailFromTpl('command_shop_cancel.tpl',\XoopsModules\Myservices\Utilities::getEmailsFromGroup(\XoopsModules\Myservices\Utilities::getModuleOption('grp_sold')), _MYSERVICES_PAYPAL_CANCELED, $msg);
+               \XoopsModules\Myservices\Utilities::sendEmailFromTpl('command_client_cancel.tpl', $commande->getVar('cmd_email'), _MYSERVICES_PAYPAL_CANCELED, $msg);
             }
         }
-        $myservicesCart = new myservices_Cart();    // Pour gérer le panier
+        $myservicesCart = new Myservices\Cart();    // Pour gérer le panier
         $myservicesCart->emptyCart();
     }
 }
 
-$title = _MYSERVICES_PAYPAL_CANCELED . ' - ' . myservices_utils::getModuleName();
-myservices_utils::setMetas($title, $title);
-require_once(XOOPS_ROOT_PATH . '/footer.php');
+$title = _MYSERVICES_PAYPAL_CANCELED . ' - ' .\XoopsModules\Myservices\Utilities::getModuleName();
+\XoopsModules\Myservices\Utilities::setMetas($title, $title);
+require_once XOOPS_ROOT_PATH . '/footer.php';

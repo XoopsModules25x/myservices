@@ -34,7 +34,7 @@ function tableExists($tablename)
 {
     $result = $GLOBALS['xoopsDB']->queryF("SHOW TABLES LIKE '$tablename'");
 
-    return ($GLOBALS['xoopsDB']->getRowsNum($result) > 0) ? true : false;
+    return $GLOBALS['xoopsDB']->getRowsNum($result) > 0;
 }
 
 /**
@@ -77,21 +77,6 @@ function xoops_module_update_myservices(\XoopsModule $module, $previousVersion =
     $helper  = Myservices\Helper::getInstance();
     $utility = new Myservices\Utility();
     $configurator = new Myservices\Common\Configurator();
-
-    if ($previousVersion < 240) {
-
-        //rename column EXAMPLE
-        $tables     = new Tables();
-        $table      = 'myservicesx_categories';
-        $column     = 'ordre';
-        $newName    = 'order';
-        $attributes = "INT(5) NOT NULL DEFAULT '0'";
-        if ($tables->useTable($table)) {
-            $tables->alterColumn($table, $column, $attributes, $newName);
-            if (!$tables->executeQueue()) {
-                echo '<br>' . _AM_XXXXX_UPGRADEFAILED0 . ' ' . $migrate->getLastError();
-            }
-        }
 
         //delete old HTML templates
         if (count($configurator->templateFolders) > 0) {

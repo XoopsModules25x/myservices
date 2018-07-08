@@ -1,4 +1,5 @@
-<?php
+<?php namespace XoopsModules\Myservices;
+
 //  ------------------------------------------------------------------------ //
 //                XOOPS - PHP Content Management System                      //
 //                    Copyright (c) 2000 XOOPS.org                           //
@@ -28,6 +29,8 @@
 // Project: The XOOPS Project (https://xoops.org/)                        //
 // ------------------------------------------------------------------------- //
 
+use XoopsModules\Myservices;
+
 /**
  * A tree structures with {@link XoopsObject}s as nodes
  *
@@ -37,7 +40,7 @@
  * @author          Kazumi Ono  <onokazu@xoops.org>
  * @copyright   (c) 2000-2003 The Xoops Project - www.xoops.org
  */
-class myservices_XoopsObjectTree
+class Tree
 {
     /**#@+
      * @access  private
@@ -62,7 +65,7 @@ class myservices_XoopsObjectTree
         $this->_objects  =& $objectArr;
         $this->_myId     = $myId;
         $this->_parentId = $parentId;
-        if (isset($rootId)) {
+        if ($rootId !== null) {
             $this->_rootId = $rootId;
         }
         $this->_initialize();

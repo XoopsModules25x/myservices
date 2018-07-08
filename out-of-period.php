@@ -7,15 +7,17 @@
  * ****************************************************************************
  */
 
+use XoopsModules\Myservices;
+
 /**
  * Fenêtre affichée sous la forme d'un popup qui renseigne l'utilisateur sur la méthode à utiliser pour réserver un service en dehors de la période normale de travail
  */
 require_once __DIR__ . '/header.php';
 error_reporting(0);
 @$xoopsLogger->activated = false;
-require_once MYSERVICES_PATH . 'class/registryfile.php';
+// require_once MYSERVICES_PATH . 'class/RegistryFile.php';
 xoops_header(false);
-$registry = new myservices_registryfile();
+$registry = new Myservices\RegistryFile();
 echo $registry->getfile(MYSERVICES_TEXTFILE2);
 echo '<div style="text-align:center;"><input class="formButton" value="' . _CLOSE . '" type="button" onclick="javascript:window.close();"></div>';
 xoops_footer();

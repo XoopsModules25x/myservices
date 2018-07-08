@@ -1,4 +1,5 @@
-<?php
+<?php namespace XoopsModules\Myservices;
+
 /**
  * ****************************************************************************
  * myservices - MODULE FOR XOOPS
@@ -7,54 +8,32 @@
  * ****************************************************************************
  */
 
+use XoopsModules\Myservices;
+
 defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
-//require XOOPS_ROOT_PATH.'/kernel/object.php';
-if (!class_exists('myservices_ORM')) {
-    require XOOPS_ROOT_PATH . '/modules/myservices/class/PersistableObjectHandler.php';
-}
+//require_once XOOPS_ROOT_PATH.'/kernel/object.php';
+//if (!class_exists('myservices_ORM')) {
+//    require_once XOOPS_ROOT_PATH . '/modules/myservices/class/PersistableObjectHandler.php';
+//}
 
 define('CALENDAR_STATUS_WORK', 1);        // Au travail
 define('CALENDAR_STATUS_HOLIDAY', 2);    // Absent(e)
 define('CALENDAR_STATUS_CLOSED', 3);    //  Magasin fermé
 
-class myservices_calendar extends myservices_Object
+/**
+ * Class CalendarHandler
+ * @package XoopsModules\Myservices
+ */
+class CalendarHandler extends Myservices\ServiceORM
 {
-    public function __construct()
-    {
-        $this->initVar('calendar_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('calendar_status', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('calendar_employes_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('calendar_start', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('calendar_end', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('calendar_products_id', XOBJ_DTYPE_INT, null, false);
-    }
-
     /**
-     * Renvoie le libellé correspondant au statut de l'objet courant
-     *
-     * @return string Le libellé correspondant ou "Non défini"
+     * CalendarHandler constructor.
+     * @param $db
      */
-    public function getStatusLabel()
-    {
-        $tblStatus = [
-            CALENDAR_STATUS_WORK    => _MYSERVICES_STATE_WORK,
-            CALENDAR_STATUS_HOLIDAY => _MYSERVICES_STATE_HOLIDAY,
-            CALENDAR_STATUS_CLOSED  => _MYSERVICES_STATE_CLOSED
-        ];
-        if (isset($tblStatus[$this->getVar('calendar_status')])) {
-            return $tblStatus[$this->getVar('calendar_status')];
-        } else {
-            return _MYSERVICES_STATE_UNDEFINED;
-        }
-    }
-}
-
-class MyservicesMyservices_calendarHandler extends myservices_ORM
-{
     public function __construct($db)
     {    //                             Table                   Classe              Id
-        parent::__construct($db, 'myservices_calendar', 'myservices_calendar', 'calendar_id');
+        parent::__construct($db, 'myservices_calendar', Calendar::class, 'calendar_id');
     }
 
     /**

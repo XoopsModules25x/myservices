@@ -7,13 +7,15 @@
  * ****************************************************************************
  */
 
+use XoopsModules\Myservices;
+
 /**
  * Affichage d'un produit
  */
 require_once __DIR__ . '/header.php';
 $GLOBALS['xoopsOption']['template_main'] = 'myservices_product.tpl';
 require_once XOOPS_ROOT_PATH . '/header.php';
-require_once MYSERVICES_PATH . 'class/activecalendar.php';
+// require_once MYSERVICES_PATH . 'class/activecalendar.php';
 
 // Initialisations
 $vatArray = $closedDays = $employees = $employeesSelect = $yearsSelect = [];
@@ -21,18 +23,18 @@ $vatArray = $closedDays = $employees = $employeesSelect = $yearsSelect = [];
 // Catégorie sélectionnée ***************************************************************
 $currentProductId = \Xmf\Request::getInt('products_id', 0, 'GET');
 if (0 == $currentProductId) {
-    myservices_utils::redirect(_MYSERVICES_ERROR4, 'index.php', 5);
+   \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_ERROR4, 'index.php', 5);
 }
 
 // Chargement du produit ****************************************************************
 $currentProduct = null;
 $currentProduct = $hMsProducts->get($currentProductId);
 if (!is_object($currentProduct)) {    // Est ce que le produit existe ?
-    myservices_utils::redirect(_MYSERVICES_ERROR3, 'index.php', 5);
+   \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_ERROR3, 'index.php', 5);
 }
 // Est ce que le produit est en ligne ?
 if (0 == $currentProduct->getVar('products_online')) {
-    myservices_utils::redirect(_MYSERVICES_ERROR6, 'index.php', 5);
+   \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_ERROR6, 'index.php', 5);
 }
 
 // Lecture des TVA **********************************************************************
@@ -45,7 +47,7 @@ $xoopsTpl->assign('product', $currentProduct->toArray());
 $productCategory = null;
 $productCategory = $hMsCategories->get($currentProduct->getVar('products_categories_id'));
 if (!is_object($productCategory)) {
-    myservices_utils::redirect(_MYSERVICES_ERROR5, 'index.php', 5);
+   \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_ERROR5, 'index.php', 5);
 }
 // Formatage de la catégorie courante ***************************************************
 $xoopsTpl->assign('category', $productCategory->toArray());
@@ -54,19 +56,19 @@ $xoopsTpl->assign('category', $productCategory->toArray());
 $xoopsTpl->assign('breadcrumb', $hMsCategories->getBreadCrumb($productCategory));
 
 // Recherche des personnes qui fournissent ce service ***********************************
-$employees = $hMsEmployes->getEmployeesForProduct($currentProductId);
+$employees = $hMsEmployees->getEmployeesForProduct($currentProductId);
 if (0 == count($employees)) {    // Personne n'assure ce service !
     $xoopsTpl->assign('no_employees', _MYSERVICES_ERROR7);
 } else {
     $xoopsTpl->assign('no_employees', '');
     foreach ($employees as $item) {
         $xoopsTpl->append('employees', $item->toArray());
-        $employeesSelect[$item->getVar('employes_id')] = $item->getEmployeeFullName();
+        $employeesSelect[$item->getVar('employees_id')] = $item->getEmployeeFullName();
     }
     $xoopsTpl->assign('employeesSelect', $employeesSelect);
 }
 // Bulle d'aide pour la durée à attendre avant de passer commande
-$xoopsTpl->assign('help', sprintf(_MYSERVICES_NO_COMMAND_BEFORE, myservices_utils::getModuleOption('latence')));
+$xoopsTpl->assign('help', sprintf(_MYSERVICES_NO_COMMAND_BEFORE,\XoopsModules\Myservices\Utilities::getModuleOption('latence')));
 
 // Chargement du javascript de galerie d'images ****************************************
 $urlCSS = MYSERVICES_URL . 'assets/css/product.css';
@@ -82,17 +84,17 @@ $monthNames  = [1 => _CAL_JANUARY, 2 => _CAL_FEBRUARY, 3 => _CAL_MARCH, 4 => _CA
 
 $month       = \Xmf\Request::getInt('month', date('n'), 'GET');
 $year        = \Xmf\Request::getInt('year', date('Y'), 'GET');
-$employes_id = \Xmf\Request::getInt('employes_id', 0, 'GET');
+$employees_id = \Xmf\Request::getInt('employees_id', 0, 'GET');
 
-if (0 == $employes_id) {    // Si aucun employé n'a été spécifié, on prend le premier
+if (0 == $employees_id) {    // Si aucun employé n'a été spécifié, on prend le premier
     if (count($employees) > 0) {
         $employee = array_slice($employees, 0, 1);
         $datas    = $employee[0]->toArray();
         $xoopsTpl->assign('currentEmployee', $datas);
     }
 } else {
-    if (isset($employees[$employes_id])) {
-        $xoopsTpl->assign('currentEmployee', $employees[$employes_id]->toArray());
+    if (isset($employees[$employees_id])) {
+        $xoopsTpl->assign('currentEmployee', $employees[$employees_id]->toArray());
     }
 }
 
@@ -105,7 +107,7 @@ $xoopsTpl->assign('currentYear', $year);
 $xoopsTpl->assign('monthNames', $monthNames);
 $xoopsTpl->assign('month', $month);
 $xoopsTpl->assign('year', $year);
-$xoopsTpl->assign('selectedEmployee', $employes_id);
+$xoopsTpl->assign('selectedEmployee', $employees_id);
 
 // Recherche des heures mini et maxi d'ouverture du magasin
 $minHour = $hMsPrefs->getLowerOpenTime();
@@ -140,7 +142,7 @@ for ($i = $currentProduct->getVar('products_duration'); $i <= $prefs['maxDuratio
 }
 $xoopsTpl->assign('durationSelect', $durationSelect);
 
-$calendar = new activeCalendar($year, $month);
+$calendar = new Myservices\ActiveCalendar($year, $month);
 $calendar->setMonthNames(array_values($monthNames));
 
 // Récupération du nom des jours, raccourcis
@@ -191,7 +193,7 @@ for ($i = 1; $i <= $daysMonth; ++$i) {    // Boucle sur tous les jours du mois
 $xoopsTpl->assign('calendar', $calendar->showMonth());
 
 // Titre de page et meta description ****************************************************
-$pageTitle    = $productCategory->getVar('categories_title') . ' ' . $currentProduct->getVar('products_title') . ' - ' . myservices_utils::getModuleName();
-$metaKeywords = myservices_utils::createMetaKeywords($currentProduct->getVar('products_title', 'e') . ' ' . $currentProduct->getVar('products_summary', 'e') . ' ' . $currentProduct->getVar('products_description', 'e'));
-myservices_utils::setMetas($pageTitle, $pageTitle, $metaKeywords);
+$pageTitle    = $productCategory->getVar('categories_title') . ' ' . $currentProduct->getVar('products_title') . ' - ' .\XoopsModules\Myservices\Utilities::getModuleName();
+$metaKeywords =\XoopsModules\Myservices\Utilities::createMetaKeywords($currentProduct->getVar('products_title', 'e') . ' ' . $currentProduct->getVar('products_summary', 'e') . ' ' . $currentProduct->getVar('products_description', 'e'));
+\XoopsModules\Myservices\Utilities::setMetas($pageTitle, $pageTitle, $metaKeywords);
 require_once XOOPS_ROOT_PATH . '/footer.php';

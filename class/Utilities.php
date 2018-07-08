@@ -1,4 +1,5 @@
-<?php
+<?php namespace XoopsModules\Myservices;
+
 /**
  * ****************************************************************************
  * myservices - MODULE FOR XOOPS
@@ -6,6 +7,8 @@
  * Created on 20 oct. 07 at 14:38:20
  * ****************************************************************************
  */
+
+use XoopsModules\Myservices;
 
 defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
@@ -19,7 +22,7 @@ defined('XOOPS_ROOT_PATH') || die('Restricted access');
  * Note: You should be able to use it without the need to instanciate it.
  *
  */
-class myservices_utils
+class Utilities
 {
     const MODULE_NAME = 'myservices';
 
@@ -31,7 +34,7 @@ class myservices_utils
      * @static
      * @staticvar   object
      */
-    public function getInstance()
+    public static function getInstance()
     {
         static $instance;
         if (null === $instance) {
@@ -135,21 +138,10 @@ class myservices_utils
         $editor_option = static::getModuleOption('form_options');
 
         switch (strtolower($editor_option)) {
-            case 'spaw':
-                if (!$x22) {
-                    if (is_readable(XOOPS_ROOT_PATH . '/class/spaw/formspaw.php')) {
-                        require_once(XOOPS_ROOT_PATH . '/class/spaw/formspaw.php');
-                        $editor = new \XoopsFormSpaw($caption, $name, $value);
-                    }
-                } else {
-                    $editor = new \XoopsFormEditor($caption, 'spaw', $editor_configs);
-                }
-                break;
-
             case 'fck':
                 if (!$x22) {
                     if (is_readable(XOOPS_ROOT_PATH . '/class/fckeditor/formfckeditor.php')) {
-                        require_once(XOOPS_ROOT_PATH . '/class/fckeditor/formfckeditor.php');
+                        require_once XOOPS_ROOT_PATH . '/class/fckeditor/formfckeditor.php';
                         $editor = new \XoopsFormFckeditor($caption, $name, $value);
                     }
                 } else {
@@ -160,7 +152,7 @@ class myservices_utils
             case 'htmlarea':
                 if (!$x22) {
                     if (is_readable(XOOPS_ROOT_PATH . '/class/htmlarea/formhtmlarea.php')) {
-                        require_once(XOOPS_ROOT_PATH . '/class/htmlarea/formhtmlarea.php');
+                        require_once XOOPS_ROOT_PATH . '/class/htmlarea/formhtmlarea.php';
                         $editor = new \XoopsFormHtmlarea($caption, $name, $value);
                     }
                 } else {
@@ -190,7 +182,7 @@ class myservices_utils
             case 'koivi':
                 if (!$x22) {
                     if (is_readable(XOOPS_ROOT_PATH . '/class/wysiwyg/formwysiwygtextarea.php')) {
-                        require_once(XOOPS_ROOT_PATH . '/class/wysiwyg/formwysiwygtextarea.php');
+                        require_once XOOPS_ROOT_PATH . '/class/wysiwyg/formwysiwygtextarea.php';
                         $editor = new \XoopsFormWysiwygTextArea($caption, $name, $value, '100%', '250px', '');
                     }
                 } else {
@@ -361,7 +353,7 @@ class myservices_utils
                 //  Note, I've been testing all the other methods (like the one of Smarty) and none of them run, that's why I have used this code
                 $files_del = [];
                 $files_del = glob(XOOPS_CACHE_PATH . '/*' . $onetemplate->getVar('tpl_file') . '*');
-                if (count($files_del) > 0 && is_array($files_del)) {
+                if (is_array($files_del) && count($files_del) > 0) {
                     foreach ($files_del as $one_file) {
                         if (is_file($one_file)) {
                             unlink($one_file);
@@ -609,7 +601,7 @@ class myservices_utils
         while ($true) {
             $ipbits = explode('.', $_SERVER['REMOTE_ADDR']);
             list($usec, $sec) = explode(' ', microtime());
-            $usec = (integer)($usec * 65536);
+            $usec = ($usec * 65536);
             $sec  = ((integer)$sec) & 0xFFFF;
 
             if ($trimName) {
@@ -712,7 +704,7 @@ class myservices_utils
                 break;
         }
         foreach ($keywords as $keyword) {
-            if (strlen($keyword) >= $limit && !is_numeric($keyword)) {
+            if (!is_numeric($keyword) && strlen($keyword) >= $limit) {
                 $tmp[] = $keyword;
             }
         }
@@ -747,6 +739,10 @@ class myservices_utils
         }
     }
 
+    /**
+     * @param $chaine
+     * @return mixed|string
+     */
     public static function textForEmail($chaine)
     {
         $search = $replace = [];

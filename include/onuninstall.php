@@ -36,7 +36,8 @@ function xoops_module_uninstall_myservices(\XoopsModule $module)
 
     $moduleDirName      = basename(dirname(__DIR__));
     $moduleDirNameUpper = strtoupper($moduleDirName);
-    $helper             = Myservices\Helper::getInstance();
+    /** @var Myservices\Helper $helper */
+    $helper = Myservices\Helper::getInstance();
 
     /** @var Myservices\Utility $utility */
     $utility = new Myservices\Utility();

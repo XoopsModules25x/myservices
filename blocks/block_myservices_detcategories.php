@@ -14,13 +14,13 @@ defined('XOOPS_ROOT_PATH') || die('Restricted access');
  */
 function b_ms_detcategories_show()
 {
-    require XOOPS_ROOT_PATH . '/modules/myservices/include/common.php';
+    require_once XOOPS_ROOT_PATH . '/modules/myservices/include/common.php';
     require_once XOOPS_ROOT_PATH . '/class/template.php';
     $block = [];
 
     $myTpl = new \XoopsTpl();
     // Préférences du module
-    $block['blockColumnsCount'] = myservices_utils::getModuleOption('columnscount');
+    $block['blockColumnsCount'] =\XoopsModules\Myservices\Utilities::getModuleOption('columnscount');
 
     // Lecture de toutes les TVA ************************************************************
     $vatArray = [];

@@ -1,4 +1,5 @@
-<?php
+<?php namespace XoopsModules\Myservices;
+
 /**
  * ****************************************************************************
  * myservices - MODULE FOR XOOPS
@@ -6,6 +7,8 @@
  * Created on 20 oct. 07 at 14:38:20
  * ****************************************************************************
  */
+
+use XoopsModules\Myservices;
 
 defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
@@ -20,7 +23,7 @@ defined('XOOPS_ROOT_PATH') || die('Restricted access');
  * Note: don't call it staticly or be sure to call the constructor
  *
  */
-class myservices_currency
+class Currency
 {
     protected $_decimalsCount;
     protected $_thousandsSep;
@@ -32,12 +35,12 @@ class myservices_currency
     public function __construct()
     {
         // Get the module's preferences
-        $this->_decimalsCount = myservices_utils::getModuleOption('decimals_count');
-        $this->_thousandsSep  = myservices_utils::getModuleOption('thousands_sep');
-        $this->_decimalSep    = myservices_utils::getModuleOption('decimal_sep');
-        $this->_moneyFull     = myservices_utils::getModuleOption('money_full');
-        $this->_moneyShort    = myservices_utils::getModuleOption('money_short');
-        $this->_monnaiePlace  = myservices_utils::getModuleOption('monnaie_place');
+        $this->_decimalsCount =\XoopsModules\Myservices\Utilities::getModuleOption('decimals_count');
+        $this->_thousandsSep  =\XoopsModules\Myservices\Utilities::getModuleOption('thousands_sep');
+        $this->_decimalSep    =\XoopsModules\Myservices\Utilities::getModuleOption('decimal_sep');
+        $this->_moneyFull     =\XoopsModules\Myservices\Utilities::getModuleOption('money_full');
+        $this->_moneyShort    =\XoopsModules\Myservices\Utilities::getModuleOption('money_short');
+        $this->_monnaiePlace  =\XoopsModules\Myservices\Utilities::getModuleOption('monnaie_place');
     }
 
     /**
@@ -72,9 +75,9 @@ class myservices_currency
     /**
      * Format an amount for display according to module's preferences
      *
-     * @param  float  $amount The amount to format
+     * @param  float|string  $amount The amount to format
      * @param  string $format Format to use, 's' for Short and 'l' for Long
-     * @return string The amount formated
+     * @return string The amount formatted
      */
     public function amountForDisplay($amount, $format = 's')
     {

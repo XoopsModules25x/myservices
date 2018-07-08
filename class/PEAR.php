@@ -1,4 +1,7 @@
 <?php
+
+//namespace XoopsModules\Myservices;
+
 /**
  * PEAR, the PHP Extension and Application Repository
  *
@@ -39,10 +42,10 @@ define('PEAR_ERROR_CALLBACK', 16);
  */
 define('PEAR_ERROR_EXCEPTION', 32);
 /**#@-*/
-define('PEAR_ZE2', (function_exists('version_compare')
-                    && version_compare(zend_version(), '2-dev', 'ge')));
+define('PEAR_ZE2', function_exists('version_compare')
+                   && version_compare(zend_version(), '2-dev', 'ge'));
 
-if ('WIN' === substr(PHP_OS, 0, 3)) {
+if (0 === strpos(PHP_OS, 'WIN')) {
     define('OS_WINDOWS', true);
     define('OS_UNIX', false);
     define('PEAR_OS', 'Windows');
@@ -99,7 +102,7 @@ $GLOBALS['_PEAR_error_handler_stack']    = [];
  * @since       Class available since PHP 4.0.2
  * @link        http://pear.php.net/manual/en/core.pear.php#core.pear.pear
  */
-class myservices_PEAR
+class PEAR
 {
     // {{{ properties
 
@@ -167,7 +170,7 @@ class myservices_PEAR
      * @access public
      * @return void
      */
-    public function PEAR($error_class = null)
+    public function __construct($error_class = null)
     {
         $classname = strtolower(get_class($this));
         if ($this->_debug) {
@@ -206,7 +209,7 @@ class myservices_PEAR
      * @access public
      * @return void
      */
-    public function _PEAR()
+    public function __destruct()
     {
         if ($this->_debug) {
             printf("PEAR destructor called, class=%s\n", strtolower(get_class($this)));
@@ -461,7 +464,7 @@ class myservices_PEAR
     {
         $deleted = false;
 
-        if ((is_array($error_code) && (0 != count($error_code)))) {
+        if (is_array($error_code) && (0 != count($error_code))) {
             // $error_code is a non-empty array here;
             // we walk through it trying to unset all
             // values
@@ -473,17 +476,17 @@ class myservices_PEAR
                 }
             }
 
-            return $deleted ? true : PEAR::raiseError('The expected error you submitted does not exist'); // IMPROVE ME
+            return $deleted ? true : self::raiseError('The expected error you submitted does not exist'); // IMPROVE ME
         } elseif (!empty($error_code)) {
             // $error_code comes alone, trying to unset it
             if ($this->_checkDelExpect($error_code)) {
                 return true;
             } else {
-                return PEAR::raiseError('The expected error you submitted does not exist'); // IMPROVE ME
+                return self::raiseError('The expected error you submitted does not exist'); // IMPROVE ME
             }
         } else {
             // $error_code is empty
-            return PEAR::raiseError('The expected error you submitted is empty'); // IMPROVE ME
+            return self::raiseError('The expected error you submitted is empty'); // IMPROVE ME
         }
     }
 
@@ -606,13 +609,19 @@ class myservices_PEAR
 
             return $a;
         } else {
-            $a = &PEAR::raiseError($message, $code, null, null, $userinfo);
+            $a = &self::raiseError($message, $code, null, null, $userinfo);
 
             return $a;
         }
     }
 
     // }}}
+
+    /**
+     * @param      $mode
+     * @param null $options
+     * @return bool
+     */
     public function staticPushErrorHandling($mode, $options = null)
     {
         $stack       =& $GLOBALS['_PEAR_error_handler_stack'];
@@ -649,6 +658,9 @@ class myservices_PEAR
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function staticPopErrorHandling()
     {
         $stack      =& $GLOBALS['_PEAR_error_handler_stack'];
@@ -715,7 +727,7 @@ class myservices_PEAR
         if (isset($this) && is_a($this, 'PEAR')) {
             $this->setErrorHandling($mode, $options);
         } else {
-            PEAR::setErrorHandling($mode, $options);
+            self::setErrorHandling($mode, $options);
         }
         $stack[] = [$mode, $options];
 
@@ -741,7 +753,7 @@ class myservices_PEAR
         if (isset($this) && is_a($this, 'PEAR')) {
             $this->setErrorHandling($mode, $options);
         } else {
-            PEAR::setErrorHandling($mode, $options);
+            self::setErrorHandling($mode, $options);
         }
 
         return true;
@@ -1064,6 +1076,9 @@ class myservices_PEAR_Error
     // }}}
     // {{{ addUserInfo()
 
+    /**
+     * @param $info
+     */
     public function addUserInfo($info)
     {
         if (empty($this->userinfo)) {

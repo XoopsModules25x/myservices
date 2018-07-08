@@ -1,7 +1,7 @@
 CREATE TABLE `myservices_caddy` (
   `caddy_id` int(10) unsigned NOT NULL auto_increment,
   `caddy_products_id` int(10) unsigned NOT NULL,
-  `caddy_employes_id` int(10) unsigned NOT NULL,
+  `caddy_employees_id` int(10) unsigned NOT NULL,
   `caddy_calendar_id` int(10) unsigned NOT NULL,
   `caddy_orders_id` int(10) unsigned NOT NULL,
   `caddy_price` decimal(7,2) NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE `myservices_caddy` (
   `caddy_end` datetime NOT NULL,
   PRIMARY KEY  (`caddy_id`),
   KEY `caddy_products_id` (`caddy_products_id`),
-  KEY `caddy_employes_id` (`caddy_employes_id`),
+  KEY `caddy_employees_id` (`caddy_employees_id`),
   KEY `caddy_calendar_id` (`caddy_calendar_id`),
   KEY `caddy_orders_id` (`caddy_orders_id`)
 ) ENGINE=InnoDB;
@@ -19,13 +19,13 @@ CREATE TABLE `myservices_caddy` (
 CREATE TABLE `myservices_calendar` (
   `calendar_id` int(10) unsigned NOT NULL auto_increment,
   `calendar_status` tinyint(1) unsigned NOT NULL COMMENT '1=Travail, 2=Absence',
-  `calendar_employes_id` int(10) unsigned NOT NULL,
+  `calendar_employees_id` int(10) unsigned NOT NULL,
   `calendar_start` datetime NOT NULL,
   `calendar_end` datetime NOT NULL,
   `calendar_products_id` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`calendar_id`),
   KEY `calendar_status` (`calendar_status`),
-  KEY `calendar_employes_id` (`calendar_employes_id`),
+  KEY `calendar_employees_id` (`calendar_employees_id`),
   KEY `calendar_start` (`calendar_start`),
   KEY `calendar_end` (`calendar_end`)
 ) ENGINE=InnoDB COMMENT='Indique les commandes comme les absences';
@@ -44,32 +44,32 @@ CREATE TABLE `myservices_categories` (
 ) ENGINE=InnoDB;
 
 
-CREATE TABLE `myservices_employes` (
-  `employes_id` int(10) unsigned NOT NULL auto_increment,
-  `employes_firstname` varchar(50) NOT NULL,
-  `employes_lastname` varchar(50) NOT NULL,
-  `employes_email` varchar(150) NOT NULL,
-  `employes_bio` text NOT NULL,
-  `employes_photo1` varchar(255) NOT NULL,
-  `employes_photo2` varchar(255) NOT NULL,
-  `employes_photo3` varchar(255) NOT NULL,
-  `employes_photo4` varchar(255) NOT NULL,
-  `employes_photo5` varchar(255) NOT NULL,
-  `employes_isactive` tinyint(1) unsigned NOT NULL,
-  PRIMARY KEY  (`employes_id`),
-  KEY `employes_firstname` (`employes_firstname`),
-  KEY `employes_lastname` (`employes_lastname`),
-  KEY `employes_isactive` (`employes_isactive`)
+CREATE TABLE `myservices_employees` (
+  `employees_id` int(10) unsigned NOT NULL auto_increment,
+  `employees_firstname` varchar(50) NOT NULL,
+  `employees_lastname` varchar(50) NOT NULL,
+  `employees_email` varchar(150) NOT NULL,
+  `employees_bio` text NOT NULL,
+  `employees_photo1` varchar(255) NOT NULL,
+  `employees_photo2` varchar(255) NOT NULL,
+  `employees_photo3` varchar(255) NOT NULL,
+  `employees_photo4` varchar(255) NOT NULL,
+  `employees_photo5` varchar(255) NOT NULL,
+  `employees_isactive` tinyint(1) unsigned NOT NULL,
+  PRIMARY KEY  (`employees_id`),
+  KEY `employees_firstname` (`employees_firstname`),
+  KEY `employees_lastname` (`employees_lastname`),
+  KEY `employees_isactive` (`employees_isactive`)
 ) ENGINE=InnoDB;
 
 
-CREATE TABLE `myservices_employesproducts` (
-  `employesproducts_id` int(10) unsigned NOT NULL auto_increment,
-  `employesproducts_employes_id` int(10) unsigned NOT NULL,
-  `employesproducts_products_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY  (`employesproducts_id`),
-  KEY `employesproducts_employes_id` (`employesproducts_employes_id`),
-  KEY `employesproducts_products_id` (`employesproducts_products_id`)
+CREATE TABLE `myservices_employeesproducts` (
+  `employeesproducts_id` int(10) unsigned NOT NULL auto_increment,
+  `employeesproducts_employees_id` int(10) unsigned NOT NULL,
+  `employeesproducts_products_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY  (`employeesproducts_id`),
+  KEY `employeesproducts_employees_id` (`employeesproducts_employees_id`),
+  KEY `employeesproducts_products_id` (`employeesproducts_products_id`)
 ) ENGINE=InnoDB;
 
 

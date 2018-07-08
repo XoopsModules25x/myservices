@@ -9,8 +9,8 @@
 
 use XoopsModules\Myservices;
 
-// require_once  dirname(__DIR__) . '/class/Helper.php';
 //require_once  dirname(__DIR__) . '/include/common.php';
+/** @var Myservices\Helper $helper */
 $helper = Myservices\Helper::getInstance();
 
 $pathIcon32 = \Xmf\Module\Admin::menuIconPath('');
@@ -36,7 +36,7 @@ $adminmenu[] = [
 
 $adminmenu[] = [
     'title' => _MI_MYSERVICES_ADMENU2,
-    'link'  => 'admin/main.php?op=employes',
+    'link'  => 'admin/main.php?op=employees',
     'icon'  => $pathIcon32 . '/users.png'
 ];
 

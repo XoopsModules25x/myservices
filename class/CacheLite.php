@@ -1,8 +1,9 @@
-<?php
+<?php namespace XoopsModules\Myservices;
+
 /**
  * Fast, light and safe Cache Class
  *
- * Cache_Lite is a fast, light and safe cache system. It's optimized
+ * CacheLite is a fast, light and safe cache system. It's optimized
  * for file containers. It is fast and safe (because it uses file
  * locking and/or anti-corruption tests).
  *
@@ -16,15 +17,22 @@
  * available at :
  * http://rainx.phpmore.com/manual/cache_lite.html
  *
- * @package  Cache_Lite
+ * @package  CacheLite
  * @category Caching
  * @author   Fabien MARTY <fab@php.net>
  * @author   Markus Tacker <tacker@php.net>
  */
+
+use XoopsModules\Myservices;
+
 define('CACHE_LITE_ERROR_RETURN', 1);
 define('CACHE_LITE_ERROR_DIE', 8);
 
-class Cache_Lite
+/**
+ * Class CacheLite
+ * @package XoopsModules\Myservices
+ */
+class CacheLite
 {
     // --- Private properties ---
     /**
@@ -202,7 +210,7 @@ class Cache_Lite
      *
      * Set the hashed directory structure level. 0 means "no hashed directory
      * structure", 1 means "one level of directory", 2 means "two levels"...
-     * This option can speed up Cache_Lite only when you have many thousands of
+     * This option can speed up CacheLite only when you have many thousands of
      * cache file. Only specific benchs can help you to choose the perfect value
      * for you. Maybe, 1 or 2 is a good start.
      *
@@ -286,19 +294,9 @@ class Cache_Lite
     }
 
     /**
-     * PHP4 constructor for backwards compatibility with older code
+     * Generic way to set a CacheLite option
      *
-     * @param array $options Options
-     */
-    public function Cache_Lite($options = [null])
-    {
-        self::__construct($options);
-    }
-
-    /**
-     * Generic way to set a Cache_Lite option
-     *
-     * see Cache_Lite constructor for available options
+     * see CacheLite constructor for available options
      *
      * @var string $name  name of the option
      * @var mixed  $value value of the option
@@ -364,19 +362,19 @@ class Cache_Lite
                     return false;
                 }
             }
-            if (($doNotTestCacheValidity) || (null === $this->_refreshTime)) {
+            if ($doNotTestCacheValidity || (null === $this->_refreshTime)) {
                 if (file_exists($this->_file)) {
                     $data = $this->_read();
                 }
             } else {
-                if ((file_exists($this->_file)) && (@filemtime($this->_file) > $this->_refreshTime)) {
+                if (file_exists($this->_file) && (@filemtime($this->_file) > $this->_refreshTime)) {
                     $data = $this->_read();
                 }
             }
-            if (($data) and ($this->_memoryCaching)) {
+            if ($data && $this->_memoryCaching) {
                 $this->_memoryCacheAdd($data);
             }
-            if (($this->_automaticSerialization) and (is_string($data))) {
+            if ($this->_automaticSerialization && is_string($data)) {
                 $data = unserialize($data);
             }
 
@@ -401,7 +399,7 @@ class Cache_Lite
             if ($this->_automaticSerialization) {
                 $data = serialize($data);
             }
-            if (isset($id)) {
+            if ($id !== null) {
                 $this->_setFileName($id, $group);
             }
             if ($this->_memoryCaching) {
@@ -429,7 +427,7 @@ class Cache_Lite
             }
             if (is_object($res)) {
                 // $res is a PEAR_Error object
-                if (!($this->_errorHandlingAPIBreak)) {
+                if (!$this->_errorHandlingAPIBreak) {
                     return false; // we return false (old API)
                 }
             }
@@ -619,7 +617,7 @@ class Cache_Lite
     public function _unlink($file)
     {
         if (!@unlink($file)) {
-            return $this->raiseError('Cache_Lite : Unable to remove cache !', -3);
+            return $this->raiseError('CacheLite : Unable to remove cache !', -3);
         }
 
         return true;
@@ -637,9 +635,9 @@ class Cache_Lite
     public function _cleanDir($dir, $group = false, $mode = 'ingroup')
     {
         if ($this->_fileNameProtection) {
-            $motif = ($group) ? 'cache_' . md5($group) . '_' : 'cache_';
+            $motif = $group ? 'cache_' . md5($group) . '_' : 'cache_';
         } else {
-            $motif = ($group) ? 'cache_' . $group . '_' : 'cache_';
+            $motif = $group ? 'cache_' . $group . '_' : 'cache_';
         }
         if ($this->_memoryCaching) {
             foreach ($this->_memoryCachingArray as $key => $v) {
@@ -653,12 +651,12 @@ class Cache_Lite
             }
         }
         if (!$dh = opendir($dir)) {
-            return $this->raiseError('Cache_Lite : Unable to open cache directory !', -4);
+            return $this->raiseError('CacheLite : Unable to open cache directory !', -4);
         }
         $result = true;
         while (false !== ($file = readdir($dh))) {
             if (('.' !== $file) && ('..' !== $file)) {
-                if ('cache_' === substr($file, 0, 6)) {
+                if (0 === strpos($file, 'cache_')) {
                     $file2 = $dir . $file;
                     if (is_file($file2)) {
                         switch (substr($mode, 0, 9)) {
@@ -666,31 +664,31 @@ class Cache_Lite
                                 // files older than lifeTime get deleted from cache
                                 if (null !== $this->_lifeTime) {
                                     if ((time() - @filemtime($file2)) > $this->_lifeTime) {
-                                        $result = ($result and ($this->_unlink($file2)));
+                                        $result = ($result && $this->_unlink($file2));
                                     }
                                 }
                                 break;
                             case 'notingrou':
                                 if (false === strpos($file2, $motif)) {
-                                    $result = ($result and ($this->_unlink($file2)));
+                                    $result = ($result && $this->_unlink($file2));
                                 }
                                 break;
                             case 'callback_':
                                 $func = substr($mode, 9, strlen($mode) - 9);
                                 if ($func($file2, $group)) {
-                                    $result = ($result and ($this->_unlink($file2)));
+                                    $result = ($result && $this->_unlink($file2));
                                 }
                                 break;
                             case 'ingroup':
                             default:
                                 if (false !== strpos($file2, $motif)) {
-                                    $result = ($result and ($this->_unlink($file2)));
+                                    $result = ($result && $this->_unlink($file2));
                                 }
                                 break;
                         }
                     }
-                    if ((is_dir($file2)) and ($this->_hashedDirectoryLevel > 0)) {
-                        $result = ($result and ($this->_cleanDir($file2 . '/', $group, $mode)));
+                    if (is_dir($file2) && ($this->_hashedDirectoryLevel > 0)) {
+                        $result = ($result && $this->_cleanDir($file2 . '/', $group, $mode));
                     }
                 }
             }
@@ -806,7 +804,7 @@ class Cache_Lite
             return $data;
         }
 
-        return $this->raiseError('Cache_Lite : Unable to read cache !', -2);
+        return $this->raiseError('CacheLite : Unable to read cache !', -2);
     }
 
     /**
@@ -824,7 +822,7 @@ class Cache_Lite
             for ($i = 0; $i < $this->_hashedDirectoryLevel; $i++) {
                 $root = $root . 'cache_' . substr($hash, 0, $i + 1) . '/';
                 if (!(@is_dir($root))) {
-                    if (@mkdir($root)) {
+                    if (!mkdir($root) && !is_dir($root)) {
                         @chmod($root, $this->_hashedDirectoryUmask);
                         if (null !== $this->_hashedDirectoryGroup) {
                             @chgrp($root, $this->_hashedDirectoryGroup);
@@ -862,7 +860,7 @@ class Cache_Lite
             return true;
         }
 
-        return $this->raiseError('Cache_Lite : Unable to write cache file : ' . $this->_file, -1);
+        return $this->raiseError('CacheLite : Unable to write cache file : ' . $this->_file, -1);
     }
 
     /**
@@ -882,7 +880,7 @@ class Cache_Lite
         if (is_object($dataRead)) {
             return $dataRead; # We return the PEAR_Error object
         }
-        if ((is_bool($dataRead)) && (!$dataRead)) {
+        if (is_bool($dataRead) && (!$dataRead)) {
             return false;
         }
 

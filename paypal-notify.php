@@ -7,12 +7,14 @@
  * ****************************************************************************
  */
 
+use XoopsModules\Myservices;
+
 /**
  * Page appelée par Paypal dans le cas de l'utilisation de l'IPN
  */
 require_once __DIR__ . '/header.php';
-require_once MYSERVICES_PATH . 'class/myservices_paypal.php';
-require_once MYSERVICES_PATH . 'class/registryfile.php';
+// require_once MYSERVICES_PATH . 'class/Paypal.php';
+// require_once MYSERVICES_PATH . 'class/RegistryFile.php';
 @error_reporting(0);
 
 $log     = '';
@@ -29,7 +31,7 @@ foreach ($_POST as $key => $value) {
     $req .= "&$key=$value";
 }
 $msg    = [];
-$paypal = new myservices_paypal(myservices_utils::getModuleOption('paypal_test'), myservices_utils::getModuleOption('paypal_email'), myservices_utils::getModuleOption('paypal_money'), true);
+$paypal = new Myservices\Paypal(\XoopsModules\Myservices\Utilities::getModuleOption('paypal_test'),\XoopsModules\Myservices\Utilities::getModuleOption('paypal_email'),\XoopsModules\Myservices\Utilities::getModuleOption('paypal_money'), true);
 $url    = $paypal->getURL(true);
 $header = '';
 $header .= "POST /cgi-bin/webscr HTTP/1.0\r\n";
@@ -48,10 +50,10 @@ if ($fp) {
             if ('COMPLETED' !== strtoupper($_POST['payment_status'])) {
                 $paypalok = false;
             }
-            if (strtoupper($_POST['receiver_email']) != strtoupper(myservices_utils::getModuleOption('paypal_email'))) {
+            if (strtoupper($_POST['receiver_email']) != strtoupper(\XoopsModules\Myservices\Utility::getModuleOption('paypal_email'))) {
                 $paypalok = false;
             }
-            if (strtoupper($_POST['mc_currency']) != strtoupper(myservices_utils::getModuleOption('paypal_money'))) {
+            if (strtoupper($_POST['mc_currency']) != strtoupper(\XoopsModules\Myservices\Utility::getModuleOption('paypal_money'))) {
                 $paypalok = false;
             }
             if (!$_POST['custom']) {
@@ -65,7 +67,7 @@ if ($fp) {
                 if (is_object($commande)) {
                     $msg['NUM_COMMANDE'] = $ref;
                     if ($montant == $commande->getVar('orders_total')) {    //  Commande vérifiée
-                        $registry = new myservices_registryfile();
+                        $registry = new Myservices\RegistryFile();
                         $texts    = $qualityLinks = [];
                         $texts    = $hMsOrders->validateOrder($ref, $qualityLinks);    // Validation de la commande, renvoie les informations de la commande
                         if (count($texts) > 0) {
@@ -73,23 +75,23 @@ if ($fp) {
                         } else {
                             $msg['SUPPLEMENTAL'] = '';
                         }
-                        $msg['ANNULATION'] = $registry->getfile(MYSERVICES_TEXTFILE1) . "\n\n" . sprintf(_MYSERVICES_CANCEL_DURATION, myservices_utils::getModuleOption('maxdelaycancel'));
+                        $msg['ANNULATION'] = $registry->getfile(MYSERVICES_TEXTFILE1) . "\n\n" . sprintf(_MYSERVICES_CANCEL_DURATION,\XoopsModules\Myservices\Utilities::getModuleOption('maxdelaycancel'));
                         $msg['QUALITY']    = $registry->getfile(MYSERVICES_TEXTFILE4) . "\n" . implode("\n", $qualityLinks);
 
-                        $msg['SUPPLEMENTAL'] = myservices_utils::textForEmail($msg['SUPPLEMENTAL']);
-                        $msg['ANNULATION']   = myservices_utils::textForEmail($msg['ANNULATION']);
-                        $msg['QUALITY']      = myservices_utils::textForEmail($msg['QUALITY']);
+                        $msg['SUPPLEMENTAL'] =\XoopsModules\Myservices\Utilities::textForEmail($msg['SUPPLEMENTAL']);
+                        $msg['ANNULATION']   =\XoopsModules\Myservices\Utilities::textForEmail($msg['ANNULATION']);
+                        $msg['QUALITY']      =\XoopsModules\Myservices\Utilities::textForEmail($msg['QUALITY']);
 
-                        myservices_utils::sendEmailFromTpl('command_shop_verified.tpl', myservices_utils::getEmailsFromGroup(myservices_utils::getModuleOption('grp_sold')), _MYSERVICES_PAYPAL_VALIDATED, $msg);
-                        myservices_utils::sendEmailFromTpl('command_client_verified.tpl', $commande->getVar('orders_email'), _MYSERVICES_PAYPAL_VALIDATED, $msg);
+                       \XoopsModules\Myservices\Utilities::sendEmailFromTpl('command_shop_verified.tpl',\XoopsModules\Myservices\Utilities::getEmailsFromGroup(\XoopsModules\Myservices\Utilities::getModuleOption('grp_sold')), _MYSERVICES_PAYPAL_VALIDATED, $msg);
+                       \XoopsModules\Myservices\Utilities::sendEmailFromTpl('command_client_verified.tpl', $commande->getVar('orders_email'), _MYSERVICES_PAYPAL_VALIDATED, $msg);
                     } else {
                         $commande->setVar('orders_state', MYSERVICES_ORDER_FRAUD);
                         $hMsOrders->insert($commande, true);
-                        myservices_utils::sendEmailFromTpl('command_shop_fraud.tpl', myservices_utils::getEmailsFromGroup(myservices_utils::getModuleOption('grp_sold')), _MYSERVICES_PAYPAL_FRAUD, $msg);
+                       \XoopsModules\Myservices\Utilities::sendEmailFromTpl('command_shop_fraud.tpl',\XoopsModules\Myservices\Utilities::getEmailsFromGroup(\XoopsModules\Myservices\Utilities::getModuleOption('grp_sold')), _MYSERVICES_PAYPAL_FRAUD, $msg);
                     }
                 }
             } else {
-                if (isset($_POST['custom'])) {
+                if (\Xmf\Request::hasVar('custom', 'POST')) {
                     $ref                 = \Xmf\Request::getInt('custom', 0, 'POST');
                     $msg['NUM_COMMANDE'] = $ref;
                     $commande            = null;
@@ -99,12 +101,12 @@ if ($fp) {
                             case 'PENDING':
                                 $commande->setVar('orders_state', MYSERVICES_ORDER_PENDING);    // En attente
                                 $hMsOrders->insert($commande, true);
-                                myservices_utils::sendEmailFromTpl('command_shop_pending.tpl', myservices_utils::getEmailsFromGroup(myservices_utils::getModuleOption('grp_sold')), _MYSERVICES_PAYPAL_PENDING, $msg);
+                               \XoopsModules\Myservices\Utilities::sendEmailFromTpl('command_shop_pending.tpl',\XoopsModules\Myservices\Utilities::getEmailsFromGroup(\XoopsModules\Myservices\Utility::getModuleOption('grp_sold')), _MYSERVICES_PAYPAL_PENDING, $msg);
                                 break;
                             case 'FAILED':
                                 $commande->setVar('orders_state', MYSERVICES_ORDER_FAILED);    // Echec
                                 $hMsOrders->insert($commande, true);
-                                myservices_utils::sendEmailFromTpl('command_shop_failed.tpl', myservices_utils::getEmailsFromGroup(myservices_utils::getModuleOption('grp_sold')), _MYSERVICES_PAYPAL_FAILED, $msg);
+                               \XoopsModules\Myservices\Utilities::sendEmailFromTpl('command_shop_failed.tpl',\XoopsModules\Myservices\Utilities::getEmailsFromGroup(\XoopsModules\Myservices\Utility::getModuleOption('grp_sold')), _MYSERVICES_PAYPAL_FAILED, $msg);
                                 break;
                         }
                     }
@@ -122,7 +124,7 @@ $fp = fopen(XOOPS_UPLOAD_PATH . '/logpaypal_myservice.txt', 'a');
 if ($fp) {
     fwrite($fp, str_repeat('-', 120) . "\n");
     fwrite($fp, date('d/m/Y H:i:s') . "\n");
-    if (isset($_POST['txn_id'])) {
+    if (\Xmf\Request::hasVar('txn_id', 'POST')) {
         fwrite($fp, 'Transaction : ' . $_POST['txn_id'] . "\n");
     }
     fwrite($fp, 'Result : ' . $log . "\n");

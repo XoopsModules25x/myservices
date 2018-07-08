@@ -1,4 +1,5 @@
-<?php
+<?php namespace XoopsModules\Myservices;
+
 /**
  * ****************************************************************************
  * myservices - MODULE FOR XOOPS
@@ -7,26 +8,24 @@
  * ****************************************************************************
  */
 
+use XoopsModules\Myservices;
+
 defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
-//require XOOPS_ROOT_PATH.'/kernel/object.php';
-if (!class_exists('myservices_ORM')) {
-    require XOOPS_ROOT_PATH . '/modules/myservices/class/PersistableObjectHandler.php';
-}
+//require_once XOOPS_ROOT_PATH.'/kernel/object.php';
+//if (!class_exists('myservices_ORM')) {
+//    require_once XOOPS_ROOT_PATH . '/modules/myservices/class/PersistableObjectHandler.php';
+//}
 
-class myservices_vat extends myservices_Object
+/**
+ * Class Vat
+ * @package XoopsModules\Myservices
+ */
+class Vat extends Myservices\ServiceObject
 {
     public function __construct()
     {
         $this->initVar('vat_id', XOBJ_DTYPE_INT, null, false);
         $this->initVar('vat_rate', XOBJ_DTYPE_TXTBOX, null, false);
-    }
-}
-
-class MyservicesMyservices_vatHandler extends myservices_ORM
-{
-    public function __construct($db)
-    {    //                         Table               Classe          Id      Description
-        parent::__construct($db, 'myservices_vat', 'myservices_vat', 'vat_id', 'vat_rate');
     }
 }

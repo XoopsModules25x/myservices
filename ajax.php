@@ -7,6 +7,8 @@
  * ****************************************************************************
  */
 
+use XoopsModules\Myservices;
+
 /**
  * Script AJAX chargé de mettre à jour la partie calendrier et employé en fonction des choix de l'utilisateur
  * Le script vérifie aussi la disponibilité de la personner choisie pour le produit sélectionné et pour une date précisée.
@@ -23,7 +25,7 @@ switch ($op) {
         $idEmployee = \Xmf\Request::getInt('idEmployee', 0, 'POST');
         if ($idEmployee > 0) {
             $employee = null;
-            $employee = $hMsEmployes->get($idEmployee);
+            $employee = $hMsEmployees->get($idEmployee);
             if (is_object($employee)) {
                 require_once XOOPS_ROOT_PATH . '/class/template.php';
                 $xoopsTpl = new \XoopsTpl();
@@ -37,12 +39,12 @@ switch ($op) {
         $year  = \Xmf\Request::getInt('year', 0, 'POST');
         $month = \Xmf\Request::getInt('month', 0, 'POST');
         if ($year > 0 && $month > 0) {
-            require_once MYSERVICES_PATH . 'class/activecalendar.php';
+            // require_once MYSERVICES_PATH . 'class/activecalendar.php';
             require_once XOOPS_ROOT_PATH . '/language/' . $xoopsConfig['language'] . '/calendar.php';
             require_once MYSERVICES_PATH . 'configs.php';
             $prefMagasin = $hMsPrefs->getPreference();
             $monthNames  = [1 => _CAL_JANUARY, 2 => _CAL_FEBRUARY, 3 => _CAL_MARCH, 4 => _CAL_APRIL, 5 => _CAL_MAY, 6 => _CAL_JUNE, 7 => _CAL_JULY, 8 => _CAL_AUGUST, 9 => _CAL_SEPTEMBER, 10 => _CAL_OCTOBER, 11 => _CAL_NOVEMBER, 12 => _CAL_DECEMBER];
-            $calendar    = new activeCalendar($year, $month);
+            $calendar    = new Myservices\ActiveCalendar($year, $month);
             $calendar->setMonthNames(array_values($monthNames));
             // Récupération du nom des jours, raccourcis
             $l     = $prefs['daysLength'];    // Longueur du texte des jours
@@ -109,7 +111,7 @@ switch ($op) {
         } else {    // Les paramètres attendus sont présents
             // 1) Est-ce que le délai entre maintenant et la date souhaitée est supérieur au temps de latence ?
             if (!$hMsPrefs->canOrderNow($year, $month, $day, $time)) {
-                $xoopsTpl->assign('additionalBefore', '<b>' . sprintf(_MYSERVICES_ERROR17, myservices_utils::getModuleOption('latence')) . '</b><br>');
+                $xoopsTpl->assign('additionalBefore', '<b>' . sprintf(_MYSERVICES_ERROR17,\XoopsModules\Myservices\Utilities::getModuleOption('latence')) . '</b><br>');
             } else {
                 // 2) Vérification que le magasin est bien ouvert ce jour là
                 if (!$hMsPrefs->isStoreOpen($year, $month, $day, $time)) {
@@ -120,7 +122,7 @@ switch ($op) {
                         $xoopsTpl->assign('additionalBefore', '<b>' . _MYSERVICES_ERROR16 . '</b><br>');
                     } else {
                         // Arrivé là, il ne reste plus qu'à vérifier la disponibilité de la personne
-                        if (!$hMsEmployes->isEmployeeAvailable($year, $month, $day, $time, $duration, $products_id, $employee_id)) {
+                        if (!$hMsEmployees->isEmployeeAvailable($year, $month, $day, $time, $duration, $products_id, $employee_id)) {
                             $xoopsTpl->assign('additionalBefore', '<b>' . _MYSERVICES_ERROR18 . '</b><br>');
                         } else {
                             $contentOk = '';

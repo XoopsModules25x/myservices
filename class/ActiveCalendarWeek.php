@@ -1,5 +1,8 @@
-<?php
-require_once __DIR__ . 'activecalendar.php';
+<?php namespace XoopsModules\Myservices;
+
+use XoopsModules\Myservices;
+
+require_once __DIR__ . '/activecalendar.php';
 
 /*
 * @subclass: ActiveCalendarWeek
@@ -14,6 +17,10 @@ require_once __DIR__ . 'activecalendar.php';
 
 */
 
+/**
+ * Class ActiveCalendarWeek
+ * @package XoopsModules\Myservices
+ */
 class ActiveCalendarWeek extends ActiveCalendar
 {
     /*
@@ -33,6 +40,13 @@ class ActiveCalendarWeek extends ActiveCalendar
     PUBLIC activeCalendarWeek() -> class constructor. Calls the main class constructor
     ********************************************************************************
     */
+    /**
+     * ActiveCalendarWeek constructor.
+     * @param bool   $year
+     * @param bool   $month
+     * @param bool   $day
+     * @param string $GMTDiff
+     */
     public function __construct($year = false, $month = false, $day = false, $GMTDiff = 'none')
     {
         parent::__construct($year, $month, $day, $GMTDiff);
@@ -46,6 +60,10 @@ class ActiveCalendarWeek extends ActiveCalendar
     It generates as many rows as set in $numberOfWeeks
     ********************************************************************************
     */
+    /**
+     * @param int $numberOfWeeks
+     * @return string
+     */
     public function showWeeks($numberOfWeeks = 1)
     {
         $out = $this->mkWeeksHead();
@@ -63,6 +81,11 @@ class ActiveCalendarWeek extends ActiveCalendar
     It generates as many rows as set in $numberOfWeeks
     ********************************************************************************
     */
+    /**
+     * @param int $weekID
+     * @param int $numberOfWeeks
+     * @return string
+     */
     public function showWeeksByID($weekID = 1, $numberOfWeeks = 1)
     {
         $xday = 1;
@@ -76,7 +99,7 @@ class ActiveCalendarWeek extends ActiveCalendar
         if ($this->startOnSun) {
             --$xday;
         }
-        self::__construct($this->actyear, $this->actmonth, $xday, $this->GMT);
+        $this->__construct($this->actyear, $this->actmonth, $xday, $this->GMT);
 
         return $this->showWeeks($numberOfWeeks);
     }
@@ -86,6 +109,10 @@ class ActiveCalendarWeek extends ActiveCalendar
     PUBLIC enableDayLinks -> calls same method of the parent class
     ********************************************************************************
     */
+    /**
+     * @param bool $link
+     * @param bool $javaScript
+     */
     public function enableDayLinks($link = false, $javaScript = false)
     {
         parent::enableDayLinks($link, $javaScript);
@@ -96,6 +123,11 @@ class ActiveCalendarWeek extends ActiveCalendar
     PUBLIC enableWeekNum -> calls same method of the parent class
     ********************************************************************************
     */
+    /**
+     * @param string $title
+     * @param bool   $link
+     * @param bool   $javaScript
+     */
     public function enableWeekNum($title = '', $link = false, $javaScript = false)
     {
         parent::enableWeekNum($title, $link, $javaScript);
@@ -106,6 +138,13 @@ class ActiveCalendarWeek extends ActiveCalendar
     PUBLIC setEvent -> calls same method of the parent class
     ********************************************************************************
     */
+    /**
+     * @param      $year
+     * @param      $month
+     * @param      $day
+     * @param bool $id
+     * @param bool $url
+     */
     public function setEvent($year, $month, $day, $id = false, $url = false)
     {
         parent::setEvent($year, $month, $day, $id, $url);
@@ -116,6 +155,14 @@ class ActiveCalendarWeek extends ActiveCalendar
     PUBLIC setEventContent -> calls same method of the parent class
     ********************************************************************************
     */
+    /**
+     * @param      $year
+     * @param      $month
+     * @param      $day
+     * @param      $content
+     * @param bool $url
+     * @param bool $id
+     */
     public function setEventContent($year, $month, $day, $content, $url = false, $id = false)
     {
         parent::setEventContent($year, $month, $day, $content, $url, $id);
@@ -126,6 +173,10 @@ class ActiveCalendarWeek extends ActiveCalendar
     PUBLIC setMonthNames -> calls same method of the parent class
     ********************************************************************************
     */
+    /**
+     * @param $namesArray
+     * @return bool|void
+     */
     public function setMonthNames($namesArray)
     {
         parent::setMonthNames($namesArray);
@@ -136,6 +187,10 @@ class ActiveCalendarWeek extends ActiveCalendar
     PUBLIC setDayNames -> calls same method of the parent class
     ********************************************************************************
     */
+    /**
+     * @param $namesArray
+     * @return bool|void
+     */
     public function setDayNames($namesArray)
     {
         parent::setDayNames($namesArray);
@@ -149,6 +204,9 @@ class ActiveCalendarWeek extends ActiveCalendar
     The setFirstWeekDay() does not affect the method showWeeks()
     ********************************************************************************
     */
+    /**
+     * @param $daynum
+     */
     public function setFirstWeekDay($daynum)
     {
         parent::setFirstWeekDay($daynum);
@@ -163,6 +221,9 @@ class ActiveCalendarWeek extends ActiveCalendar
     PRIVATE mkWeeksHead() -> creates the week table tag
     ********************************************************************************
     */
+    /**
+     * @return string
+     */
     public function mkWeeksHead()
     {
         return '<table class="' . $this->cssWeeksTable . "\">\n";
@@ -173,6 +234,9 @@ class ActiveCalendarWeek extends ActiveCalendar
     PRIVATE mkWeekDayz() -> creates the tr tag of the week table for the weekdays
     ********************************************************************************
     */
+    /**
+     * @return string
+     */
     public function mkWeekDayz()
     {
         $out = '<tr>';
@@ -192,6 +256,10 @@ class ActiveCalendarWeek extends ActiveCalendar
     PRIVATE mkWeeksBody() -> creates the tr tags of the week table
     ********************************************************************************
     */
+    /**
+     * @param $numberOfWeeks
+     * @return string
+     */
     public function mkWeeksBody($numberOfWeeks)
     {
         $this->resetSelectedToToday();
@@ -208,7 +276,7 @@ class ActiveCalendarWeek extends ActiveCalendar
             }
             for ($i = 0; $i <= 6; ++$i) {
                 $out .= $this->mkDay($this->actday);
-                self::__construct($this->actyear, $this->actmonth, $this->actday + 1, $this->GMT);
+                $this->__construct($this->actyear, $this->actmonth, $this->actday + 1, $this->GMT);
                 $this->resetSelectedToToday();
             }
             $out .= "</tr>\n";
@@ -227,6 +295,9 @@ class ActiveCalendarWeek extends ActiveCalendar
     PRIVATE mkWeeksFoot() -> closes the week table tag
     ********************************************************************************
     */
+    /**
+     * @return string
+     */
     public function mkWeeksFoot()
     {
         return "</table>\n";
@@ -238,6 +309,10 @@ class ActiveCalendarWeek extends ActiveCalendar
     The parameter indicates if the name of the first month is needed (at the beginning of the weekly calendar).
     ********************************************************************************
     */
+    /**
+     * @param bool $bothMonths
+     * @return string
+     */
     public function mkMonthRow($bothMonths = true)
     {
         $colspanLeft  = min($this->getDaysThisMonth() - $this->actday + 1, 7);
@@ -266,6 +341,10 @@ class ActiveCalendarWeek extends ActiveCalendar
     }
 
     /* Helper methods */
+    /**
+     * @param $var
+     * @return string
+     */
     public function mkSingleWeekDay($var)
     {
         $weekday = parent::getWeekday($var);
@@ -274,6 +353,9 @@ class ActiveCalendarWeek extends ActiveCalendar
         return $out;
     }
 
+    /**
+     * @return int
+     */
     public function getDaysThisMonth()
     {
         return $this->getMonthDays($this->actmonth, $this->actyear);

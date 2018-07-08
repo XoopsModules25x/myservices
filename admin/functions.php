@@ -11,6 +11,10 @@
 
 use XoopsModules\Myservices;
 
+/**
+ * @param int    $currentoption
+ * @param string $breadcrumb
+ */
 function myservices_adminMenu($currentoption = 0, $breadcrumb = '')
 {
     global $xoopsConfig, $xoopsModule;
@@ -19,7 +23,7 @@ function myservices_adminMenu($currentoption = 0, $breadcrumb = '')
     $helper = Myservices\Helper::getInstance();
     $helper->loadLanguage('modinfo');
     
-    require XOOPS_ROOT_PATH . '/modules/myservices/admin/menu.php';
+    require_once XOOPS_ROOT_PATH . '/modules/myservices/admin/menu.php';
 
     echo "<style type=\"text/css\">\n";
     echo "#buttontop { float:left; width:100%; background: #e7e7e7; font-size:93%; line-height:normal; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; margin: 0; }\n";

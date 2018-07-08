@@ -13,17 +13,19 @@
  * @return array
  */
 
+use XoopsModules\Myservices;
+
 function myservices_search($queryarray, $andor, $limit, $offset, $userid)
 {
     global $xoopsDB;
     require_once __DIR__ . '/common.php';
-    require_once XOOPS_ROOT_PATH . '/modules/myservices/class/myservices_products.php';
+    require_once XOOPS_ROOT_PATH . '/modules/myservices/class/Products.php';
 
     // Recherche dans les produits
     $sql = 'SELECT products_id, products_title FROM ' . $xoopsDB->prefix('myservices_products') . ' WHERE (products_online = 1';
     $sql .= ') ';
 
-    $tmpObject = new myservices_products();
+    $tmpObject = new \XoopsModules\Myservices\Products();
     $datas     =& $tmpObject->getVars();
     $tblFields = [];
     $cnt       = 0;

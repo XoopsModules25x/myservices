@@ -1,4 +1,5 @@
-<?php
+<?php namespace XoopsModules\Myservices;
+
 /**
  * ****************************************************************************
  * myservices - MODULE FOR XOOPS
@@ -7,34 +8,23 @@
  * ****************************************************************************
  */
 
+use XoopsModules\Myservices;
+
 defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
-//require XOOPS_ROOT_PATH.'/kernel/object.php';
-if (!class_exists('myservices_ORM')) {
-    require XOOPS_ROOT_PATH . '/modules/myservices/class/PersistableObjectHandler.php';
-}
-
-class myservices_caddy extends myservices_Object
+/**
+ * Class CaddyHandler
+ * @package XoopsModules\Myservices
+ */
+class CaddyHandler extends Myservices\ServiceORM
 {
-    public function __construct()
-    {
-        $this->initVar('caddy_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('caddy_products_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('caddy_employes_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('caddy_calendar_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('caddy_orders_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('caddy_price', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('caddy_vat_rate', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('caddy_start', XOBJ_DTYPE_TXTBOX, null, false);
-        $this->initVar('caddy_end', XOBJ_DTYPE_TXTBOX, null, false);
-    }
-}
-
-class MyservicesMyservices_caddyHandler extends myservices_ORM
-{
+    /**
+     * CaddyHandler constructor.
+     * @param $db
+     */
     public function __construct($db)
     {    //                             Table           Classe              Id
-        parent::__construct($db, 'myservices_caddy', 'myservices_caddy', 'caddy_id');
+        parent::__construct($db, Caddy::class, 'Caddy', 'caddy_id');
     }
 
     /**

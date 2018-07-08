@@ -14,21 +14,21 @@ defined('XOOPS_ROOT_PATH') || die('Restricted access');
  * @param $options
  * @return array
  */
-function b_ms_employes_show($options)
+function b_ms_employees_show($options)
 {
     // Options = Nombre d'éléments visibles simultanément dans la liste
-    require XOOPS_ROOT_PATH . '/modules/myservices/include/common.php';
+    require_once XOOPS_ROOT_PATH . '/modules/myservices/include/common.php';
     $block      = [];
     $itemsCount = (int)$options[0];
     $tblItems   = [];
     $select     = '';
-    $jump       = MYSERVICES_URL . 'employee.php?employes_id=';
+    $jump       = MYSERVICES_URL . 'employee.php?employees_id=';
     $additional = " onchange='location=\"" . $jump . "\"+this.options[this.selectedIndex].value'";
     $additional .= " style='width: 170px; max-width: 170px;'";
     $select     .= "<select name='blockSelectEmployee' id='blockSelectEmployee' size='" . $itemsCount . "'" . $additional . '>';
-    $tblItems   = $hMsEmployes->getActiveEmployees();
+    $tblItems   = $hMsEmployees->getActiveEmployees();
     foreach ($tblItems as $employee) {
-        $select .= "<option value='" . $employee->getVar('employes_id') . "'>" . xoops_trim($employee->getVar('employes_lastname')) . ' ' . xoops_trim($employee->getVar('employes_firstname')) . '</option>';
+        $select .= "<option value='" . $employee->getVar('employees_id') . "'>" . xoops_trim($employee->getVar('employees_lastname')) . ' ' . xoops_trim($employee->getVar('employees_firstname')) . '</option>';
     }
     $select .= '</select>';
 
@@ -37,7 +37,11 @@ function b_ms_employes_show($options)
     return $block;
 }
 
-function b_ms_employes_edit($options)
+/**
+ * @param $options
+ * @return string
+ */
+function b_ms_employees_edit($options)
 {
     // Options = Nombre d'éléments visibles simultanément dans la liste
     $form = '';
@@ -50,11 +54,11 @@ function b_ms_employes_edit($options)
  * Ad hoc Block
  * @param $options
  */
-function b_ms_employes_duplicatable($options)
+function b_ms_employees_duplicatable($options)
 {
     $options = explode('|', $options);
-    $block   = &b_ms_employes_show($options);
+    $block   = &b_ms_employees_show($options);
     $tpl     = new \XoopsTpl();
     $tpl->assign('block', $block);
-    $tpl->display('db:myservices_block_employes.tpl');
+    $tpl->display('db:myservices_block_employees.tpl');
 }

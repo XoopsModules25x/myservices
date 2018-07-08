@@ -5,7 +5,7 @@
 <{if count($employees) >0 }>
     <ul>
         <{foreach item=employee from=$employees}>
-            <li><a href="<{$employee.employes_link}>"><{$employee.employes_fullname}></a></li>
+            <li><a href="<{$employee.employees_link}>"><{$employee.employees_fullname}></a></li>
         <{/foreach}>
     </ul>
 <{else}>

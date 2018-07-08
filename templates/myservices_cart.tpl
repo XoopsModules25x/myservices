@@ -17,8 +17,8 @@
             <{foreach item=product from=$caddieProducts}>
                 <tr>
                     <td><a href="<{$product.products_url}>" title="<{$product.products_href_title}>"><{$product.products_title}></a></td>
-                    <td align='center'><{$product.products_reserved_date}><br><{$product.products_reserved_time}><br><{$product.products_reserved_duration}> <{$smarty.const._MYSERVICES_HOURS}><br><a href="<{$product.employee.employes_link}>"
-                                                                                                                                                                                                       title="<{$product.employee.employes_href_title}>"><{$product.employee.employes_fullname}></a></td>
+                    <td align='center'><{$product.products_reserved_date}><br><{$product.products_reserved_time}><br><{$product.products_reserved_duration}> <{$smarty.const._MYSERVICES_HOURS}><br><a href="<{$product.employee.employees_link}>"
+                                                                                                                                                                                                       title="<{$product.employee.employees_href_title}>"><{$product.employee.employees_fullname}></a></td>
                     <td align='right'><{$product.products_displaylong_price}></td>
                     <td align='right'><{$product.products_amount_ht}></td>
                     <td align='right'><{$product.products_vat_amount}> (<{$product.products_vat_rate}> %)</td>
