@@ -73,7 +73,7 @@ $xoopsTpl->assign('help', sprintf(_MYSERVICES_NO_COMMAND_BEFORE,\XoopsModules\My
 // Chargement du javascript de galerie d'images ****************************************
 $urlCSS = MYSERVICES_URL . 'assets/css/product.css';
 $css    = "<link rel=\"stylesheet\" type=\"text/css\" href=\"$urlCSS\">";
-$urlJS  = '<script type="text/javascript" src="' . MYSERVICES_URL . 'js/image-slideshow-4.js' . '"></script><script type="text/javascript" src="' . MYSERVICES_URL . 'js/prototype.js' . '"></script>';
+$urlJS  = '<script type="text/javascript" src="' . MYSERVICES_URL . 'assets/js/image-slideshow-4.js' . '"></script><script type="text/javascript" src="' . MYSERVICES_URL . 'assets/js/prototype.js' . '"></script>';
 $xoopsTpl->assign('xoops_module_header', $css . $urlJS);
 
 // Calendrier ***************************************************************************
