@@ -9,15 +9,21 @@
  * @param string $breadcrumb
  */
 
+use XoopsModules\Myservices;
+
+/**
+ * @param int    $currentoption
+ * @param string $breadcrumb
+ */
 function myservices_adminMenu($currentoption = 0, $breadcrumb = '')
 {
     global $xoopsConfig, $xoopsModule;
-    if (file_exists(XOOPS_ROOT_PATH . '/modules/myservices/language/' . $xoopsConfig['language'] . '/modinfo.php')) {
-        include_once XOOPS_ROOT_PATH . '/modules/myservices/language/' . $xoopsConfig['language'] . '/modinfo.php';
-    } else {
-        include_once XOOPS_ROOT_PATH . '/modules/myservices/language/english/modinfo.php';
-    }
-    require XOOPS_ROOT_PATH . '/modules/myservices/admin/menu.php';
+
+    /** @var Myservices\Helper $helper */
+    $helper = Myservices\Helper::getInstance();
+    $helper->loadLanguage('modinfo');
+    
+    require_once XOOPS_ROOT_PATH . '/modules/myservices/admin/menu.php';
 
     echo "<style type=\"text/css\">\n";
     echo "#buttontop { float:left; width:100%; background: #e7e7e7; font-size:93%; line-height:normal; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; margin: 0; }\n";
@@ -40,7 +46,7 @@ function myservices_adminMenu($currentoption = 0, $breadcrumb = '')
     echo "<table style=\"width: 100%; padding: 0; \" cellspacing=\"0\">\n";
     echo "<tr>\n";
     echo "<td style=\"width: 70%; font-size: 10px; text-align: left; color: #2F5376; padding: 0 6px; line-height: 18px;\">\n";
-    echo "<a href=\"../index.php\">" . _AM_MYSERVICES_GO_TO_MODULE . "</a> | <a href=\"" . XOOPS_URL . '/modules/system/admin.php?fct=preferences&amp;op=showmod&amp;mod=' . $xoopsModule->getVar('mid') . "\">" . _AM_MYSERVICES_PREFERENCES . "</a>\n";
+    echo '<a href="../index.php">' . _AM_MYSERVICES_GO_TO_MODULE . '</a> | <a href="' . XOOPS_URL . '/modules/system/admin.php?fct=preferences&amp;op=showmod&amp;mod=' . $xoopsModule->getVar('mid') . '">' . _AM_MYSERVICES_PREFERENCES . "</a>\n";
     echo "</td>\n";
     echo "<td style=\"width: 30%; font-size: 10px; text-align: right; color: #2F5376; padding: 0 6px; line-height: 18px;\">\n";
     echo '<b>' . $xoopsModule->getVar('name') . ' - ' . _AM_MYSERVICES_ADMINISTRATION . '</b>&nbsp;' . $breadcrumb . "\n";
@@ -56,10 +62,10 @@ function myservices_adminMenu($currentoption = 0, $breadcrumb = '')
         } else {
             echo "<li>\n";
         }
-        echo "<a href=\"" . XOOPS_URL . '/modules/myservices/' . $link['link'] . "\"><span>" . $link['title'] . "</span></a>\n";
+        echo '<a href="' . XOOPS_URL . '/modules/myservices/' . $link['link'] . '"><span>' . $link['title'] . "</span></a>\n";
         echo "</li>\n";
     }
     echo "</ul>\n";
     echo "</div>\n";
-    echo "<br style=\"clear:both;\" />\n";
+    echo "<br style=\"clear:both;\">\n";
 }

@@ -10,22 +10,22 @@
 /**
  * Liste des catégories mères du module
  */
-require __DIR__ . '/header.php';
-$xoopsOption['template_main'] = 'myservices_index.tpl';
+require_once __DIR__ . '/header.php';
+$GLOBALS['xoopsOption']['template_main'] = 'myservices_index.tpl';
 require_once XOOPS_ROOT_PATH . '/header.php';
 
 require_once XOOPS_ROOT_PATH . '/class/template.php';
 
-$myTpl = new XoopsTpl();
+$myTpl = new \XoopsTpl();
 // Module Preferences
-$xoopsTpl->assign('columnsCount', myservices_utils::getModuleOption('columnscount'));
+$xoopsTpl->assign('columnsCount',\XoopsModules\Myservices\Utilities::getModuleOption('columnscount'));
 
 // Lecture de toutes les TVA ************************************************************
-$vatArray = array();
+$vatArray = [];
 $vatArray = $hMsVat->getItems();
 
 // Recherche des données
-$categories = $datas = array();
+$categories = $datas = [];
 $categories = $hMsCategories->getMotherCategories();
 foreach ($categories as $category) {
     $myTpl->assign('category', $category->toArray());
@@ -36,5 +36,5 @@ $xoopsTpl->assign('categories', $datas);
 unset($myTpl);
 
 // Titre de page
-myservices_utils::setMetas(_MYSERVICES_CATEGORIES, _MYSERVICES_CATEGORIES);
+\XoopsModules\Myservices\Utilities::setMetas(_MYSERVICES_CATEGORIES, _MYSERVICES_CATEGORIES);
 require_once XOOPS_ROOT_PATH . '/footer.php';

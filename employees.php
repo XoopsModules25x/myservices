@@ -8,21 +8,21 @@
  */
 
 /**
-  * Affiche la liste de tous les employés actifs
+ * Affiche la liste de tous les employés actifs
  */
 require_once __DIR__ . '/header.php';
-$xoopsOption['template_main'] = 'myservices_employes.tpl';
+$GLOBALS['xoopsOption']['template_main'] = 'myservices_employees.tpl';
 require_once XOOPS_ROOT_PATH . '/header.php';
 
-$tblEmployes = array();
-$tblEmployes = $hMsEmployes->getActiveEmployees();
-foreach ($tblEmployes as $item) {
+$tblEmployees = [];
+$tblEmployees = $hMsEmployees->getActiveEmployees();
+foreach ($tblEmployees as $item) {
     $xoopsTpl->append('employees', $item->toArray());
 }
 
-$xoopsTpl->assign('moduleName', myservices_utils::getModuleName());
+$xoopsTpl->assign('moduleName',\XoopsModules\Myservices\Utilities::getModuleName());
 
 // Titre de page et meta description ****************************************************
-$pageTitle = _MYSERVICES_EMPLOYEES_LIST . ' - ' . myservices_utils::getModuleName();
-myservices_utils::setMetas($pageTitle, $pageTitle);
+$pageTitle = _MYSERVICES_EMPLOYEES_LIST . ' - ' .\XoopsModules\Myservices\Utilities::getModuleName();
+\XoopsModules\Myservices\Utilities::setMetas($pageTitle, $pageTitle);
 require_once XOOPS_ROOT_PATH . '/footer.php';

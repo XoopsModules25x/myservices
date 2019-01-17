@@ -7,75 +7,71 @@
  * ****************************************************************************
  */
 
+use XoopsModules\Myservices;
+
 /**
  * Affichage et gestion du caddy
  */
-require __DIR__ . '/header.php';
-$xoopsOption['template_main'] = 'myservices_cart.tpl';
+require_once __DIR__ . '/header.php';
+$GLOBALS['xoopsOption']['template_main'] = 'myservices_cart.tpl';
 require_once XOOPS_ROOT_PATH . '/header.php';
-require_once MYSERVICES_PATH . 'class/myservices_cart.php';
+//require_once MYSERVICES_PATH . 'class/myservices_cart.php';
 
-$myservicesCart = myservices_Cart::getInstance();    // Pour gérer le panier
-$vatArray       = array();
+$myservicesCart = Myservices\Cart::getInstance();    // Pour gérer le panier
+$vatArray       = [];
 $vatArray       = $hMsVat->getItems();
 
-$op = 'default';
-if (isset($_POST['op'])) {
-    $op = $_POST['op'];
-} elseif (isset($_GET['op'])) {
-    $op = $_GET['op'];
+$op    = \Xmf\Request::getCmd('op', 'default');
+
+if (\Xmf\Request::hasVar('products_id', 'POST')) {
+ $products_id = \Xmf\Request::getInt('products_id', 0, 'POST');
+} else {
+ $products_id = \Xmf\Request::getInt('products_id', 0, 'GET');
 }
 
-$products_id = 0;
-if (isset($_POST['products_id'])) {
-    $products_id = (int)$_POST['products_id'];
-} elseif (isset($_GET['products_id'])) {
-    $products_id = (int)$_GET['products_id'];
-}
 
-$employes_id = 0;
-if (isset($_POST['employee'])) {
-    $employes_id = (int)$_POST['employee'];
-} elseif (isset($_GET['employee'])) {
-    $employes_id = (int)$_GET['employee'];
+if (\Xmf\Request::hasVar('employee', 'POST')) {
+ $employees_id = \Xmf\Request::getInt('employee', 0, 'POST');
+} else {
+ $employees_id = \Xmf\Request::getInt('employee', 0, 'GET');
 }
 
 $selectedDay = 0;
-if (isset($_POST['selectedDay'])) {
-    $selectedDay = (int)$_POST['selectedDay'];
-} elseif (isset($_GET['selectedDay'])) {
-    $selectedDay = (int)$_GET['selectedDay'];
+if (\Xmf\Request::hasVar('selectedDay', 'POST')) {
+ $selectedDay = \Xmf\Request::getInt('selectedDay', 0, 'POST');
+} elseif (\Xmf\Request::hasVar('selectedDay', 'GET')) {
+ $selectedDay = \Xmf\Request::getInt('selectedDay', 0, 'GET');
 }
 
-$selectedMonth = 0;
-if (isset($_POST['selectedMonth'])) {
-    $selectedMonth = (int)$_POST['selectedMonth'];
-} elseif (isset($_GET['selectedMonth'])) {
-    $selectedMonth = (int)$_GET['selectedMonth'];
+
+if (\Xmf\Request::hasVar('selectedMonth', 'POST')) {
+ $selectedMonth = \Xmf\Request::getInt('selectedMonth', 0, 'POST');
+} else {
+ $selectedMonth = \Xmf\Request::getInt('selectedMonth', 0, 'GET');
 }
 
-$selectedYear = 0;
-if (isset($_POST['selectedYear'])) {
-    $selectedYear = (int)$_POST['selectedYear'];
-} elseif (isset($_GET['selectedYear'])) {
-    $selectedYear = (int)$_GET['selectedYear'];
+
+if (\Xmf\Request::hasVar('selectedYear', 'POST')) {
+ $selectedYear = \Xmf\Request::getInt('selectedYear', 0, 'POST');
+} else {
+ $selectedYear = \Xmf\Request::getInt('selectedYear', 0, 'GET');
 }
 
 $duration = 0;
-if (isset($_POST['duration'])) {
+if (\Xmf\Request::hasVar('duration', 'POST')) {
     $duration = $_POST['duration'];
-} elseif (isset($_GET['duration'])) {
+} elseif (\Xmf\Request::hasVar('duration', 'GET')) {
     $duration = $_GET['duration'];
 }
 
 $startingHour = '';
-if (isset($_POST['selectedTime'])) {
+if (\Xmf\Request::hasVar('selectedTime', 'POST')) {
     $startingHour = $_POST['selectedTime'];
-} elseif (isset($_GET['selectedTime'])) {
+} elseif (\Xmf\Request::hasVar('selectedTime', 'GET')) {
     $startingHour = $_GET['selectedTime'];
 }
 if (!empty($startingHour)) {
-    $startingHour = myservices_utils::normalyzeTime($startingHour);
+    $startingHour =\XoopsModules\Myservices\Utilities::normalyzeTime($startingHour);
 }
 
 $formatedDate = '';
@@ -84,9 +80,9 @@ if (!empty($selectedDay) && !empty($selectedMonth) && !empty($selectedYear)) {
 }
 
 $xoopsTpl->assign('op', $op);
-$xoopsTpl->assign('confEmpty', myservices_utils::javascriptLinkConfirm(_MYSERVICES_EMPTY_CART_SURE, true));
-$xoopsTpl->assign('confirm_delete_item', myservices_utils::javascriptLinkConfirm(_MYSERVICES_EMPTY_ITEM_SURE, false));
-$xoopsTpl->assign('module_name', myservices_utils::getModuleName());
+$xoopsTpl->assign('confEmpty',\XoopsModules\Myservices\Utilities::javascriptLinkConfirm(_MYSERVICES_EMPTY_CART_SURE, true));
+$xoopsTpl->assign('confirm_delete_item',\XoopsModules\Myservices\Utilities::javascriptLinkConfirm(_MYSERVICES_EMPTY_ITEM_SURE, false));
+$xoopsTpl->assign('module_name',\XoopsModules\Myservices\Utilities::getModuleName());
 
 // ********************************************************************************************************************
 // Liste le contenu du caddy
@@ -95,12 +91,12 @@ function listCart()
 {
     global $xoopsTpl, $myservicesCart;
 
-    $cartForTemplate = array();
+    $cartForTemplate = [];
     $emptyCart       = false;
     $commandAmount   = $vatAmount = $commandAmountTTC = 0;
 
     $myservicesCart->computeCart($cartForTemplate, $emptyCart, $commandAmount, $vatAmount, $commandAmountTTC);
-    $currency = myservices_currency::getInstance();
+    $currency = \XoopsModules\Myservices\Currency::getInstance();
 
     $xoopsTpl->assign('emptyCart', $emptyCart);                                                // Caddy Vide ?
     $xoopsTpl->assign('caddieProducts', $cartForTemplate);                                    // Produits dans le caddy
@@ -116,53 +112,53 @@ function listCart()
 switch ($op) {
 
     // ****************************************************************************************************************
-	case 'add':	// Ajout d'un élément
+    case 'add':    // Ajout d'un élément
         // ****************************************************************************************************************
-        if ($products_id == 0) {
-            myservices_utils::redirect(_MYSERVICES_ERROR9, 'index.php', 4);
+        if (0 == $products_id) {
+           \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_ERROR9, 'index.php', 4);
         }
         $product = null;
         $product = $hMsProducts->get($products_id);
         if (!is_object($product)) {
-            myservices_utils::redirect(_MYSERVICES_ERROR9, 'index.php', 4);
+           \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_ERROR9, 'index.php', 4);
         }
 
-        if ($employes_id == 0) {
-            myservices_utils::redirect(_MYSERVICES_ERROR11, 'index.php', 4);
+        if (0 == $employees_id) {
+           \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_ERROR11, 'index.php', 4);
         }
         $employee = null;
-        $employee = $hMsEmployes->get($employes_id);
+        $employee = $hMsEmployees->get($employees_id);
         if (!is_object($product)) {
-            myservices_utils::redirect(_MYSERVICES_ERROR11, 'index.php', 4);
+           \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_ERROR11, 'index.php', 4);
         }
 
-        if ($duration == 0) {
-            myservices_utils::redirect(_MYSERVICES_ERROR19, 'index.php', 4);
+        if (0 == $duration) {
+           \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_ERROR19, 'index.php', 4);
         }
 
-        if ($startingHour == '') {
-            myservices_utils::redirect(_MYSERVICES_ERROR20, 'index.php', 4);
+        if ('' == $startingHour) {
+           \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_ERROR20, 'index.php', 4);
         }
 
-        if ($formatedDate == '') {
-            myservices_utils::redirect(_MYSERVICES_ERROR21, 'index.php', 4);
+        if ('' == $formatedDate) {
+           \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_ERROR21, 'index.php', 4);
         }
 
-        $myservicesCart->addProduct($products_id, $duration, $employes_id, $startingHour, $formatedDate);
+        $myservicesCart->addProduct($products_id, $duration, $employees_id, $startingHour, $formatedDate);
         $url = MYSERVICES_URL . 'cart.php';
-		header("Location: $url");	// Pour éviter de reposter le même produit lorsqu'on rafraichit la page
+        header("Location: $url");    // Pour éviter de reposter le même produit lorsqu'on rafraichit la page
         listCart();
         break;
 
     // ****************************************************************************************************************
-	case 'update':	// Recalcul des quantités
+    case 'update':    // Recalcul des quantités
         // ****************************************************************************************************************
         $myservicesCart->updateQuantites();
         listCart();
         break;
 
     // ****************************************************************************************************************
-	case 'delete':	// Suppression d'un élément
+    case 'delete':    // Suppression d'un élément
         // ****************************************************************************************************************
         $myservicesCart->deleteProduct($products_id);
         listCart();
@@ -176,7 +172,7 @@ switch ($op) {
         break;
 
     // ****************************************************************************************************************
-	case 'default':	// Action par défaut
+    case 'default':    // Action par défaut
         // ****************************************************************************************************************
         listCart();
         break;
@@ -188,6 +184,6 @@ if (file_exists(MYSERVICES_PATH . 'language/' . $xoopsConfig['language'] . '/mod
     require_once MYSERVICES_PATH . 'language/english/modinfo.php';
 }
 
-$title = _MI_MYSERVICES_SMNAME2 . ' - ' . myservices_utils::getModuleName();
-myservices_utils::setMetas($title, $title);
+$title = _MI_MYSERVICES_SMNAME2 . ' - ' .\XoopsModules\Myservices\Utilities::getModuleName();
+\XoopsModules\Myservices\Utilities::setMetas($title, $title);
 require_once XOOPS_ROOT_PATH . '/footer.php';

@@ -110,3 +110,6 @@ define('_MI_MYSERVICES_FORM_HTMLAREA', 'HtmlArea Editor');
 define('_MI_MYSERVICES_FORM_FCK', 'FCK Editor');
 define('_MI_MYSERVICES_FORM_KOIVI', 'Koivi Editor');
 define('_MI_MYSERVICES_FORM_TINYEDITOR', 'TinyEditor');
+
+define('_MI_MYSERVICES_HOME', 'Home');
+define('_MI_MYSERVICES_ABOUT', 'About');

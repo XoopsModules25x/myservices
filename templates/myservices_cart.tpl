@@ -17,14 +17,14 @@
             <{foreach item=product from=$caddieProducts}>
                 <tr>
                     <td><a href="<{$product.products_url}>" title="<{$product.products_href_title}>"><{$product.products_title}></a></td>
-                    <td align='center'><{$product.products_reserved_date}><br><{$product.products_reserved_time}><br><{$product.products_reserved_duration}> <{$smarty.const._MYSERVICES_HOURS}><br><a href="<{$product.employee.employes_link}>"
-                                                                                                                                                                                                       title="<{$product.employee.employes_href_title}>"><{$product.employee.employes_fullname}></a></td>
+                    <td align='center'><{$product.products_reserved_date}><br><{$product.products_reserved_time}><br><{$product.products_reserved_duration}> <{$smarty.const._MYSERVICES_HOURS}><br><a href="<{$product.employee.employees_link}>"
+                                                                                                                                                                                                       title="<{$product.employee.employees_href_title}>"><{$product.employee.employees_fullname}></a></td>
                     <td align='right'><{$product.products_displaylong_price}></td>
                     <td align='right'><{$product.products_amount_ht}></td>
                     <td align='right'><{$product.products_vat_amount}> (<{$product.products_vat_rate}> %)</td>
                     <td align='right'><{$product.products_price_ttc}></td>
                     <td align='right'>&nbsp;<a href="<{$smarty.const.MYSERVICES_URL}>cart.php?op=delete&products_id=<{$product.products_number}>" <{$confirm_delete_item}> title="<{$smarty.const._MYSERVICES_REMOVE_ITEM}>"><img src="<{$smarty.const.MYSERVICES_IMAGES_URL}>cartdelete.gif"
-                                                                                                                                                                                                                                  alt="<{$smarty.const._MYSERVICES_REMOVE_ITEM}>" border="0"/></td>
+                                                                                                                                                                                                                                  alt="<{$smarty.const._MYSERVICES_REMOVE_ITEM}>" border="0"></td>
                 </tr>
             <{/foreach}>
             <tr>
@@ -38,17 +38,18 @@
                     <br>
     </form>
     <form method="post" name="frmEmpty" id="frmEmpty" action="<{$smarty.const.MYSERVICES_URL}>cart.php" <{$confEmpty}> style="margin:0; padding:0; border: 0; display: inline;">
-        <input type="hidden" name="op" id="op" value="empty"/>
-        <input type="submit" name="btnEmpty" id="btnEmpty" value="<{$smarty.const._MYSERVICES_EMPTY_CART}>"/>
+        <{securityToken}><{*//mb*}>
+        <input type="hidden" name="op" id="op" value="empty">
+        <input type="submit" name="btnEmpty" id="btnEmpty" value="<{$smarty.const._MYSERVICES_EMPTY_CART}>">
     </form>
     <form method="post" name="frmGoOn" id="frmGoOn" action="<{$smarty.const.MYSERVICES_URL}>" style="margin:0; padding:0; border: 0; display: inline;">
-        <input type="submit" name="btnGoOn" id="btnGoOn" value="<{$smarty.const._MYSERVICES_GO_ON}>"/>
+        <input type="submit" name="btnGoOn" id="btnGoOn" value="<{$smarty.const._MYSERVICES_GO_ON}>">
     </form>
     </td>
     <td colspan="2" align="center">
         <br>
         <form method="post" name="frmCheckout" id="frmCheckout" action="<{$smarty.const.MYSERVICES_URL}>checkout.php" style="margin:0; padding:0; border: 0; display: inline;">
-            <input type="submit" name="btnCheckout" id="btnCheckout" value="<{$smarty.const._MYSERVICES_CHECKOUT}>"/>
+            <input type="submit" name="btnCheckout" id="btnCheckout" value="<{$smarty.const._MYSERVICES_CHECKOUT}>">
         </form>
     </td>
     </tr>

@@ -1,6 +1,6 @@
 <!-- Created by Instant Zero (http://www.instant-zero.com) -->
 <div class="buy">
-    <a href="<{$category.categories_url}>" title="<{$category.categories_href_title}>"><img src="<{$category.categories_fullimgurl}>" alt="<{$category.categories_title}>"/></a><br>
+    <a href="<{$category.categories_url}>" title="<{$category.categories_href_title}>"><img src="<{$category.categories_fullimgurl}>" alt="<{$category.categories_title}>"></a><br>
     <b><{$category.categories_title}></b>
     <br>
     <{$category.categories_description}>

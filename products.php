@@ -11,13 +11,13 @@
  * Affiche la liste de tous les produits
  */
 require_once __DIR__ . '/header.php';
-$xoopsOption['template_main'] = 'myservices_products.tpl';
+$GLOBALS['xoopsOption']['template_main'] = 'myservices_products.tpl';
 require_once XOOPS_ROOT_PATH . '/header.php';
 
-$tblProducts = $tblProductsForDisp = $tblCategories = array();
+$tblProducts = $tblProductsForDisp = $tblCategories = [];
 
 $tblCategories = $hMsCategories->getObjects(null, true);
-$criteria      = new Criteria('products_online', 1, '=');
+$criteria      = new \Criteria('products_online', 1, '=');
 $criteria->setSort('products_categories_id, products_title');
 $tblProducts = $hMsProducts->getObjects($criteria);
 foreach ($tblProducts as $product) {
@@ -28,6 +28,6 @@ foreach ($tblProducts as $product) {
 $xoopsTpl->assign('products', $tblProductsForDisp);
 
 // Titre de page et meta description ****************************************************
-$pageTitle = _MYSERVICES_LISTE . ' - ' . myservices_utils::getModuleName();
-myservices_utils::setMetas($pageTitle, $pageTitle);
+$pageTitle = _MYSERVICES_LISTE . ' - ' .\XoopsModules\Myservices\Utilities::getModuleName();
+\XoopsModules\Myservices\Utilities::setMetas($pageTitle, $pageTitle);
 require_once XOOPS_ROOT_PATH . '/footer.php';

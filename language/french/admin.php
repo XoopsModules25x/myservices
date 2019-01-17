@@ -20,9 +20,9 @@ define('_AM_MYSERVICES_LIST', 'Liste');
 define('_AM_MYSERVICES_ID', 'Id');
 define('_AM_MYSERVICES_CURRENT_PICTURE', 'Image actuelle');
 define('_AM_MYSERVICES_PICTURE', 'Image');
-define('_AM_MYSERVICES_SELECT_HLP', 'Utilisez la touche Ctrl (ou la touche pomme sur Mac)<br />pour choisir plusieurs éléments');
+define('_AM_MYSERVICES_SELECT_HLP', 'Utilisez la touche Ctrl (ou la touche pomme sur Mac)<br>pour choisir plusieurs éléments');
 define('_AM_MYSERVICES_DUPLICATED', 'Dupliqué');
-define('_AM_MYSERVICES_CONF_DEL_CATEG', 'Confirmez-vous la suppression de la catégorie suivante ainsi que ses sous catégories ? :<br />%s');
+define('_AM_MYSERVICES_CONF_DEL_CATEG', 'Confirmez-vous la suppression de la catégorie suivante ainsi que ses sous catégories ? :<br>%s');
 define('_AM_MYSERVICES_SORRY_NOREMOVE', "Désolé, il n'est pas possible de supprimer ce produit car il fait partie des commandes suivantes");
 
 define('_AM_MYSERVICES_ERROR_1', "Erreur, pas d'identifiant spécifié");
@@ -85,7 +85,7 @@ define('_AM_MYSERVICES_CSV_EXPORT', 'Export au format CSV');
 define('_AM_MYSERVICES_DATE', 'Date');
 define('_AM_MYSERVICES_CLIENT', 'Client');
 define('_AM_MYSERVICES_CSV_READY', "Votre fichier CSV est prêt pour le téléchargement, cliquez sur ce lien pour l'obtenir");
-define('_AM_MYSERVICES_CANCEL', "Texte explicatif à joindre aux emails<br />de commande pour expliquer la<br />procédure d'annulation");
+define('_AM_MYSERVICES_CANCEL', "Texte explicatif à joindre aux emails<br>de commande pour expliquer la<br>procédure d'annulation");
 define('_AM_MYSERVICES_CGV', 'Conditions Générales de Vente');
 define('_AM_MYSERVICES_PHOTOSDESC', 'Veuillez prendre des photos de taille identique');
 

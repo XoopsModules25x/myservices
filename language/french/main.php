@@ -76,7 +76,7 @@ define('_MYSERVICES_ERROR10', "Erreur, nous sommes désolés mais nous n'avons p
 define('_MYSERVICES_ERROR11', 'Erreur, employé(e)inconnue');
 define('_MYSERVICES_ERROR12', "Erreur, cette personne n'est plus active");
 
-define('_MYSERVICES_ORDER', 'Commande ');	// For paypal
+define('_MYSERVICES_ORDER', 'Commande ');    // For paypal
 define('_MYSERVICES_THANK_YOU', 'Merci pour votre paiement avec Paypal, votre commande sera traitée dans les plus brefs délais.');
 define('_MYSERVICES_TRANSACTION_FINSIHED', 'Votre transaction est terminée');
 define('_MYSERVICES_CONTINUE_SHOPPING', 'Vous pouvez continuer votre visite sur notre site');
@@ -154,7 +154,7 @@ define('_MYSERVICES_ERROR20', "Erreur, aucune heure de début n'a été spécifi
 define('_MYSERVICES_ERROR21', "Erreur, la date de la prestation n'a été spécifiée");
 define('_MYSERVICES_AVAILABILITY_OK', 'Cette personne est disponible pour ce jour et pour cette durée');
 define('_MYSERVICES_NO_COMMAND_BEFORE', " Il n'est pas possible de passer commande avant %d heures");
-define('_MYSERVICES_DATE_DURATION', 'Date, durée<br />et intervenant(e)');
+define('_MYSERVICES_DATE_DURATION', 'Date, durée<br>et intervenant(e)');
 define('_MYSERVICES_AMOUNT_HT', 'Montant HT');
 define('_MYSERVICES_VAT', 'TVA');
 define('_MYSERVICES_HOURS', 'heure(s)');

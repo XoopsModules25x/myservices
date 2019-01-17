@@ -4,16 +4,16 @@
 <br>
 <div style="text-align: justify;">
     <div class="imageSlideshowHolder" id="imageSlideshowHolder">
-        <img src="<{$product.products_image_url1}>" alt="" border="0"/>
-        <img src="<{$product.products_image_url2}>" alt="" border="0"/>
-        <img src="<{$product.products_image_url3}>" alt="" border="0"/>
-        <img src="<{$product.products_image_url4}>" alt="" border="0"/>
-        <img src="<{$product.products_image_url5}>" alt="" border="0"/>
-        <img src="<{$product.products_image_url6}>" alt="" border="0"/>
-        <img src="<{$product.products_image_url7}>" alt="" border="0"/>
-        <img src="<{$product.products_image_url8}>" alt="" border="0"/>
-        <img src="<{$product.products_image_url9}>" alt="" border="0"/>
-        <img src="<{$product.products_image_url10}>" alt="" border="0"/>
+        <img src="<{$product.products_image_url1}>" alt="" border="0">
+        <img src="<{$product.products_image_url2}>" alt="" border="0">
+        <img src="<{$product.products_image_url3}>" alt="" border="0">
+        <img src="<{$product.products_image_url4}>" alt="" border="0">
+        <img src="<{$product.products_image_url5}>" alt="" border="0">
+        <img src="<{$product.products_image_url6}>" alt="" border="0">
+        <img src="<{$product.products_image_url7}>" alt="" border="0">
+        <img src="<{$product.products_image_url8}>" alt="" border="0">
+        <img src="<{$product.products_image_url9}>" alt="" border="0">
+        <img src="<{$product.products_image_url10}>" alt="" border="0">
     </div>
     <h2><{$product.products_title}></h2>
     <br>
@@ -30,8 +30,9 @@
 <{if $no_employees != ''}>
     <{$no_employees}>
 <{else}>
-    <hr size="1" noshade="noshade" style="width: 80%; height: 1px;"/>
+    <hr size="1" noshade="noshade" style="width: 80%; height: 1px;">
     <form method="post" action="<{$smarty.const.MYSERVICES_URL}>cart.php" name="frmresa" id="frmresa" onsubmit='return verifyParameters();'>
+        <{securityToken}><{*//mb*}>
         <table border="0">
             <tr>
                 <td>
@@ -83,11 +84,11 @@
                 </td>
             </tr>
         </table>
-        <input type="hidden" name="products_id" id="products_id" value="<{$product.products_id}>"/>
-        <input type="hidden" name="op" id="op" value="add"/>
-        <input type="hidden" name="selectedDay" id="selectedDay" value=""/>
-        <input type="hidden" name="selectedMonth" id="selectedMonth" value=""/>
-        <input type="hidden" name="selectedYear" id="selectedYear" value=""/>
+        <input type="hidden" name="products_id" id="products_id" value="<{$product.products_id}>">
+        <input type="hidden" name="op" id="op" value="add">
+        <input type="hidden" name="selectedDay" id="selectedDay" value="">
+        <input type="hidden" name="selectedMonth" id="selectedMonth" value="">
+        <input type="hidden" name="selectedYear" id="selectedYear" value="">
     </form>
     <script type="text/javascript">
         <{* Mise à jour des champs cachés pour la sélection de la date *}>

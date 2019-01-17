@@ -17,13 +17,13 @@
  */
 
 require_once dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
-include_once __DIR__ . '/admin_header.php';
+require_once __DIR__ . '/admin_header.php';
 
 xoops_cp_header();
 
-$indexAdmin = new ModuleAdmin();
+$indexAdmin = \Xmf\Module\Admin::getInstance();
 
-echo $indexAdmin->addNavigation(basename(__FILE__));
-echo $indexAdmin->renderIndex();
+$indexAdmin->displayNavigation(basename(__FILE__));
+$indexAdmin->displayIndex();
 
-include_once __DIR__ . '/admin_footer.php';
+require_once __DIR__ . '/admin_footer.php';

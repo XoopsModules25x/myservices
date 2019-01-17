@@ -13,5 +13,5 @@
             <br>
         <{/foreach}>
     </ul>
-    <hr/>
+    <hr>
 <{/foreach}>

@@ -9,7 +9,7 @@
 
 <{* Liste des sous-catégories *}>
 <{if count($subCategories) >0 }>
-    <hr size="1" noshade="noshade" style="width: 100%; height: 1px;"/>
+    <hr size="1" noshade="noshade" style="width: 100%; height: 1px;">
     <table border='0' cellspacing='5' cellpadding='0' align="center">
         <tr>
             <{foreach item=onecategory from=$subCategories}>
@@ -21,7 +21,7 @@
             <{/foreach}>
         </tr>
     </table>
-    <hr size="1" noshade="noshade" style="width: 100%; height: 1px;"/>
+    <hr size="1" noshade="noshade" style="width: 100%; height: 1px;">
 <{/if}>
 
 <{* Informations sur la catégorie courante *}>
@@ -30,7 +30,7 @@
     <tr>
         <td>
             <div style="margin: 5px 10px 5px 5px;float: left;">
-                <img src="<{$category.categories_fullimgurl}>" alt="<{$category.categories_href_title}>"/>
+                <img src="<{$category.categories_fullimgurl}>" alt="<{$category.categories_href_title}>">
             </div>
             <h2><{$category.categories_title}></h2>
             <br>

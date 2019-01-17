@@ -13,23 +13,25 @@
  * @return array
  */
 
+use XoopsModules\Myservices;
+
 function myservices_search($queryarray, $andor, $limit, $offset, $userid)
 {
     global $xoopsDB;
-    include XOOPS_ROOT_PATH . '/modules/myservices/include/common.php';
-    include_once XOOPS_ROOT_PATH . '/modules/myservices/class/myservices_products.php';
+    require_once __DIR__ . '/common.php';
+    require_once XOOPS_ROOT_PATH . '/modules/myservices/class/Products.php';
 
     // Recherche dans les produits
     $sql = 'SELECT products_id, products_title FROM ' . $xoopsDB->prefix('myservices_products') . ' WHERE (products_online = 1';
     $sql .= ') ';
 
-    $tmpObject = new myservices_products();
+    $tmpObject = new \XoopsModules\Myservices\Products();
     $datas     =& $tmpObject->getVars();
-    $tblFields = array();
+    $tblFields = [];
     $cnt       = 0;
     foreach ($datas as $key => $value) {
-        if ($value['data_type'] == XOBJ_DTYPE_TXTBOX || $value['data_type'] == XOBJ_DTYPE_TXTAREA) {
-            if ($cnt == 0) {
+        if (XOBJ_DTYPE_TXTBOX == $value['data_type'] || XOBJ_DTYPE_TXTAREA == $value['data_type']) {
+            if (0 == $cnt) {
                 $tblFields[] = $key;
             } else {
                 $tblFields[] = ' OR ' . $key;
@@ -41,25 +43,25 @@ function myservices_search($queryarray, $andor, $limit, $offset, $userid)
     $count = count($queryarray);
     $more  = '';
     if (is_array($queryarray) && $count > 0) {
-        $cnt = 0;
-        $sql .= ' AND (';
+        $cnt  = 0;
+        $sql  .= ' AND (';
         $more = ')';
         foreach ($queryarray as $oneQuery) {
-            $sql .= '(';
+            $sql  .= '(';
             $cond = " LIKE '%" . $oneQuery . "%' ";
-            $sql .= implode($cond, $tblFields) . $cond . ')';
+            $sql  .= implode($cond, $tblFields) . $cond . ')';
             ++$cnt;
             if ($cnt != $count) {
                 $sql .= ' ' . $andor . ' ';
             }
         }
     }
-    $sql .= $more . ' ORDER BY products_title DESC';
+    $sql    .= $more . ' ORDER BY products_title DESC';
     $i      = 0;
-    $ret    = array();
-    $myts   = MyTextSanitizer::getInstance();
+    $ret    = [];
+    $myts   = \MyTextSanitizer::getInstance();
     $result = $xoopsDB->query($sql, $limit, $offset);
-    while ($myrow = $xoopsDB->fetchArray($result)) {
+    while (false !== ($myrow = $xoopsDB->fetchArray($result))) {
         $ret[$i]['image'] = 'images/cartadd.gif';
         $ret[$i]['link']  = 'product.php?products_id=' . $myrow['products_id'];
         $ret[$i]['title'] = $myts->htmlSpecialChars($myrow['products_title']);

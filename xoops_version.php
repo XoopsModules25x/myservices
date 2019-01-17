@@ -7,7 +7,9 @@
  * ****************************************************************************
  */
 
-defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
+defined('XOOPS_ROOT_PATH') || die('Restricted access');
+
+require_once __DIR__   . '/preloads/autoloader.php';
 
 $modversion['name']           = _MI_MYSERVICES_NAME;
 $modversion['version']        = 2.0;
@@ -29,20 +31,20 @@ $modversion['module_status']       = 'Beta 1';
 $modversion['release_date']        = '2016/07/05';
 $modversion['module_website_url']  = 'www.xoops.org';
 $modversion['module_website_name'] = 'XOOPS';
-$modversion['min_php']             = '5.5';
-$modversion['min_xoops']           = '2.5.8';
+$modversion['min_php']             = '5.6';
+$modversion['min_xoops']           = '2.5.9';
 $modversion['min_admin']           = '1.2';
-$modversion['min_db']              = array(
+$modversion['min_db']              = [
     'mysql'  => '5.0.7',
     'mysqli' => '5.0.7'
-);
+];
 
 $modversion['sqlfile']['mysql'] = 'sql/mysql.sql';
 $modversion['tables'][0]        = 'myservices_caddy';
 $modversion['tables'][1]        = 'myservices_calendar';
 $modversion['tables'][2]        = 'myservices_categories';
-$modversion['tables'][3]        = 'myservices_employes';
-$modversion['tables'][4]        = 'myservices_employesproducts';
+$modversion['tables'][3]        = 'myservices_employees';
+$modversion['tables'][4]        = 'myservices_employeesproducts';
 $modversion['tables'][5]        = 'myservices_orders';
 $modversion['tables'][6]        = 'myservices_prefs';
 $modversion['tables'][7]        = 'myservices_products';
@@ -84,13 +86,13 @@ $modversion['blocks'][$cptb]['template']    = 'myservices_block_products.tpl';
  * Employee List
  */
 ++$cptb;
-$modversion['blocks'][$cptb]['file']        = 'block_myservices_employes.php';
+$modversion['blocks'][$cptb]['file']        = 'block_myservices_employees.php';
 $modversion['blocks'][$cptb]['name']        = _MI_MYSERVICES_BNAME1;
 $modversion['blocks'][$cptb]['description'] = '';
-$modversion['blocks'][$cptb]['show_func']   = 'b_ms_employes_show';
-$modversion['blocks'][$cptb]['edit_func']   = 'b_ms_employes_edit';
+$modversion['blocks'][$cptb]['show_func']   = 'b_ms_employees_show';
+$modversion['blocks'][$cptb]['edit_func']   = 'b_ms_employees_edit';
 $modversion['blocks'][$cptb]['options']     = '1'; // Number of visible items simultaneously
-$modversion['blocks'][$cptb]['template']    = 'myservices_block_employes.tpl';
+$modversion['blocks'][$cptb]['template']    = 'myservices_block_employees.tpl';
 /**
  * Detailed list of categories
  */
@@ -123,9 +125,9 @@ $modversion['sub'][$cptm]['url']  = 'products.php'; // Products
 global $xoopsModule, $hMsCategories;
 if (is_object($xoopsModule) && $xoopsModule->getVar('dirname') == $modversion['dirname'] && $xoopsModule->getVar('isactive')) {
     if (!isset($hMsCategories)) {
-        $hMsCategories = xoops_getModuleHandler('myservices_categories', 'myservices');
+        $hMsCategories = \XoopsModules\Myservices\Helper::getInstance()->getHandler('Categories');
     }
-    $tblCategories = array();
+    $tblCategories = [];
     $tblCategories = $hMsCategories->getMotherCategories();
     foreach ($tblCategories as $item) {
         ++$cptm;
@@ -193,7 +195,7 @@ $modversion['templates'][$cptt]['file']        = 'myservices_product.tpl';
 $modversion['templates'][$cptt]['description'] = 'Product Category';
 
 ++$cptt;
-$modversion['templates'][$cptt]['file']        = 'myservices_employes.tpl';
+$modversion['templates'][$cptt]['file']        = 'myservices_employees.tpl';
 $modversion['templates'][$cptt]['description'] = 'List of employees';
 
 ++$cptt;
@@ -223,16 +225,17 @@ $cpto = 0;
 
 // default admin editor
 xoops_load('XoopsEditorHandler');
-$editor_handler         = XoopsEditorHandler::getInstance();
-$editorList             = array_flip($editor_handler->getList());
-$modversion['config'][$cpto] = array(
+$editorHandler              = XoopsEditorHandler::getInstance();
+$editorList                  = array_flip($editorHandler->getList());
+$modversion['config'][$cpto] = [
     'name'        => 'form_options',
     'title'       => '_MI_MYSERVICES_FORM_OPTIONS',
     'description' => '_MI_MYSERVICES_FORM_OPTIONS_DESC',
     'formtype'    => 'select',
     'valuetype'   => 'text',
     'default'     => 'dhtmltextarea',
-    'options'     => $editorList);
+    'options'     => $editorList
+];
 
 /**
  * Currency's sign placement (left or right)?

@@ -7,21 +7,23 @@
  * ****************************************************************************
  */
 
+use XoopsModules\Myservices;
+
 /**
  * Page appelée par Paypal après le paiement en ligne
  */
-require __DIR__ . '/header.php';
+require_once __DIR__ . '/header.php';
 $success     = true;
 $datasPaypal = false;
 
-$xoopsOption['template_main'] = 'myservices_thankyou.tpl';
+$GLOBALS['xoopsOption']['template_main'] = 'myservices_thankyou.tpl';
 require_once XOOPS_ROOT_PATH . '/header.php';
-require_once MYSERVICES_PATH . 'class/myservices_cart.php';
+// require_once MYSERVICES_PATH . 'class/myservices_cart.php';
 
-$cart = new myservices_Cart();	// Pour gérer le panier
+$cart = new Myservices\Cart();    // Pour gérer le panier
 $cart->emptyCart();
 $xoopsTpl->assign('success', $success);
 
-$title = _MYSERVICES_PURCHASE_FINSISHED . ' - ' . myservices_utils::getModuleName();
-myservices_utils::setMetas($title, $title);
-require_once(XOOPS_ROOT_PATH . '/footer.php');
+$title = _MYSERVICES_PURCHASE_FINSISHED . ' - ' .\XoopsModules\Myservices\Utilities::getModuleName();
+\XoopsModules\Myservices\Utilities::setMetas($title, $title);
+require_once XOOPS_ROOT_PATH . '/footer.php';
