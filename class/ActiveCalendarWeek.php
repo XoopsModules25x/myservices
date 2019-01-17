@@ -1,6 +1,6 @@
-<?php
+<?php namespace XoopsModules\Myservices;
 
-namespace XoopsModules\Myservices;
+use XoopsModules\Myservices;
 
 require_once __DIR__ . '/activecalendar.php';
 
@@ -40,7 +40,6 @@ class ActiveCalendarWeek extends ActiveCalendar
     PUBLIC activeCalendarWeek() -> class constructor. Calls the main class constructor
     ********************************************************************************
     */
-
     /**
      * ActiveCalendarWeek constructor.
      * @param bool   $year
@@ -61,7 +60,6 @@ class ActiveCalendarWeek extends ActiveCalendar
     It generates as many rows as set in $numberOfWeeks
     ********************************************************************************
     */
-
     /**
      * @param int $numberOfWeeks
      * @return string
@@ -83,7 +81,6 @@ class ActiveCalendarWeek extends ActiveCalendar
     It generates as many rows as set in $numberOfWeeks
     ********************************************************************************
     */
-
     /**
      * @param int $weekID
      * @param int $numberOfWeeks
@@ -112,7 +109,6 @@ class ActiveCalendarWeek extends ActiveCalendar
     PUBLIC enableDayLinks -> calls same method of the parent class
     ********************************************************************************
     */
-
     /**
      * @param bool $link
      * @param bool $javaScript
@@ -127,7 +123,6 @@ class ActiveCalendarWeek extends ActiveCalendar
     PUBLIC enableWeekNum -> calls same method of the parent class
     ********************************************************************************
     */
-
     /**
      * @param string $title
      * @param bool   $link
@@ -143,7 +138,6 @@ class ActiveCalendarWeek extends ActiveCalendar
     PUBLIC setEvent -> calls same method of the parent class
     ********************************************************************************
     */
-
     /**
      * @param      $year
      * @param      $month
@@ -161,7 +155,6 @@ class ActiveCalendarWeek extends ActiveCalendar
     PUBLIC setEventContent -> calls same method of the parent class
     ********************************************************************************
     */
-
     /**
      * @param      $year
      * @param      $month
@@ -180,7 +173,6 @@ class ActiveCalendarWeek extends ActiveCalendar
     PUBLIC setMonthNames -> calls same method of the parent class
     ********************************************************************************
     */
-
     /**
      * @param $namesArray
      * @return bool|void
@@ -195,7 +187,6 @@ class ActiveCalendarWeek extends ActiveCalendar
     PUBLIC setDayNames -> calls same method of the parent class
     ********************************************************************************
     */
-
     /**
      * @param $namesArray
      * @return bool|void
@@ -213,7 +204,6 @@ class ActiveCalendarWeek extends ActiveCalendar
     The setFirstWeekDay() does not affect the method showWeeks()
     ********************************************************************************
     */
-
     /**
      * @param $daynum
      */
@@ -221,7 +211,6 @@ class ActiveCalendarWeek extends ActiveCalendar
     {
         parent::setFirstWeekDay($daynum);
     }
-
     /*
     ----------------------
     @START PRIVATE METHODS
@@ -232,7 +221,6 @@ class ActiveCalendarWeek extends ActiveCalendar
     PRIVATE mkWeeksHead() -> creates the week table tag
     ********************************************************************************
     */
-
     /**
      * @return string
      */
@@ -246,7 +234,6 @@ class ActiveCalendarWeek extends ActiveCalendar
     PRIVATE mkWeekDayz() -> creates the tr tag of the week table for the weekdays
     ********************************************************************************
     */
-
     /**
      * @return string
      */
@@ -269,7 +256,6 @@ class ActiveCalendarWeek extends ActiveCalendar
     PRIVATE mkWeeksBody() -> creates the tr tags of the week table
     ********************************************************************************
     */
-
     /**
      * @param $numberOfWeeks
      * @return string
@@ -309,7 +295,6 @@ class ActiveCalendarWeek extends ActiveCalendar
     PRIVATE mkWeeksFoot() -> closes the week table tag
     ********************************************************************************
     */
-
     /**
      * @return string
      */
@@ -324,7 +309,6 @@ class ActiveCalendarWeek extends ActiveCalendar
     The parameter indicates if the name of the first month is needed (at the beginning of the weekly calendar).
     ********************************************************************************
     */
-
     /**
      * @param bool $bothMonths
      * @return string
@@ -357,7 +341,6 @@ class ActiveCalendarWeek extends ActiveCalendar
     }
 
     /* Helper methods */
-
     /**
      * @param $var
      * @return string
