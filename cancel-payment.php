@@ -33,8 +33,8 @@ if (\Xmf\Request::hasVar('id', 'GET')) {
                 $hMsOrders->insert($commande, true);
                 $msg                 = [];
                 $msg['NUM_COMMANDE'] = $commande->getVar('orders_id');
-               \XoopsModules\Myservices\Utilities::sendEmailFromTpl('command_shop_cancel.tpl',\XoopsModules\Myservices\Utilities::getEmailsFromGroup(\XoopsModules\Myservices\Utilities::getModuleOption('grp_sold')), _MYSERVICES_PAYPAL_CANCELED, $msg);
-               \XoopsModules\Myservices\Utilities::sendEmailFromTpl('command_client_cancel.tpl', $commande->getVar('cmd_email'), _MYSERVICES_PAYPAL_CANCELED, $msg);
+                \XoopsModules\Myservices\Utilities::sendEmailFromTpl('command_shop_cancel.tpl', \XoopsModules\Myservices\Utilities::getEmailsFromGroup(\XoopsModules\Myservices\Utilities::getModuleOption('grp_sold')), _MYSERVICES_PAYPAL_CANCELED, $msg);
+                \XoopsModules\Myservices\Utilities::sendEmailFromTpl('command_client_cancel.tpl', $commande->getVar('cmd_email'), _MYSERVICES_PAYPAL_CANCELED, $msg);
             }
         }
         $myservicesCart = new Myservices\Cart();    // Pour gérer le panier
@@ -42,6 +42,6 @@ if (\Xmf\Request::hasVar('id', 'GET')) {
     }
 }
 
-$title = _MYSERVICES_PAYPAL_CANCELED . ' - ' .\XoopsModules\Myservices\Utilities::getModuleName();
+$title = _MYSERVICES_PAYPAL_CANCELED . ' - ' . \XoopsModules\Myservices\Utilities::getModuleName();
 \XoopsModules\Myservices\Utilities::setMetas($title, $title);
 require_once XOOPS_ROOT_PATH . '/footer.php';

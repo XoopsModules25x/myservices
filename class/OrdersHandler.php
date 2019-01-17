@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 /**
  * ****************************************************************************
@@ -42,8 +44,8 @@ class OrdersHandler extends Myservices\ServiceORM
     /**
      * Validation d'une commande (changement d'état)
      *
-     * @param  integer $cmd_id       Identifiant de la commande
-     * @param array    $qualityLinks Lien vers les formulaires de qualité
+     * @param  int  $cmd_id       Identifiant de la commande
+     * @param array $qualityLinks Lien vers les formulaires de qualité
      * @return array Tableau contenant les textes à envoyer par email à la personne (les textes des produits)
      */
     public function validateOrder($cmd_id, &$qualityLinks)
@@ -86,22 +88,22 @@ class OrdersHandler extends Myservices\ServiceORM
             // Liens vers les formulaires de qualité
             $qualityLinks[] = $product->getVar('products_quality_link');
             // Doit on prévenir les salariés ?
-            if (1 ==\XoopsModules\Myservices\Utilities::getModuleOption('email_employees') && '' != xoops_trim($employee->getVar('employees_email'))) {
+            if (1 == \XoopsModules\Myservices\Utilities::getModuleOption('email_employees') && '' != xoops_trim($employee->getVar('employees_email'))) {
                 $recipients   = $msg = $elementsService = [];
-                $recipients   =\XoopsModules\Myservices\Utilities::getEmailsFromGroup(\XoopsModules\Myservices\Utility::getModuleOption('grp_sold'));    // Copie aux responsables du site
+                $recipients   = \XoopsModules\Myservices\Utilities::getEmailsFromGroup(\XoopsModules\Myservices\Utility::getModuleOption('grp_sold'));    // Copie aux responsables du site
                 $recipients[] = $employee->getVar('employees_email'); // Plus le (la) salarié(e)
 
                 $elementsService[] = _MYSERVICES_SERVICE . ' : ' . $product->getVar('products_title');
-                $elementsService[] = _MYSERVICES_STARTING_DATE . ' : ' .\XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($service->getVar('caddy_start'));
-                $elementsService[] = _MYSERVICES_ENDING_DATE . ' : ' .\XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($service->getVar('caddy_end'));
+                $elementsService[] = _MYSERVICES_STARTING_DATE . ' : ' . \XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($service->getVar('caddy_start'));
+                $elementsService[] = _MYSERVICES_ENDING_DATE . ' : ' . \XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($service->getVar('caddy_end'));
 
                 $msg['DETAIL'] = implode("\n", $elementsCommande) . "\n\n" . implode("\n", $elementsService);
-                $msg['DETAIL'] =\XoopsModules\Myservices\Utilities::textForEmail($msg['DETAIL']);
-               \XoopsModules\Myservices\Utilities::sendEmailFromTpl('employee_service.tpl', $recipients, _MYSERVICES_ALERT, $msg);
+                $msg['DETAIL'] = \XoopsModules\Myservices\Utilities::textForEmail($msg['DETAIL']);
+                \XoopsModules\Myservices\Utilities::sendEmailFromTpl('employee_service.tpl', $recipients, _MYSERVICES_ALERT, $msg);
             }
             $retval[] = _MYSERVICES_SERVICE . ' : ' . $product->getVar('products_title');
-            $retval[] = _MYSERVICES_STARTING_DATE . ' : ' .\XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($service->getVar('caddy_start'));
-            $retval[] = _MYSERVICES_ENDING_DATE . ' : ' .\XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($service->getVar('caddy_end'));
+            $retval[] = _MYSERVICES_STARTING_DATE . ' : ' . \XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($service->getVar('caddy_start'));
+            $retval[] = _MYSERVICES_ENDING_DATE . ' : ' . \XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($service->getVar('caddy_end'));
             $retval[] = _MYSERVICES_PRODUCT_PRICETTC . ' : ' . $service->getVar('caddy_price');
             $retval[] = "\n";
         }

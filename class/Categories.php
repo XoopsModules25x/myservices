@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 /**
  * ****************************************************************************
@@ -46,8 +48,8 @@ class Categories extends Myservices\ServiceObject
         $cat_title = $this->getVar('categories_title', 'n');
         $url       = '';
 
-        if (1 ==\XoopsModules\Myservices\Utilities::getModuleOption('urlrewriting')) {    // On utilise l'url rewriting
-            $url = MYSERVICES_URL . 'category-' . (int)$cat_cid .\XoopsModules\Myservices\Utilities::makeSeoUrl($cat_title) . '.html';
+        if (1 == \XoopsModules\Myservices\Utilities::getModuleOption('urlrewriting')) {    // On utilise l'url rewriting
+            $url = MYSERVICES_URL . 'category-' . (int)$cat_cid . \XoopsModules\Myservices\Utilities::makeSeoUrl($cat_title) . '.html';
         } else {    // Pas d'utilisation de l'url rewriting
             $url = MYSERVICES_URL . 'category.php?categories_id=' . (int)$cat_cid;
         }
@@ -67,7 +69,7 @@ class Categories extends Myservices\ServiceObject
         foreach ($this->vars as $k => $v) {
             $ret[$k] = $this->getVar($k, $format);
         }
-        $ret['categories_href_title'] =\XoopsModules\Myservices\Utilities::makeHrefTitle($this->getVar('categories_title'));
+        $ret['categories_href_title'] = \XoopsModules\Myservices\Utilities::makeHrefTitle($this->getVar('categories_title'));
         $ret['categories_url']        = $this->getCategoryLink();
 
         // URL complète de l'image

@@ -18,7 +18,7 @@ require_once XOOPS_ROOT_PATH . '/class/template.php';
 
 $myTpl = new \XoopsTpl();
 // Module Preferences
-$xoopsTpl->assign('columnsCount',\XoopsModules\Myservices\Utilities::getModuleOption('columnscount'));
+$xoopsTpl->assign('columnsCount', \XoopsModules\Myservices\Utilities::getModuleOption('columnscount'));
 
 // Lecture de toutes les TVA ************************************************************
 $vatArray = [];

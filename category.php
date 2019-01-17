@@ -18,23 +18,23 @@ require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
 // Catégorie sélectionnée ***************************************************************
 $currentCategoryId = \Xmf\Request::getInt('categories_id', 0, 'GET');
 if (0 == $currentCategoryId) {
-   \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_ERROR1, 'index.php', 5);
+    \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_ERROR1, 'index.php', 5);
 }
 
 // Chargement de la catégorie ***********************************************************
 $currentCategory = null;
 $currentCategory = $hMsCategories->get($currentCategoryId);
 if (!is_object($currentCategory)) {
-   \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_ERROR2, 'index.php', 5);
+    \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_ERROR2, 'index.php', 5);
 }
 // Formatage de la catégorie courante ***************************************************
 $xoopsTpl->assign('category', $currentCategory->toArray());
 
 // Module Preferences ****************************************************************
-$xoopsTpl->assign('columnsCount',\XoopsModules\Myservices\Utilities::getModuleOption('columnscount'));
-$xoopsTpl->assign('ProductsPerColumn',\XoopsModules\Myservices\Utilities::getModuleOption('prodperline'));
+$xoopsTpl->assign('columnsCount', \XoopsModules\Myservices\Utilities::getModuleOption('columnscount'));
+$xoopsTpl->assign('ProductsPerColumn', \XoopsModules\Myservices\Utilities::getModuleOption('prodperline'));
 
-$limit =\XoopsModules\Myservices\Utilities::getModuleOption('perpage');
+$limit = \XoopsModules\Myservices\Utilities::getModuleOption('perpage');
 $start = \Xmf\Request::getInt('start', 0, 'GET');
 
 // Lecture de toutes les TVA ************************************************************
@@ -77,7 +77,7 @@ foreach ($products as $product) {
 }
 
 // Titre de page et meta description
-$pageTitle    = _MYSERVICES_PRODUCT_CATEGORY . ' ' . $currentCategory->getVar('categories_title') . ' - ' .\XoopsModules\Myservices\Utilities::getModuleName();
-$metaKeywords =\XoopsModules\Myservices\Utilities::createMetaKeywords($currentCategory->getVar('categories_title', 'e') . ' ' . $currentCategory->getVar('categories_description', 'e'));
+$pageTitle    = _MYSERVICES_PRODUCT_CATEGORY . ' ' . $currentCategory->getVar('categories_title') . ' - ' . \XoopsModules\Myservices\Utilities::getModuleName();
+$metaKeywords = \XoopsModules\Myservices\Utilities::createMetaKeywords($currentCategory->getVar('categories_title', 'e') . ' ' . $currentCategory->getVar('categories_description', 'e'));
 \XoopsModules\Myservices\Utilities::setMetas($pageTitle, $pageTitle, $metaKeywords);
 require_once XOOPS_ROOT_PATH . '/footer.php';

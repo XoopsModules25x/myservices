@@ -20,8 +20,7 @@
 use XoopsModules\Myservices;
 
 if ((!defined('XOOPS_ROOT_PATH')) || !($GLOBALS['xoopsUser'] instanceof \XoopsUser)
-    || !$GLOBALS['xoopsUser']->IsAdmin()
-) {
+    || !$GLOBALS['xoopsUser']->IsAdmin()) {
     exit('Restricted access' . PHP_EOL);
 }
 
@@ -38,7 +37,6 @@ function tableExists($tablename)
 }
 
 /**
- *
  * Prepares system prior to attempting to install module
  * @param XoopsModule $module {@link XoopsModule}
  *
@@ -49,35 +47,35 @@ function xoops_module_pre_update_myservices(\XoopsModule $module)
     $moduleDirName = basename(dirname(__DIR__));
     /** @var Myservices\Helper $helper */
     /** @var Myservices\Utility $utility */
-    $helper       = Myservices\Helper::getInstance();
-    $utility      = new Myservices\Utility();
+    $helper  = Myservices\Helper::getInstance();
+    $utility = new Myservices\Utility();
 
     $xoopsSuccess = $utility::checkVerXoops($module);
     $phpSuccess   = $utility::checkVerPhp($module);
+
     return $xoopsSuccess && $phpSuccess;
 }
 
 /**
- *
  * Performs tasks required during update of the module
  * @param XoopsModule $module {@link XoopsModule}
  * @param null        $previousVersion
  *
  * @return bool true if update successful, false if not
  */
-
 function xoops_module_update_myservices(\XoopsModule $module, $previousVersion = null)
 {
-    $moduleDirName = basename(dirname(__DIR__));
-    $capsDirName   = strtoupper($moduleDirName);
+    $moduleDirName      = basename(dirname(__DIR__));
+    $moduleDirNameUpper = mb_strtoupper($moduleDirName);
 
     /** @var Myservices\Helper $helper */
     /** @var Myservices\Utility $utility */
     /** @var Myservices\Common\Configurator $configurator */
-    $helper  = Myservices\Helper::getInstance();
-    $utility = new Myservices\Utility();
+    $helper       = Myservices\Helper::getInstance();
+    $utility      = new Myservices\Utility();
     $configurator = new Myservices\Common\Configurator();
 
+    if ($previousVersion < 240) {
         //delete old HTML templates
         if (count($configurator->templateFolders) > 0) {
             foreach ($configurator->templateFolders as $folder) {
@@ -129,7 +127,7 @@ function xoops_module_update_myservices(\XoopsModule $module, $previousVersion =
 
         //  ---  COPY blank.png FILES ---------------
         if (count($configurator->copyBlankFiles) > 0) {
-            $file =  dirname(__DIR__) . '/assets/images/blank.png';
+            $file = dirname(__DIR__) . '/assets/images/blank.png';
             foreach (array_keys($configurator->copyBlankFiles) as $i) {
                 $dest = $configurator->copyBlankFiles[$i] . '/blank.png';
                 $utility::copyFile($file, $dest);
@@ -142,7 +140,9 @@ function xoops_module_update_myservices(\XoopsModule $module, $previousVersion =
 
         /** @var XoopsGroupPermHandler $grouppermHandler */
         $grouppermHandler = xoops_getHandler('groupperm');
+
         return $grouppermHandler->deleteByModule($module->getVar('mid'), 'item_read');
     }
+
     return true;
 }

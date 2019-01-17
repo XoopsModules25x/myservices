@@ -28,7 +28,7 @@
     </tr>
 </table>
 
-<{if count($products) >0 }>
+<{if $products|is_array && count($products) > 0 }>
     <br>
     <hr>
     <h4><{$smarty.const._MYSERVICES_SERVICES_BY_ME}> <{$employee.employees_lastname}> <{$employee.employees_firstname}> :</h4>

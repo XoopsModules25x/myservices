@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 /*
  Utility Class Definition
@@ -22,10 +24,6 @@
  * @author       Mamba <mambax7@gmail.com>
  * @since        File available since version 1.54
  */
-
-use Xmf\Request;
-use XoopsModules\Myservices;
-use XoopsModules\Myservices\Common;
 
 /**
  * Class Utility

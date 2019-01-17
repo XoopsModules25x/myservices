@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 /**
  * ****************************************************************************
@@ -41,34 +43,34 @@ class PreferencesHandler extends Myservices\ServiceORM
      */
     public function canOrderNow($year, $month, $day, $hour)
     {
-        $hour    =\XoopsModules\Myservices\Utilities::normalyzeTime($hour);
+        $hour    = \XoopsModules\Myservices\Utilities::normalyzeTime($hour);
         $now     = time();
-        $hours   = (int)substr($hour, 0, 2);
-        $minutes = (int)substr($hour, 3, 2);
-        $seconds = (int)substr($hour, 6, 2);
+        $hours   = (int)mb_substr($hour, 0, 2);
+        $minutes = (int)mb_substr($hour, 3, 2);
+        $seconds = (int)mb_substr($hour, 6, 2);
         $later   = mktime($hours, $minutes, $seconds, $month, $day, $year);
         if ($later < $now) {
             return false;
         }
-        $latence    =\XoopsModules\Myservices\Utilities::getModuleOption('latence') * 3600;
+        $latence    = \XoopsModules\Myservices\Utilities::getModuleOption('latence') * 3600;
         $difference = $later - $now;
         if ($difference < $latence) {
             return false;
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     /**
      * Renvoie la date à partir de laquelle on peut commander
      *
-     * @return integer timestamp qui indique le premier jour d'ouverture disponible
+     * @return int timestamp qui indique le premier jour d'ouverture disponible
      */
     public function getFirstAvailableDayForOrder()
     {
         global $hMsCalendar;
         $now          = time();
-        $latence      =\XoopsModules\Myservices\Utilities::getModuleOption('latence') * 3600;
+        $latence      = \XoopsModules\Myservices\Utilities::getModuleOption('latence') * 3600;
         $true         = false;
         $startingHour = $this->getLowerOpenTime();
         while (!$true) {
@@ -85,11 +87,11 @@ class PreferencesHandler extends Myservices\ServiceORM
     /**
      * Fonction chargée d'indiquer si le magasin est ouvert à une date et à une heure donnée (pour les horaires habituels du magasin)
      *
-     * @param integer  $year  Année à de la date
-     * @param  integer $month Mois de la date
-     * @param  integer $day   Jour de la date
-     * @param string   $hour  L'heure à tester (hh:mm:ss)
-     * @param bool     $strict
+     * @param int    $year  Année à de la date
+     * @param  int   $month Mois de la date
+     * @param  int   $day   Jour de la date
+     * @param string $hour  L'heure à tester (hh:mm:ss)
+     * @param bool   $strict
      * @return bool Vrai = magasin ouvert, False = magasin fermé
      */
     public function isStoreOpen($year, $month, $day, $hour, $strict = false)
@@ -102,7 +104,7 @@ class PreferencesHandler extends Myservices\ServiceORM
         $name3      = 'prefs_j' . $weekday . 't2debut';
         $name4      = 'prefs_j' . $weekday . 't2fin';
 
-        $hour =\XoopsModules\Myservices\Utilities::normalyzeTime($hour);
+        $hour = \XoopsModules\Myservices\Utilities::normalyzeTime($hour);
 
         if (!$strict) {
             if ('00:00:00' !== $preference->getVar($name1) && '00:00:00' !== $preference->getVar($name2)) {

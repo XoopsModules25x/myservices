@@ -10,8 +10,8 @@
 use XoopsModules\Myservices;
 
 require_once __DIR__ . '/admin_header.php';
-require_once  dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
-require_once  dirname(__DIR__) . '/include/common.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
+require_once dirname(__DIR__) . '/include/common.php';
 
 require_once MYSERVICES_PATH . 'admin/functions.php';
 require_once XOOPS_ROOT_PATH . '/class/tree.php';
@@ -19,15 +19,15 @@ require_once XOOPS_ROOT_PATH . '/class/uploader.php';
 require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
 require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
 
-$op    = \Xmf\Request::getCmd('op', 'default');
+$op = \Xmf\Request::getCmd('op', 'default');
 
 $destname = '';
-$s        =\XoopsModules\Myservices\Utilities::getModuleOption('csvsep');
+$s        = \XoopsModules\Myservices\Utilities::getModuleOption('csvsep');
 
 /**
  * Function responsible for managing the upload
  *
- * @param integer $indice The index of the file to download
+ * @param int $indice The index of the file to download
  * @return bool
  */
 function myservices_upload($indice)
@@ -39,17 +39,16 @@ function myservices_upload($indice)
         $fldname = get_magic_quotes_gpc() ? stripslashes($fldname['name']) : $fldname['name'];
         if (xoops_trim('' != $fldname)) {
             $dstpath        = XOOPS_UPLOAD_PATH;
-            $destname       =\XoopsModules\Myservices\Utilities::createUploadName($dstpath, $fldname, true);
-            $permittedtypes = explode("\n", str_replace("\r", '',\XoopsModules\Myservices\Utilities::getModuleOption('mimetypes')));
+            $destname       = \XoopsModules\Myservices\Utilities::createUploadName($dstpath, $fldname, true);
+            $permittedtypes = explode("\n", str_replace("\r", '', \XoopsModules\Myservices\Utilities::getModuleOption('mimetypes')));
             array_walk($permittedtypes, 'trim');
-            $uploader = new \XoopsMediaUploader($dstpath, $permittedtypes,\XoopsModules\Myservices\Utilities::getModuleOption('maxuploadsize'));
+            $uploader = new \XoopsMediaUploader($dstpath, $permittedtypes, \XoopsModules\Myservices\Utilities::getModuleOption('maxuploadsize'));
             $uploader->setTargetFileName($destname);
             if ($uploader->fetchMedia($_POST['xoops_upload_file'][$indice])) {
                 if ($uploader->upload()) {
                     return true;
-                } else {
-                    echo _AM_MYSHOP_ERROR_3 . htmlentities($uploader->getErrors(), ENT_QUOTES | ENT_HTML5);
                 }
+                echo _AM_MYSHOP_ERROR_3 . htmlentities($uploader->getErrors(), ENT_QUOTES | ENT_HTML5);
             } else {
                 echo htmlentities($uploader->getErrors(), ENT_QUOTES | ENT_HTML5);
             }
@@ -78,12 +77,12 @@ function OneTimeSelect($libelle, $de, $jour, $indice, $debutfin)
     $nom1 = sprintf('j%dt%d%s1', $jour + 1, $indice, $debfin);
     $nom2 = sprintf('j%dt%d%s2', $jour + 1, $indice, $debfin);
 
-    $heures1 = new \XoopsFormSelect($libelle, $nom1, (int)substr($de, 0, 2));        // Ajout des heures
+    $heures1 = new \XoopsFormSelect($libelle, $nom1, (int)mb_substr($de, 0, 2));        // Ajout des heures
     for ($i = 0; $i <= 23; ++$i) {
         $heures1->addOption($i, $i);
     }
     $per_tray->addElement($heures1);
-    $minutes1 = new \XoopsFormSelect(' : ', $nom2, (int)substr($de, 3, 2));        // Ajout des minutes
+    $minutes1 = new \XoopsFormSelect(' : ', $nom2, (int)mb_substr($de, 3, 2));        // Ajout des minutes
     for ($i = 0; $i <= 60; ++$i) {
         $minutes1->addOption($i, $i);
     }
@@ -130,23 +129,21 @@ function show_footer()
 }
 
 // Read some application settings ********************************************************************
-$limit               =\XoopsModules\Myservices\Utilities::getModuleOption('perpage');    // Maximum number of items to display in the admin
+$limit               = \XoopsModules\Myservices\Utilities::getModuleOption('perpage');    // Maximum number of items to display in the admin
 $baseurl             = MYSERVICES_URL . 'admin/' . basename(__FILE__);    // of this script
-$conf_msg            =\XoopsModules\Myservices\Utilities::javascriptLinkConfirm(_AM_MYSERVICES_CONF_DELITEM);
+$conf_msg            = \XoopsModules\Myservices\Utilities::javascriptLinkConfirm(_AM_MYSERVICES_CONF_DELITEM);
 $myservices_Currency = \XoopsModules\Myservices\Currency::getInstance();
 
 global $xoopsConfig;
-/** @var Myservices\Helper $helper */
-$helper = Myservices\Helper::getInstance();
+/** @var \XoopsModules\Myservices\Helper $helper */
+$helper = \XoopsModules\Myservices\Helper::getInstance();
 $helper->loadLanguage('modinfo');
 $helper->loadLanguage('main');
-
 
 // ******************************************************************************************************************************************
 // **** Main ********************************************************************************************************************************
 // ******************************************************************************************************************************************
 switch ($op) {
-
     // ****************************************************************************************************************
     case 'vat':    // Managing VAT
         // ****************************************************************************************************************
@@ -156,7 +153,7 @@ switch ($op) {
         $tblVat = [];
         $form   = "<form method='post' action='$baseurl' name='frmaddvat' id='frmaddvat'><input type='hidden' name='op' id='op' value='addvat'><input type='submit' name='btngo' id='btngo' value='" . _AM_MYSERVICES_ADD_ITEM . "'></form>";
         echo $form;
-       \XoopsModules\Myservices\Utilities::htitle(_MI_MYSERVICES_ADMENU1, 4);
+        \XoopsModules\Myservices\Utilities::htitle(_MI_MYSERVICES_ADMENU1, 4);
         $tblVat = $hMsVat->getItems($start, $limit);
         $class  = '';
         echo "<table width='100%' cellspacing='1' cellpadding='3' border='0' class='outer'>";
@@ -176,7 +173,6 @@ switch ($op) {
         echo '</table>';
         require_once __DIR__ . '/admin_footer.php';  //show_footer();
         break;
-
     // ****************************************************************************************************************
     case 'saveeditvat':    // Save a VAT
         // ****************************************************************************************************************
@@ -187,7 +183,7 @@ switch ($op) {
             $edit = true;
             $item = $hMsVat->get($id);
             if (!is_object($item)) {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
             }
             $item->unsetNew();
         } else {
@@ -197,20 +193,19 @@ switch ($op) {
         $item->setVars($_POST);
         $res = $hMsVat->insert($item);
         if ($res) {
-           \XoopsModules\Myservices\Utilities::updateCache();
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $opRedirect, 2);
+            \XoopsModules\Myservices\Utilities::updateCache();
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $opRedirect, 2);
         } else {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $opRedirect, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $opRedirect, 5);
         }
         break;
-
     // ****************************************************************************************************************
     case 'deletevat':    // Delete VAT
         // ****************************************************************************************************************
         xoops_cp_header();
         $id = \Xmf\Request::getInt('id', 0, 'GET');
         if (empty($id)) {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
         }
         $opRedirect = 'vat';
         // On v�rifie que cette TVA n'est pas utilis�e par un produit
@@ -222,19 +217,18 @@ switch ($op) {
             if (is_object($item)) {
                 $res = $hMsVat->delete($item, true);
                 if ($res) {
-                   \XoopsModules\Myservices\Utilities::updateCache();
-                   \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $opRedirect, 2);
+                    \XoopsModules\Myservices\Utilities::updateCache();
+                    \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $opRedirect, 2);
                 } else {
-                   \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $opRedirect, 5);
+                    \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $opRedirect, 5);
                 }
             } else {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl . '?op=' . $opRedirect, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl . '?op=' . $opRedirect, 5);
             }
         } else {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_2, $baseurl . '?op=' . $opRedirect, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_2, $baseurl . '?op=' . $opRedirect, 5);
         }
         break;
-
     // ****************************************************************************************************************
     case 'addvat':    // Add VAT
     case 'editvat':    // Edit VAT
@@ -246,13 +240,13 @@ switch ($op) {
             $title = _AM_MYSERVICES_EDIT_VAT;
             $id    = \Xmf\Request::getInt('id', 0, 'GET');
             if (empty($id)) {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
             }
             // Item exits ?
             $item = null;
             $item = $hMsVat->get($id);
             if (!is_object($item)) {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
             }
             $edit         = true;
             $label_submit = _AM_MYSERVICES_MODIFY;
@@ -267,15 +261,14 @@ switch ($op) {
         $sform->addElement(new \XoopsFormHidden('vat_id', $item->getVar('vat_id')));
         $sform->addElement(new \XoopsFormText(_MYSERVICES_RATE, 'vat_rate', 10, 15, $item->getVar('vat_rate', 'e')), true);
 
-        $button_tray = new \XoopsFormElementTray('', '');
-        $submit_btn  = new \XoopsFormButton('', 'post', $label_submit, 'submit');
-        $button_tray->addElement($submit_btn);
-        $sform->addElement($button_tray);
-        $sform =\XoopsModules\Myservices\Utilities::formMarkRequiredFields($sform);
+        $buttonTray = new \XoopsFormElementTray('', '');
+        $submit_btn = new \XoopsFormButton('', 'post', $label_submit, 'submit');
+        $buttonTray->addElement($submit_btn);
+        $sform->addElement($buttonTray);
+        $sform = \XoopsModules\Myservices\Utilities::formMarkRequiredFields($sform);
         $sform->display();
         require_once __DIR__ . '/admin_footer.php';  //show_footer();
         break;
-
     // ****************************************************************************************************************
     case 'employees':        // Employee List
         // ****************************************************************************************************************
@@ -285,7 +278,7 @@ switch ($op) {
         $objet    = 'employees';
         $form     = "<form method='post' action='$baseurl' name='frmadd$objet' id='frmadd$objet'><input type='hidden' name='op' id='op' value='add$objet'><input type='submit' name='btngo' id='btngo' value='" . _AM_MYSERVICES_ADD_ITEM . "'></form>";
         echo $form;
-       \XoopsModules\Myservices\Utilities::htitle(_MI_MYSERVICES_ADMENU2, 4);
+        \XoopsModules\Myservices\Utilities::htitle(_MI_MYSERVICES_ADMENU2, 4);
 
         $start = \Xmf\Request::getInt('start', 0, 'GET');
 
@@ -329,7 +322,6 @@ switch ($op) {
         echo "<div align='right'>" . $pagenav->renderNav() . '</div>';
         require_once __DIR__ . '/admin_footer.php';  //show_footer();
         break;
-
     // ****************************************************************************************************************
     case 'saveeditemployees':    // Save an employee
         // ****************************************************************************************************************
@@ -340,7 +332,7 @@ switch ($op) {
             $edit = true;
             $item = $hMsEmployees->get($id);
             if (!is_object($item)) {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
             }
             $item->unsetNew();
         } else {
@@ -367,20 +359,19 @@ switch ($op) {
         }
         $res = $hMsEmployees->insert($item);
         if ($res) {
-           \XoopsModules\Myservices\Utilities::updateCache();
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $opRedirect, 2);
+            \XoopsModules\Myservices\Utilities::updateCache();
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $opRedirect, 2);
         } else {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $opRedirect, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $opRedirect, 5);
         }
         break;
-
     // ****************************************************************************************************************
     case 'deleteemployees':    // Delete an employee
         // ****************************************************************************************************************
         xoops_cp_header();
         $id = \Xmf\Request::getInt('id', 0, 'GET');
         if (empty($id)) {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
         }
         $opRedirect = 'employees';
 
@@ -393,19 +384,18 @@ switch ($op) {
             if (is_object($item)) {
                 $res = $hMsEmployees->delete($item, true);
                 if ($res) {
-                   \XoopsModules\Myservices\Utilities::updateCache();
-                   \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $opRedirect, 2);
+                    \XoopsModules\Myservices\Utilities::updateCache();
+                    \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $opRedirect, 2);
                 } else {
-                   \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $opRedirect, 5);
+                    \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $opRedirect, 5);
                 }
             } else {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl . '?op=' . $opRedirect, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl . '?op=' . $opRedirect, 5);
             }
         } else {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_5, $baseurl . '?op=' . $opRedirect, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_5, $baseurl . '?op=' . $opRedirect, 5);
         }
         break;
-
     // ****************************************************************************************************************
     case 'addemployees': // Add an employee
     case 'editemployees': // Edition Employee
@@ -417,13 +407,13 @@ switch ($op) {
             $title = _AM_MYSERVICES_EDIT_EMPL;
             $id    = \Xmf\Request::getInt('id', 0, 'GET');
             if (empty($id)) {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
             }
             // Item exits ?
             $item = null;
             $item = $hMsEmployees->get($id);
             if (!is_object($item)) {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
             }
             $edit         = true;
             $label_submit = _AM_MYSERVICES_MODIFY;
@@ -442,7 +432,7 @@ switch ($op) {
         $sform->addElement(new \XoopsFormText(_MYSERVICES_FIRSTNAME, 'employees_firstname', 50, 50, $item->getVar('employees_firstname', 'e')), true);
         $sform->addElement(new \XoopsFormText(_MYSERVICES_EMAIL, 'employees_email', 50, 150, $item->getVar('employees_email', 'e')), false);
         $sform->addElement(new \XoopsFormRadioYN(_MYSERVICES_ISACTIVE, 'employees_isactive', $item->getVar('employees_isactive')), true);
-        $editor =\XoopsModules\Myservices\Utilities::getWysiwygForm(_MYSERVICES_BIO, 'employees_bio', $item->getVar('employees_bio', 'e'), 15, 60, 'bio_hidden');
+        $editor = \XoopsModules\Myservices\Utilities::getWysiwygForm(_MYSERVICES_BIO, 'employees_bio', $item->getVar('employees_bio', 'e'), 15, 60, 'bio_hidden');
         if ($editor) {
             $sform->addElement($editor, false);
         }
@@ -457,19 +447,18 @@ switch ($op) {
                 $sform->addElement($pictureTray);
                 unset($pictureTray, $deleteCheckbox);
             }
-            $sform->addElement(new \XoopsFormFile(_AM_MYSERVICES_PICTURE, 'attachedfile' . $i,\XoopsModules\Myservices\Utilities::getModuleOption('maxuploadsize')), false);
+            $sform->addElement(new \XoopsFormFile(_AM_MYSERVICES_PICTURE, 'attachedfile' . $i, \XoopsModules\Myservices\Utilities::getModuleOption('maxuploadsize')), false);
         }
 
-        $button_tray = new \XoopsFormElementTray('', '');
-        $submit_btn  = new \XoopsFormButton('', 'post', $label_submit, 'submit');
-        $button_tray->addElement($submit_btn);
-        $sform->addElement($button_tray);
+        $buttonTray = new \XoopsFormElementTray('', '');
+        $submit_btn = new \XoopsFormButton('', 'post', $label_submit, 'submit');
+        $buttonTray->addElement($submit_btn);
+        $sform->addElement($buttonTray);
 
-        $sform =\XoopsModules\Myservices\Utilities::formMarkRequiredFields($sform);
+        $sform = \XoopsModules\Myservices\Utilities::formMarkRequiredFields($sform);
         $sform->display();
         require_once __DIR__ . '/admin_footer.php';  //show_footer();
         break;
-
     // ****************************************************************************************************************
     case 'instant-zero':    // Publicity
         // ****************************************************************************************************************
@@ -478,7 +467,6 @@ switch ($op) {
         echo "<iframe src='http://www.instant-zero.com/modules/liaise/?form_id=2' width='100%' height='600' frameborder='0'></iframe>";
         require_once __DIR__ . '/admin_footer.php';  //show_footer();
         break;
-
     // ****************************************************************************************************************
     case 'categories':    // Categories list
         // ****************************************************************************************************************
@@ -487,7 +475,7 @@ switch ($op) {
         $objet = 'categories';
         // Display categories **********************************************************************
         $tblItems = [];
-       \XoopsModules\Myservices\Utilities::htitle(_MI_MYSERVICES_ADMENU4, 4);
+        \XoopsModules\Myservices\Utilities::htitle(_MI_MYSERVICES_ADMENU4, 4);
 
         $tblItems    = $hMsCategories->getItems();
         $mytree      = new \XoopsObjectTree($tblItems, 'categories_id', 'categories_pid');
@@ -507,7 +495,6 @@ switch ($op) {
 
         require_once __DIR__ . '/admin_footer.php';  //show_footer();
         break;
-
     // ****************************************************************************************************************
     case 'addcategories': // Add a Category
     case 'editcategories': // Editing a category
@@ -519,13 +506,13 @@ switch ($op) {
             $title = _AM_MYSERVICES_EDIT_CATEG;
             $id    = \Xmf\Request::getInt('id', 0, 'POST');
             if (empty($id)) {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
             }
             // Item exits ?
             $item = null;
             $item = $hMsCategories->get($id);
             if (!is_object($item)) {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
             }
             $edit         = true;
             $label_submit = _AM_MYSERVICES_MODIFY;
@@ -556,27 +543,26 @@ switch ($op) {
             $sform->addElement($pictureTray);
             unset($pictureTray, $deleteCheckbox);
         }
-        $sform->addElement(new \XoopsFormFile(_AM_MYSERVICES_PICTURE, 'attachedfile',\XoopsModules\Myservices\Utilities::getModuleOption('maxuploadsize')), false);
-        $editor =\XoopsModules\Myservices\Utilities::getWysiwygForm(_AM_MYSERVICES_DESCRIPTION, 'categories_description', $item->getVar('categories_description', 'e'), 15, 60, 'description_hidden');
+        $sform->addElement(new \XoopsFormFile(_AM_MYSERVICES_PICTURE, 'attachedfile', \XoopsModules\Myservices\Utilities::getModuleOption('maxuploadsize')), false);
+        $editor = \XoopsModules\Myservices\Utilities::getWysiwygForm(_AM_MYSERVICES_DESCRIPTION, 'categories_description', $item->getVar('categories_description', 'e'), 15, 60, 'description_hidden');
         if ($editor) {
             $sform->addElement($editor, false);
         }
 
-        $editor2 =\XoopsModules\Myservices\Utilities::getWysiwygForm(_MI_MYSERVICES_ADVERTISEMENT, 'categories_advertisement', $item->getVar('categories_advertisement', 'e'), 15, 60, 'advertisement_hidden');
+        $editor2 = \XoopsModules\Myservices\Utilities::getWysiwygForm(_MI_MYSERVICES_ADVERTISEMENT, 'categories_advertisement', $item->getVar('categories_advertisement', 'e'), 15, 60, 'advertisement_hidden');
         if ($editor2) {
             $sform->addElement($editor2, false);
         }
 
-        $button_tray = new \XoopsFormElementTray('', '');
-        $submit_btn  = new \XoopsFormButton('', 'post', $label_submit, 'submit');
-        $button_tray->addElement($submit_btn);
-        $sform->addElement($button_tray);
+        $buttonTray = new \XoopsFormElementTray('', '');
+        $submit_btn = new \XoopsFormButton('', 'post', $label_submit, 'submit');
+        $buttonTray->addElement($submit_btn);
+        $sform->addElement($buttonTray);
 
-        $sform =\XoopsModules\Myservices\Utilities::formMarkRequiredFields($sform);
+        $sform = \XoopsModules\Myservices\Utilities::formMarkRequiredFields($sform);
         $sform->display();
         require_once __DIR__ . '/admin_footer.php';  //show_footer();
         break;
-
     // ****************************************************************************************************************
     case 'saveeditcategories':    // Save a category
         // ****************************************************************************************************************
@@ -587,11 +573,11 @@ switch ($op) {
             $edit = true;
             $item = $hMsCategories->get($id);
             if (!is_object($item)) {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
             }
             $item->unsetNew();
             if (\Xmf\Request::getInt('categories_pid', 0, 'POST') == \Xmf\Request::getInt('categories_id', 0, 'POST')) {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_6, $baseurl . '?op=' . $opRedirect, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_6, $baseurl . '?op=' . $opRedirect, 5);
             }
         } else {
             $item = $hMsCategories->create(true);
@@ -609,13 +595,12 @@ switch ($op) {
         }
         $res = $hMsCategories->insert($item);
         if ($res) {
-           \XoopsModules\Myservices\Utilities::updateCache();
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $opRedirect, 2);
+            \XoopsModules\Myservices\Utilities::updateCache();
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $opRedirect, 2);
         } else {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $opRedirect, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $opRedirect, 5);
         }
         break;
-
     // ****************************************************************************************************************
     case 'deletecategories':    //  Delete a category
         // ****************************************************************************************************************
@@ -623,17 +608,16 @@ switch ($op) {
         // myservices_adminMenu(4);
         $id = \Xmf\Request::getInt('id', 0, 'POST');
         if (0 == $id) {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
         }
         $category = null;
         $category = $hMsCategories->get($id);
         if (!is_object($category)) {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_14, $baseurl, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_14, $baseurl, 5);
         }
         $msg = sprintf(_AM_MYSERVICES_CONF_DEL_CATEG, $category->getVar('categories_title'));
         xoops_confirm(['op' => 'confdeletecategory', 'id' => $id], 'index.php', $msg);
         break;
-
     // ****************************************************************************************************************
     case 'confdeletecategory':    // effective Deleting a category (after confirmation of deletion)
         // ****************************************************************************************************************
@@ -641,12 +625,12 @@ switch ($op) {
         // myservices_adminMenu(4);
         $id = \Xmf\Request::getInt('id', 0, 'POST');
         if (0 == $id) {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
         }
         $category = null;
         $category = $hMsCategories->get($id);
         if (!is_object($category)) {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_14, $baseurl, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_14, $baseurl, 5);
         }
         $opRedirect = 'categories';
         // Check that this category is not used by products
@@ -673,19 +657,18 @@ switch ($op) {
                 $critere = new \Criteria('categories_id', $id, '=');
                 $res     = $hMsCategories->deleteAll($critere);
                 if ($res) {
-                   \XoopsModules\Myservices\Utilities::updateCache();
-                   \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $opRedirect, 2);
+                    \XoopsModules\Myservices\Utilities::updateCache();
+                    \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $opRedirect, 2);
                 } else {
-                   \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $opRedirect, 5);
+                    \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $opRedirect, 5);
                 }
             } else {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl . '?op=' . $opRedirect, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl . '?op=' . $opRedirect, 5);
             }
         } else {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_4, $baseurl . '?op=' . $opRedirect, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_4, $baseurl . '?op=' . $opRedirect, 5);
         }
         break;
-
     // ****************************************************************************************************************
     case 'products':    // Product Management
         // ****************************************************************************************************************
@@ -710,7 +693,7 @@ switch ($op) {
              . " <input type='submit' name='btngo' id='btngo' value='"
              . _GO
              . "'></form>";
-       \XoopsModules\Myservices\Utilities::htitle(_MI_MYSERVICES_ADMENU5, 4);
+        \XoopsModules\Myservices\Utilities::htitle(_MI_MYSERVICES_ADMENU5, 4);
 
         $start    = \Xmf\Request::getInt('start', 0, 'GET');
         $criteria = new \CriteriaCompo();
@@ -781,7 +764,6 @@ switch ($op) {
         echo "<div align='right'>" . $pagenav->renderNav() . '</div>';
         require_once __DIR__ . '/admin_footer.php';  //show_footer();
         break;
-
     // ****************************************************************************************************************
     case 'addproducts':        // Add a product
     case 'editproducts':    // Edit a product
@@ -795,13 +777,13 @@ switch ($op) {
             $title = _AM_MYSERVICES_EDIT_PRODUCT;
             $id    = \Xmf\Request::getInt('id', 0, 'GET');
             if (empty($id)) {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
             }
             // Item exits ?
             $item = null;
             $item = $hMsProducts->get($id);
             if (!is_object($item)) {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
             }
             $edit         = true;
             $label_submit = _AM_MYSERVICES_MODIFY;
@@ -814,7 +796,7 @@ switch ($op) {
         $tblCategories = [];
         $tblCategories = $hMsCategories->getItems();
         if (0 == count($tblCategories)) {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_8, $baseurl, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_8, $baseurl, 5);
         }
         $mytree      = new \XoopsObjectTree($tblCategories, 'categories_id', 'categories_pid');
         $selectCateg = $mytree->makeSelBox('products_categories_id', 'categories_title', '-', $item->getVar('products_categories_id'));
@@ -823,7 +805,7 @@ switch ($op) {
         $tblVat = [];
         $tblVat = $hMsVat->getList();
         if (0 == count($tblVat)) {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_9, $baseurl, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_9, $baseurl, 5);
         }
 
         // People offering this service ************************************
@@ -832,7 +814,7 @@ switch ($op) {
         // Search for all employees
         $tblEmployees = $hMsEmployees->getItems();
         if (0 == count($tblEmployees)) {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_10, $baseurl, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_10, $baseurl, 5);
         }
 
         foreach ($tblEmployees as $oneitem) {
@@ -840,7 +822,7 @@ switch ($op) {
         }
         // Search for employees who provide this service
         if ($edit) {
-            $criteria            = new \Criteria('employeesproducts_products_id', $item->getVar('products_id'), '=');
+            $criteria             = new \Criteria('employeesproducts_products_id', $item->getVar('products_id'), '=');
             $tblEmployeesProducts = $hMsEmployeesProducts->getObjects($criteria);
             foreach ($tblEmployeesProducts as $item2) {
                 $tblEmployeesProductsForm[] = $item2->getVar('employeesproducts_employees_id');
@@ -864,12 +846,12 @@ switch ($op) {
         $vatSelect->addOptionArray($tblVat);
         $sform->addElement($vatSelect, true);
         $sform->addElement(new \XoopsFormText(_AM_MYSERVICES_PRODUCT_PRICE_HT, 'products_price', 20, 20, $item->getVar('products_price', 'e')), true);
-        $editor =\XoopsModules\Myservices\Utilities::getWysiwygForm(_MYSERVICES_PRODUCT_SUMMARY, 'products_summary', $item->getVar('products_summary', 'e'), 15, 60, 'summary_hidden');
+        $editor = \XoopsModules\Myservices\Utilities::getWysiwygForm(_MYSERVICES_PRODUCT_SUMMARY, 'products_summary', $item->getVar('products_summary', 'e'), 15, 60, 'summary_hidden');
         if ($editor) {
             $sform->addElement($editor, true);
         }
 
-        $editor2 =\XoopsModules\Myservices\Utilities::getWysiwygForm(_MYSERVICES_PRODUCT_DESC, 'products_description', $item->getVar('products_description', 'e'), 15, 60, 'description_hidden');
+        $editor2 = \XoopsModules\Myservices\Utilities::getWysiwygForm(_MYSERVICES_PRODUCT_DESC, 'products_description', $item->getVar('products_description', 'e'), 15, 60, 'description_hidden');
         if ($editor2) {
             $sform->addElement($editor2, false);
         }
@@ -884,7 +866,7 @@ switch ($op) {
 
         // Images *************************************************************
         $sform->insertBreak('<b><span style="text-align: center; text-decoration: underline;">' . _AM_MYSERVICES_PHOTOSDESC . '</span></b>', 'foot');
-        $maxUpload =\XoopsModules\Myservices\Utilities::getModuleOption('maxuploadsize');
+        $maxUpload = \XoopsModules\Myservices\Utilities::getModuleOption('maxuploadsize');
         for ($i = 1; $i <= 10; ++$i) {
             if ($op == 'edit' . $objet && '' != trim($item->getVar('products_image' . $i)) && file_exists(XOOPS_UPLOAD_PATH . '/' . trim($item->getVar('products_image' . $i)))) {
                 $pictureTray = new \XoopsFormElementTray(_MYSERVICES_CURRENT_PICTURE, '<br>');
@@ -898,16 +880,15 @@ switch ($op) {
             $sform->addElement(new \XoopsFormFile(_MYSERVICES_CHANGE_PICTURE, 'attachedfile' . $i, $maxUpload), false);
         }
 
-        $button_tray = new \XoopsFormElementTray('', '');
-        $submit_btn  = new \XoopsFormButton('', 'post', $label_submit, 'submit');
-        $button_tray->addElement($submit_btn);
-        $sform->addElement($button_tray);
+        $buttonTray = new \XoopsFormElementTray('', '');
+        $submit_btn = new \XoopsFormButton('', 'post', $label_submit, 'submit');
+        $buttonTray->addElement($submit_btn);
+        $sform->addElement($buttonTray);
 
-        $sform =\XoopsModules\Myservices\Utilities::formMarkRequiredFields($sform);
+        $sform = \XoopsModules\Myservices\Utilities::formMarkRequiredFields($sform);
         $sform->display();
         require_once __DIR__ . '/admin_footer.php';  //show_footer();
         break;
-
     // ****************************************************************************************************************
     case 'saveeditproducts':    // Save the information of a product
         // ****************************************************************************************************************
@@ -918,7 +899,7 @@ switch ($op) {
             $edit = true;
             $item = $hMsProducts->get($id);
             if (!is_object($item)) {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
             }
             $item->unsetNew();
             $add = false;
@@ -964,13 +945,12 @@ switch ($op) {
                     $res = $hMsEmployeesProducts->insert($item2);
                 }
             }
-           \XoopsModules\Myservices\Utilities::updateCache();
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $objet, 2);
+            \XoopsModules\Myservices\Utilities::updateCache();
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $objet, 2);
         } else {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $objet, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $objet, 5);
         }
         break;
-
     // ****************************************************************************************************************
     case 'copyproducts':    // Copy a product
         // ****************************************************************************************************************
@@ -978,7 +958,7 @@ switch ($op) {
         $id    = \Xmf\Request::getInt('id', 0, 'GET');
         $objet = 'products';
         if (empty($id)) {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
         }
         $product = null;
         $product = $hMsProducts->get($id);
@@ -1001,20 +981,19 @@ switch ($op) {
                     $newProductEmploye->setNew();
                     $hMsEmployeesProducts->insert($newProductEmploye, true);
                 }
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $objet, 2);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $objet, 2);
             } else {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $objet, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $objet, 5);
             }
         }
         break;
-
     // ****************************************************************************************************************
     case 'deleteproducts':    // Delete a product
         // ****************************************************************************************************************
         xoops_cp_header();
         $id = \Xmf\Request::getInt('id', 0, 'GET');
         if (0 == $id) {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
         }
         $objet  = 'products';
         $tblTmp = [];
@@ -1029,17 +1008,17 @@ switch ($op) {
             if (is_object($item)) {
                 $res = $hMsProducts->delete($item, true);
                 if ($res) {
-                   \XoopsModules\Myservices\Utilities::updateCache();
-                   \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $objet, 2);
+                    \XoopsModules\Myservices\Utilities::updateCache();
+                    \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $objet, 2);
                 } else {
-                   \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $objet, 5);
+                    \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $objet, 5);
                 }
             } else {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl . '?op=' . $objet, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl . '?op=' . $objet, 5);
             }
         } else {
             // myservices_adminMenu(5);
-           \XoopsModules\Myservices\Utilities::htitle(_AM_MYSERVICES_SORRY_NOREMOVE, 4);
+            \XoopsModules\Myservices\Utilities::htitle(_AM_MYSERVICES_SORRY_NOREMOVE, 4);
             $tblTmp2 = [];
             $tblTmp2 = $hMsOrders->getObjects(new \Criteria('orders_id', '(' . implode(',', $tblTmp) . ')', 'IN'), true);
             echo "<table width='100%' cellspacing='1' cellpadding='3' border='0' class='outer'>";
@@ -1047,7 +1026,7 @@ switch ($op) {
             echo "<tr><th align='center'>" . _AM_MYSERVICES_ID . "</th><th align='center'>" . _AM_MYSERVICES_DATE . "</th><th align='center'>" . _AM_MYSERVICES_CLIENT . '</th></tr>';
             foreach ($tblTmp2 as $item) {
                 $class = ('even' === $class) ? 'odd' : 'even';
-                $date  =\XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($item->getVar('orders_date'));
+                $date  = \XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($item->getVar('orders_date'));
                 echo "<tr class='" . $class . "'>\n";
                 echo "<td align='right'>"
                      . $item->getVar('orders_id')
@@ -1066,7 +1045,6 @@ switch ($op) {
             require_once __DIR__ . '/admin_footer.php';  //show_footer();
         }
         break;
-
     // ****************************************************************************************************************
     case 'holiday':    // Management holidays and days worked (but the order has been placed off-site)
         // ****************************************************************************************************************
@@ -1074,8 +1052,8 @@ switch ($op) {
         // myservices_adminMenu(3);
         $objet = 'holiday';
 
-       \XoopsModules\Myservices\Utilities::htitle(_MI_MYSERVICES_ADMENU3, 4);
-       \XoopsModules\Myservices\Utilities::htitle(_MYSERVICES_EMPLOYES_IN_HOLIDAYS, 5);
+        \XoopsModules\Myservices\Utilities::htitle(_MI_MYSERVICES_ADMENU3, 4);
+        \XoopsModules\Myservices\Utilities::htitle(_MYSERVICES_EMPLOYES_IN_HOLIDAYS, 5);
         echo " <a href='$baseurl?op=csv$objet'>" . _AM_MYSERVICES_CSV_EXPORT . '</a>';
 
         // Search for people on vacation
@@ -1100,7 +1078,7 @@ switch ($op) {
             $employeesList[] = $item->getVar('calendar_employees_id');
         }
         if (count($employeesList) > 0) {
-            $critere     = new \Criteria('employees_id', '(' . implode(',', $employeesList) . ')', 'IN');
+            $critere      = new \Criteria('employees_id', '(' . implode(',', $employeesList) . ')', 'IN');
             $tblEmployees = $hMsEmployees->getObjects($critere, true);
         }
 
@@ -1118,9 +1096,9 @@ switch ($op) {
             echo '<td>'
                  . $employee
                  . "</td><td align='center'>"
-                 .\XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($item->getVar('calendar_start'))
+                 . \XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($item->getVar('calendar_start'))
                  . "</td><td align='center'>"
-                 .\XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($item->getVar('calendar_end'))
+                 . \XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($item->getVar('calendar_end'))
                  . "</td><td align='center'>"
                  . $item->getStatusLabel()
                  . "</td><td align='center'>"
@@ -1142,7 +1120,7 @@ switch ($op) {
         echo "<div align='right'>" . $pagenav->renderNav() . '</div>';
 
         // Store Closed ******************************************************************************
-       \XoopsModules\Myservices\Utilities::htitle(_AM_MYSERVICES_CLOSE_SHOP, 5);
+        \XoopsModules\Myservices\Utilities::htitle(_AM_MYSERVICES_CLOSE_SHOP, 5);
         $itemsCount = 0;
         $tblItems   = [];
         $start2     = \Xmf\Request::getInt('start2', 0, 'GET');
@@ -1166,7 +1144,15 @@ switch ($op) {
             $action_edit   = "<a href='$baseurl?op=edit" . $objet . '&status=' . $item->getVar('calendar_status') . '&id=' . $itemId . "' title='" . _MYSERVICES_EDIT . "'>" . $icones['edit'] . '</a>';
             $action_delete = "<a href='$baseurl?op=delete" . $objet . '&id=' . $itemId . "' title='" . _MYSERVICES_DELETE . "'" . $conf_msg . '>' . $icones['delete'] . '</a>';
             echo "<tr class='" . $class . "'>\n";
-            echo "<td align='center'>" .\XoopsModules\Myservices\Utilities::SQLDateToHuman($item->getVar('calendar_start'), 's') . "</td><td align='center'>" .\XoopsModules\Myservices\Utilities::SQLDateToHuman($item->getVar('calendar_end'), 's') . "</td><td align='center'>" . $action_edit . '&nbsp;' . $action_delete . "</td>\n";
+            echo "<td align='center'>"
+                 . \XoopsModules\Myservices\Utilities::SQLDateToHuman($item->getVar('calendar_start'), 's')
+                 . "</td><td align='center'>"
+                 . \XoopsModules\Myservices\Utilities::SQLDateToHuman($item->getVar('calendar_end'), 's')
+                 . "</td><td align='center'>"
+                 . $action_edit
+                 . '&nbsp;'
+                 . $action_delete
+                 . "</td>\n";
             echo "<tr>\n";
         }
         $class = ('even' === $class) ? 'odd' : 'even';
@@ -1181,7 +1167,6 @@ switch ($op) {
         echo "<div align='right'>" . $pagenav->renderNav() . '</div>';
         require_once __DIR__ . '/admin_footer.php';  //show_footer();
         break;
-
     // ****************************************************************************************************************
     case 'addholiday': // Add a person on leave
     case 'editholiday': // Editing leave a person
@@ -1191,10 +1176,10 @@ switch ($op) {
         $object = 'holiday';
 
         if (\Xmf\Request::hasVar('status', 'POST')) {
- $status = \Xmf\Request::getInt('status', 0, 'POST');
-} elseif (\Xmf\Request::hasVar('status', 'GET')) {
- $status = \Xmf\Request::getInt('status', 0, 'GET');
-} else {
+            $status = \Xmf\Request::getInt('status', 0, 'POST');
+        } elseif (\Xmf\Request::hasVar('status', 'GET')) {
+            $status = \Xmf\Request::getInt('status', 0, 'GET');
+        } else {
             $status = CALENDAR_STATUS_HOLIDAY;
         }
 
@@ -1206,13 +1191,13 @@ switch ($op) {
             }
             $id = \Xmf\Request::getInt('id', 0, 'GET');
             if (empty($id)) {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
             }
             // Item exits ?
             $item = null;
             $item = $hMsCalendar->get($id);
             if (!is_object($item)) {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
             }
             $edit         = true;
             $label_submit = _AM_MYSERVICES_MODIFY;
@@ -1236,7 +1221,7 @@ switch ($op) {
             // Find the list of employees
             $tblEmployees = $hMsEmployees->getItems();
             if (0 == count($tblEmployees)) {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_11, $baseurl, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_11, $baseurl, 5);
             }
             foreach ($tblEmployees as $oneitem) {
                 $tblEmployeesForm[$oneitem->getVar('employees_id')] = xoops_trim($oneitem->getVar('employees_lastname')) . ' ' . xoops_trim($oneitem->getVar('employees_firstname'));
@@ -1264,15 +1249,14 @@ switch ($op) {
             $sform->addElement(new \XoopsFormHidden('calendar_status', CALENDAR_STATUS_CLOSED));
         }
 
-        $button_tray = new \XoopsFormElementTray('', '');
-        $submit_btn  = new \XoopsFormButton('', 'post', $label_submit, 'submit');
-        $button_tray->addElement($submit_btn);
-        $sform->addElement($button_tray);
-        $sform =\XoopsModules\Myservices\Utilities::formMarkRequiredFields($sform);
+        $buttonTray = new \XoopsFormElementTray('', '');
+        $submit_btn = new \XoopsFormButton('', 'post', $label_submit, 'submit');
+        $buttonTray->addElement($submit_btn);
+        $sform->addElement($buttonTray);
+        $sform = \XoopsModules\Myservices\Utilities::formMarkRequiredFields($sform);
         $sform->display();
         require_once __DIR__ . '/admin_footer.php';  //show_footer();
         break;
-
     // ****************************************************************************************************************
     case 'saveeditholiday':    // Save time off / closure
         // ****************************************************************************************************************
@@ -1283,7 +1267,7 @@ switch ($op) {
             $edit = true;
             $item = $hMsCalendar->get($id);
             if (!is_object($item)) {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
             }
             $item->unsetNew();
         } else {
@@ -1293,37 +1277,36 @@ switch ($op) {
         $item->setVars($_POST);
         if (CALENDAR_STATUS_CLOSED == \Xmf\Request::getInt('calendar_status', 0, 'POST')) {
             $date = strtotime($_POST['calendar_start']);
-            $item->setVar('calendar_start',\XoopsModules\Myservices\Utilities::timestampToMysqlDateTime($date));
+            $item->setVar('calendar_start', \XoopsModules\Myservices\Utilities::timestampToMysqlDateTime($date));
 
             $date = strtotime($_POST['calendar_end']);
-            $item->setVar('calendar_end',\XoopsModules\Myservices\Utilities::timestampToMysqlDateTime($date));
+            $item->setVar('calendar_end', \XoopsModules\Myservices\Utilities::timestampToMysqlDateTime($date));
         } else {
             // Passage des dates au bon format
             $dateForm = $_POST['calendar_start'];
             $date     = strtotime($dateForm['date']) + $dateForm['time'];
-            $item->setVar('calendar_start',\XoopsModules\Myservices\Utilities::timestampToMysqlDateTime($date));
+            $item->setVar('calendar_start', \XoopsModules\Myservices\Utilities::timestampToMysqlDateTime($date));
 
             $dateForm = $_POST['calendar_end'];
             $date     = strtotime($dateForm['date']) + $dateForm['time'];
-            $item->setVar('calendar_end',\XoopsModules\Myservices\Utilities::timestampToMysqlDateTime($date));
+            $item->setVar('calendar_end', \XoopsModules\Myservices\Utilities::timestampToMysqlDateTime($date));
         }
 
         $res = $hMsCalendar->insert($item);
         if ($res) {
-           \XoopsModules\Myservices\Utilities::updateCache();
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $opRedirect, 2);
+            \XoopsModules\Myservices\Utilities::updateCache();
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $opRedirect, 2);
         } else {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $opRedirect, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $opRedirect, 5);
         }
         break;
-
     // ****************************************************************************************************************
     case 'deleteholiday':    // Save time off / closure
         // ****************************************************************************************************************
         xoops_cp_header();
         $id = \Xmf\Request::getInt('id', 0, 'GET');
         if (empty($id)) {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
         }
         $opRedirect = 'holiday';
         $item       = null;
@@ -1331,16 +1314,15 @@ switch ($op) {
         if (is_object($item)) {
             $res = $hMsCalendar->delete($item, true);
             if ($res) {
-               \XoopsModules\Myservices\Utilities::updateCache();
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $opRedirect, 2);
+                \XoopsModules\Myservices\Utilities::updateCache();
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $opRedirect, 2);
             } else {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $opRedirect, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $opRedirect, 5);
             }
         } else {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl . '?op=' . $opRedirect, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl . '?op=' . $opRedirect, 5);
         }
         break;
-
     // ****************************************************************************************************************
     case 'csvholiday':    // Export CSV leave
         // ****************************************************************************************************************
@@ -1364,7 +1346,7 @@ switch ($op) {
             $tblEmployees = $tblEmployeesForm = $tblItems = [];
             $tblEmployees = $hMsEmployees->getItems();
             if (0 == count($tblEmployees)) {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_10, $baseurl, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_10, $baseurl, 5);
             }
 
             foreach ($tblEmployees as $oneitem) {
@@ -1389,26 +1371,25 @@ switch ($op) {
             fclose($fp);
             echo "<br><a target='_blank' href='" . XOOPS_UPLOAD_URL . '/' . $filename . "'>" . _AM_MYSERVICES_CSV_READY . '</a>';
         } else {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_7);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_7);
         }
         require_once __DIR__ . '/admin_footer.php';  //show_footer();
         break;
-
     // ****************************************************************************************************************
     case 'orders':    // Order Management
         // ****************************************************************************************************************
         xoops_cp_header();
         // myservices_adminMenu(6);
-       \XoopsModules\Myservices\Utilities::htitle(_MI_MYSERVICES_ADMENU7, 4);
+        \XoopsModules\Myservices\Utilities::htitle(_MI_MYSERVICES_ADMENU7, 4);
         $objet = 'orders';
 
         $start   = \Xmf\Request::getInt('start', 0, 'GET');
         $filter3 = 0;
         if (\Xmf\Request::hasVar('filter3', 'POST')) {
- $filter3 = \Xmf\Request::getInt('filter3', 0, 'POST');
-} elseif (\Xmf\Request::hasVar('filter3', 'SESSION')) {
- $filter3 = \Xmf\Request::getInt('filter3', 0, 'SESSION');
-} else {
+            $filter3 = \Xmf\Request::getInt('filter3', 0, 'POST');
+        } elseif (\Xmf\Request::hasVar('filter3', 'SESSION')) {
+            $filter3 = \Xmf\Request::getInt('filter3', 0, 'SESSION');
+        } else {
             $filter3 = 1;
         }
         $_SESSION['filter3'] = $filter3;
@@ -1457,13 +1438,13 @@ switch ($op) {
                                . "</option></select> <input type='hidden' name='op' id='op' value='orders'><input type='submit' name='btnfilter' id='btnfilter' value='"
                                . _AM_MYSERVICES_FILTER
                                . "'></form>";
-        $confValidateCommand =\XoopsModules\Myservices\Utilities::javascriptLinkConfirm(_AM_MYSERVICES_CONF_VALIDATE);
+        $confValidateCommand = \XoopsModules\Myservices\Utilities::javascriptLinkConfirm(_AM_MYSERVICES_CONF_VALIDATE);
         echo "<tr><td colspan='2' align='left'>" . $pagenav->renderNav() . "</td><td><a href='$baseurl?op=csv&cmdtype=" . $filter3 . "'>" . _AM_MYSERVICES_CSV_EXPORT . "</a></td><td align='right' colspan='2'>" . $form . "</td></tr>\n";
         echo "<tr><th align='center'>" . _AM_MYSERVICES_ID . "</th><th align='center'>" . _AM_MYSERVICES_DATE . "</th><th align='center'>" . _AM_MYSERVICES_CLIENT . "</th><th align='center'>" . _MYSERVICES_TOTAL_TTC . "</th><th align='center'>" . _AM_MYSERVICES_ACTION . '</th></tr>';
         foreach ($tblCommands as $item) {
             $id              = $item->getVar('orders_id');
             $class           = ('even' === $class) ? 'odd' : 'even';
-            $date            =\XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($item->getVar('orders_date'));
+            $date            = \XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($item->getVar('orders_date'));
             $action_edit     = "<a target='_blank' href='detailscmd.php?id=" . $id . "' title='" . _MYSERVICES_DETAILS . "'>" . $icones['details'] . '</a>';
             $action_delete   = "<a href='$baseurl?op=delete" . $objet . '&id=' . $id . "' title='" . _MYSERVICES_DELETE . "'" . $conf_msg . '>' . $icones['delete'] . '</a>';
             $action_validate = "<a href='$baseurl?op=validate" . $objet . '&id=' . $id . "' " . $confValidateCommand . " title='" . _MYSERVICES_VALIDATE_COMMAND . "'>" . $icones['ok'] . '</a>';
@@ -1491,13 +1472,12 @@ switch ($op) {
         echo "<div align='right'>" . $pagenav->renderNav() . '</div>';
         require_once __DIR__ . '/admin_footer.php';  //show_footer();
         break;
-
     // ****************************************************************************************************************
     case 'csv':    // Export orders to CSV
         // ****************************************************************************************************************
         xoops_cp_header();
         // myservices_adminMenu(6);
-       \XoopsModules\Myservices\Utilities::htitle(_MI_MYSERVICES_ADMENU7, 4);
+        \XoopsModules\Myservices\Utilities::htitle(_MI_MYSERVICES_ADMENU7, 4);
         $cmd_type = \Xmf\Request::getInt('cmdtype', 0, 'GET');
         $filename = 'myservices.csv';
         $fp       = fopen(XOOPS_UPLOAD_PATH . '/' . $filename, 'w');
@@ -1538,17 +1518,16 @@ switch ($op) {
             fclose($fp);
             echo "<a target='_blank' href='" . XOOPS_UPLOAD_URL . '/' . $filename . "'>" . _AM_MYSERVICES_CSV_READY . '</a>';
         } else {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_7);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_7);
         }
         require_once __DIR__ . '/admin_footer.php';  //show_footer();
         break;
-
     // ****************************************************************************************************************
     case 'deleteorders':    // Delete command
         // ****************************************************************************************************************
         $id = \Xmf\Request::getInt('id', 0, 'GET');
         if (empty($id)) {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
         }
         $objet = 'orders';
         $item  = $hMsOrders->get($id);
@@ -1566,26 +1545,25 @@ switch ($op) {
                     // Then suppression caddy
                     $hMsCaddy->delete($oneCaddy, true);
                 }
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $objet, 2);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $objet, 2);
             } else {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $objet, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $objet, 5);
             }
         } else {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl . '?op=' . $objet, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl . '?op=' . $objet, 5);
         }
         break;
-
     // ****************************************************************************************************************
     case 'validateorders':    // Validation of an order
         // ****************************************************************************************************************
         $id = \Xmf\Request::getInt('id', 0, 'GET');
         if (empty($id)) {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_1, $baseurl, 5);
         }
         $commande = null;
         $commande = $hMsOrders->get($id);
         if (!is_object($commande)) {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_15, $baseurl);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_ERROR_15, $baseurl);
         }
         $msg                 = [];
         $msg['NUM_COMMANDE'] = $id;
@@ -1597,15 +1575,14 @@ switch ($op) {
         } else {
             $msg['SUPPLEMENTAL'] = '';
         }
-        $msg['ANNULATION']   = $registry->getfile(MYSERVICES_TEXTFILE1) . "\n\n" . sprintf(_MYSERVICES_CANCEL_DURATION,\XoopsModules\Myservices\Utilities::getModuleOption('maxdelaycancel'));
+        $msg['ANNULATION']   = $registry->getfile(MYSERVICES_TEXTFILE1) . "\n\n" . sprintf(_MYSERVICES_CANCEL_DURATION, \XoopsModules\Myservices\Utilities::getModuleOption('maxdelaycancel'));
         $msg['QUALITY']      = $registry->getfile(MYSERVICES_TEXTFILE4) . "\n" . implode("\n", $qualityLinks);
-        $msg['SUPPLEMENTAL'] =\XoopsModules\Myservices\Utilities::textForEmail($msg['SUPPLEMENTAL']);
-        $msg['ANNULATION']   =\XoopsModules\Myservices\Utilities::textForEmail($msg['ANNULATION']);
-        $msg['QUALITY']      =\XoopsModules\Myservices\Utilities::textForEmail($msg['QUALITY']);
-       \XoopsModules\Myservices\Utilities::sendEmailFromTpl('command_shop_verified.tpl',\XoopsModules\Myservices\Utilities::getEmailsFromGroup(\XoopsModules\Myservices\Utility::getModuleOption('grp_sold')), _MYSERVICES_PAYPAL_VALIDATED, $msg);
-       \XoopsModules\Myservices\Utilities::sendEmailFromTpl('command_client_verified.tpl', $commande->getVar('orders_email'), _MYSERVICES_PAYPAL_VALIDATED, $msg);
+        $msg['SUPPLEMENTAL'] = \XoopsModules\Myservices\Utilities::textForEmail($msg['SUPPLEMENTAL']);
+        $msg['ANNULATION']   = \XoopsModules\Myservices\Utilities::textForEmail($msg['ANNULATION']);
+        $msg['QUALITY']      = \XoopsModules\Myservices\Utilities::textForEmail($msg['QUALITY']);
+        \XoopsModules\Myservices\Utilities::sendEmailFromTpl('command_shop_verified.tpl', \XoopsModules\Myservices\Utilities::getEmailsFromGroup(\XoopsModules\Myservices\Utility::getModuleOption('grp_sold')), _MYSERVICES_PAYPAL_VALIDATED, $msg);
+        \XoopsModules\Myservices\Utilities::sendEmailFromTpl('command_client_verified.tpl', $commande->getVar('orders_email'), _MYSERVICES_PAYPAL_VALIDATED, $msg);
         break;
-
     // ****************************************************************************************************************
     case 'texts':    // Texts Management
         // ****************************************************************************************************************
@@ -1617,35 +1594,34 @@ switch ($op) {
         $sform = new \XoopsThemeForm(_MI_MYSERVICES_ADMENU8, 'frmatxt', $baseurl);
         $sform->addElement(new \XoopsFormHidden('op', 'savetexts'));
         // Cancellation
-        $editor1 =\XoopsModules\Myservices\Utilities::getWysiwygForm(_AM_MYSERVICES_CANCEL, 'text1', $registry->getfile(MYSERVICES_TEXTFILE1), 5, 60, 'hometext1_hidden');
+        $editor1 = \XoopsModules\Myservices\Utilities::getWysiwygForm(_AM_MYSERVICES_CANCEL, 'text1', $registry->getfile(MYSERVICES_TEXTFILE1), 5, 60, 'hometext1_hidden');
         if ($editor1) {
             $sform->addElement($editor1, false);
         }
         // How to order off period?
-        $editor2 =\XoopsModules\Myservices\Utilities::getWysiwygForm(_MYSERVICES_NOTIN_HOURS, 'text2', $registry->getfile(MYSERVICES_TEXTFILE2), 5, 60, 'hometext2_hidden');
+        $editor2 = \XoopsModules\Myservices\Utilities::getWysiwygForm(_MYSERVICES_NOTIN_HOURS, 'text2', $registry->getfile(MYSERVICES_TEXTFILE2), 5, 60, 'hometext2_hidden');
         if ($editor2) {
             $sform->addElement($editor2, false);
         }
         // Terms
-        $editor3 =\XoopsModules\Myservices\Utilities::getWysiwygForm(_AM_MYSERVICES_CGV, 'text3', $registry->getfile(MYSERVICES_TEXTFILE3), 5, 60, 'hometext3_hidden');
+        $editor3 = \XoopsModules\Myservices\Utilities::getWysiwygForm(_AM_MYSERVICES_CGV, 'text3', $registry->getfile(MYSERVICES_TEXTFILE3), 5, 60, 'hometext3_hidden');
         if ($editor3) {
             $sform->addElement($editor3, false);
         }
 
         // Quality Form
-        $editor4 =\XoopsModules\Myservices\Utilities::getWysiwygForm(_AM_MYSERVICES_QUALITY, 'text4', $registry->getfile(MYSERVICES_TEXTFILE4), 5, 60, 'hometext4_hidden');
+        $editor4 = \XoopsModules\Myservices\Utilities::getWysiwygForm(_AM_MYSERVICES_QUALITY, 'text4', $registry->getfile(MYSERVICES_TEXTFILE4), 5, 60, 'hometext4_hidden');
         if ($editor4) {
             $sform->addElement($editor4, false);
         }
 
-        $button_tray = new \XoopsFormElementTray('', '');
-        $submit_btn  = new \XoopsFormButton('', 'post', _AM_MYSERVICES_MODIFY, 'submit');
-        $button_tray->addElement($submit_btn);
-        $sform->addElement($button_tray);
-        $sform =\XoopsModules\Myservices\Utilities::formMarkRequiredFields($sform);
+        $buttonTray = new \XoopsFormElementTray('', '');
+        $submit_btn = new \XoopsFormButton('', 'post', _AM_MYSERVICES_MODIFY, 'submit');
+        $buttonTray->addElement($submit_btn);
+        $sform->addElement($buttonTray);
+        $sform = \XoopsModules\Myservices\Utilities::formMarkRequiredFields($sform);
         $sform->display();
         break;
-
     // ****************************************************************************************************************
     case 'savetexts':        // Save text
         // ****************************************************************************************************************
@@ -1655,16 +1631,15 @@ switch ($op) {
         $registry->savefile($myts->stripSlashesGPC($_POST['text2']), MYSERVICES_TEXTFILE2);
         $registry->savefile($myts->stripSlashesGPC($_POST['text3']), MYSERVICES_TEXTFILE3);
         $registry->savefile($myts->stripSlashesGPC($_POST['text4']), MYSERVICES_TEXTFILE4);
-       \XoopsModules\Myservices\Utilities::updateCache();
-       \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl, 2);
+        \XoopsModules\Myservices\Utilities::updateCache();
+        \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl, 2);
         break;
-
     // ****************************************************************************************************************
     case 'timesheet':    // Working hours
         // ****************************************************************************************************************
         xoops_cp_header();
         // myservices_adminMenu(8);
-       \XoopsModules\Myservices\Utilities::htitle(_MI_MYSERVICES_ADMENU9, 4);
+        \XoopsModules\Myservices\Utilities::htitle(_MI_MYSERVICES_ADMENU9, 4);
         echo _AM_MYSERVICES_TIMESHEET_HLP . '<br><br>';
         $item  = null;
         $item  = $hMsPrefs->getPreference();
@@ -1681,14 +1656,13 @@ switch ($op) {
             $ind  = $i - 1;
             OneDay($ind, $item->getVar($nom1), $item->getVar($nom2), $item->getVar($nom3), $item->getVar($nom4), $sform);
         }
-        $button_tray = new \XoopsFormElementTray('', '');
-        $submit_btn  = new \XoopsFormButton('', 'post', _AM_MYSERVICES_MODIFY, 'submit');
-        $button_tray->addElement($submit_btn);
-        $sform->addElement($button_tray);
-        $sform =\XoopsModules\Myservices\Utilities::formMarkRequiredFields($sform);
+        $buttonTray = new \XoopsFormElementTray('', '');
+        $submit_btn = new \XoopsFormButton('', 'post', _AM_MYSERVICES_MODIFY, 'submit');
+        $buttonTray->addElement($submit_btn);
+        $sform->addElement($buttonTray);
+        $sform = \XoopsModules\Myservices\Utilities::formMarkRequiredFields($sform);
         $sform->display();
         break;
-
     // ****************************************************************************************************************
     case 'saveedithours':    // Save work schedules
         // ****************************************************************************************************************
@@ -1699,7 +1673,7 @@ switch ($op) {
             $edit = true;
             $item = $hMsPrefs->get($id);
             if (!is_object($item)) {
-               \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
+                \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_NOT_FOUND, $baseurl, 5);
             }
             $item->unsetNew();
         } else {
@@ -1741,20 +1715,19 @@ switch ($op) {
         }
         $res = $hMsPrefs->insert($item);
         if ($res) {
-           \XoopsModules\Myservices\Utilities::updateCache();
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $opRedirect, 2);
+            \XoopsModules\Myservices\Utilities::updateCache();
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_OK, $baseurl . '?op=' . $opRedirect, 2);
         } else {
-           \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $opRedirect, 5);
+            \XoopsModules\Myservices\Utilities::redirect(_AM_MYSERVICES_SAVE_PB, $baseurl . '?op=' . $opRedirect, 5);
         }
         break;
-
     // ****************************************************************************************************************
     case 'default':
     case 'dashboard':
         // ****************************************************************************************************************
         xoops_cp_header();
         // myservices_adminMenu(0);
-       \XoopsModules\Myservices\Utilities::htitle(_AM_MYSERVICES_LAST_ORDERS, 4);
+        \XoopsModules\Myservices\Utilities::htitle(_AM_MYSERVICES_LAST_ORDERS, 4);
         $itemsCount = 15;    // Number of items to display
         // Display the last orders validated x
         $start       = \Xmf\Request::getInt('start', 0, 'GET');
@@ -1781,7 +1754,7 @@ switch ($op) {
             $tblCaddy    = $hMsCaddy->getObjects($critePanier);
             echo "<tr class='" . $class . "'>\n";
             echo "<td colspan='5'><b>&raquo;</b> "
-                 .\XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($commande->getVar('orders_date'))
+                 . \XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($commande->getVar('orders_date'))
                  . ' - '
                  . $commande->getVar('orders_lastname')
                  . ' '
@@ -1804,8 +1777,8 @@ switch ($op) {
                 $employee = $hMsEmployees->get($caddy->getVar('caddy_employees_id'));
                 $product  = $hMsProducts->get($caddy->getVar('caddy_products_id'));
                 echo "<tr>\n";
-                echo "<td class='even' align='center'>" .\XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($caddy->getVar('caddy_start')) . "</td>\n";
-                echo "<td class='odd' align='center'>" .\XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($caddy->getVar('caddy_end')) . "</td>\n";
+                echo "<td class='even' align='center'>" . \XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($caddy->getVar('caddy_start')) . "</td>\n";
+                echo "<td class='odd' align='center'>" . \XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($caddy->getVar('caddy_end')) . "</td>\n";
                 echo "<td class='even'>" . $product->getVar('products_title') . "</td>\n";
                 echo "<td class='odd'>" . $employee->getEmployeeFullName() . "</td>\n";
                 echo "<td class='even' align='right'>" . $myservices_Currency->amountForDisplay($caddy->getVar('caddy_price')) . "</td>\n";
@@ -1817,7 +1790,6 @@ switch ($op) {
         echo "<div align='right'>" . $pagenav->renderNav() . '</div>';
         require_once __DIR__ . '/admin_footer.php';  //show_footer();
         break;
-
 }
 //xoops_cp_footer();
 require_once __DIR__ . '/admin_footer.php';

@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 /**
  * ****************************************************************************
@@ -35,7 +37,7 @@ class EmployeesHandler extends Myservices\ServiceORM
     /**
      * Renvoie la liste des personnes qui fournissent un service lié à un produit
      *
-     * @param integer $products_id Numéro du produit
+     * @param int $products_id Numéro du produit
      * @return array Objets de type employés (clé = ID employé, valeur = objet employé)
      */
     public function getEmployeesForProduct($products_id)
@@ -94,21 +96,31 @@ class EmployeesHandler extends Myservices\ServiceORM
     /**
      * Indique si une personne est en congés à une date donnée
      *
-     * @param integer  $year         Année
-     * @param  integer $month        Mois
-     * @param  integer $day          Jour
-     * @param string   $startingHour Heure de début
-     * @param integer  $duration     Durée en heures
-     * @param integer  $employees_id  Identifiant de l'employé(e)
-     * @return boolean Vrai si la personne est en congés sinon faux
+     * @param int    $year         Année
+     * @param  int   $month        Mois
+     * @param  int   $day          Jour
+     * @param string $startingHour Heure de début
+     * @param int    $duration     Durée en heures
+     * @param int    $employees_id Identifiant de l'employé(e)
+     * @return bool Vrai si la personne est en congés sinon faux
      */
     public function isEmployeeInHoliday($year, $month, $day, $startingHour, $duration, $employees_id)
     {
         global $hMsCalendar;
-        $startingHour  =\XoopsModules\Myservices\Utilities::normalyzeTime($startingHour);
+        $startingHour  = \XoopsModules\Myservices\Utilities::normalyzeTime($startingHour);
         $requestedDate = sprintf('%04d-%02d-%02d %s', $year, $month, $day, $startingHour);
         // 1) Recherche du "en plein dedans"
-        $sql    = 'SELECT COUNT(*) AS cpt FROM ' . $this->db->prefix('myservices_calendar') . ' WHERE calendar_status = ' . CALENDAR_STATUS_HOLIDAY . ' AND calendar_employees_id = ' . (int)$employees_id . " AND (calendar_start <= '" . $requestedDate . "' AND '" . $requestedDate . "' <= calendar_end)";
+        $sql    = 'SELECT COUNT(*) AS cpt FROM '
+                  . $this->db->prefix('myservices_calendar')
+                  . ' WHERE calendar_status = '
+                  . CALENDAR_STATUS_HOLIDAY
+                  . ' AND calendar_employees_id = '
+                  . (int)$employees_id
+                  . " AND (calendar_start <= '"
+                  . $requestedDate
+                  . "' AND '"
+                  . $requestedDate
+                  . "' <= calendar_end)";
         $result = $this->db->query($sql);
         if ($result) {
             list($count) = $this->db->fetchRow($result);
@@ -131,9 +143,9 @@ class EmployeesHandler extends Myservices\ServiceORM
         }
 
         // 2) Recherche de la période où l'heure de début + la durée tombe pendant les vacances
-        $hours        = (int)substr($startingHour, 0, 2);
-        $minutes      = (int)substr($startingHour, 3, 2);
-        $seconds      = (int)substr($startingHour, 6, 2);
+        $hours        = (int)mb_substr($startingHour, 0, 2);
+        $minutes      = (int)mb_substr($startingHour, 3, 2);
+        $seconds      = (int)mb_substr($startingHour, 6, 2);
         $timestamp    = mktime($hours, $minutes, $seconds, $month, $day, $year) + ($duration * 3600);
         $calculedDate = date('Y-m-d H:i:s', $timestamp);
 
@@ -154,19 +166,19 @@ class EmployeesHandler extends Myservices\ServiceORM
     /**
      * Indique si une personne est déjà au travail pour une date donnée
      *
-     * @param integer  $year         Année
-     * @param  integer $month        Mois
-     * @param  integer $day          Jour
-     * @param string|float   $startingHour Heure de début
-     * @param integer  $duration     Durée en heures
-     * @param integer  $employees_id  Identifiant de l'employé(e)
-     * @return boolean Vrai si la personne est déjà au travail (ou si elle n'est plus au travail mais elle n'a pas le temps de battement)
+     * @param int          $year         Année
+     * @param  int         $month        Mois
+     * @param  int         $day          Jour
+     * @param string|float $startingHour Heure de début
+     * @param int          $duration     Durée en heures
+     * @param int          $employees_id Identifiant de l'employé(e)
+     * @return bool Vrai si la personne est déjà au travail (ou si elle n'est plus au travail mais elle n'a pas le temps de battement)
      */
     public function isEmployeeWorking($year, $month, $day, $startingHour, $duration, $employees_id)
     {
         global $hMsCalendar;
-        $battement          =\XoopsModules\Myservices\Utilities::getModuleOption('battement') * 60;    // Conversion en secondes
-        $startingHour       =\XoopsModules\Myservices\Utilities::normalyzeTime($startingHour);
+        $battement          = \XoopsModules\Myservices\Utilities::getModuleOption('battement') * 60;    // Conversion en secondes
+        $startingHour       = \XoopsModules\Myservices\Utilities::normalyzeTime($startingHour);
         $requestedDate      = sprintf('%04d-%02d-%02d %s', $year, $month, $day, $startingHour);
         $shortRequestedDate = sprintf('%04d-%02d-%02d', $year, $month, $day);
         // 1) Recherche du "en plein dedans" (L'heure demandée tombe dans un créneau horaire où la personne travaille déjà)
@@ -193,9 +205,9 @@ class EmployeesHandler extends Myservices\ServiceORM
         }
 
         // 2) Recherche de la période où l'heure de début + la durée tombe pendant une autre période
-        $hours        = (int)substr($startingHour, 0, 2);
-        $minutes      = (int)substr($startingHour, 3, 2);
-        $seconds      = (int)substr($startingHour, 6, 2);
+        $hours        = (int)mb_substr($startingHour, 0, 2);
+        $minutes      = (int)mb_substr($startingHour, 3, 2);
+        $seconds      = (int)mb_substr($startingHour, 6, 2);
         $timestamp    = mktime($hours, $minutes, $seconds, $month, $day, $year);    // timestamp de la date et heure demand�e
         $calculedDate = date('Y-m-d H:i:s', $timestamp + ($duration * 3600));
 
@@ -230,14 +242,14 @@ class EmployeesHandler extends Myservices\ServiceORM
 
     /**
      * Indique si une personne est disponible pour un service, pour une date et pour une durée
-     * @param integer  $year        L'année
-     * @param  integer $month       Le mois
-     * @param  integer $day         Le jour
-     * @param string   $hour        L'heure de début de réservation (au format 17:10)
-     * @param integer  $duration    La durée de la réservation
-     * @param  integer $products_id L'identifiant du produit
-     * @param integer  $employees_id L'identifiant du salarié
-     * @return boolean Vrai si la personne est disponible sinon faux
+     * @param int    $year         L'année
+     * @param  int   $month        Le mois
+     * @param  int   $day          Le jour
+     * @param string $hour         L'heure de début de réservation (au format 17:10)
+     * @param int    $duration     La durée de la réservation
+     * @param  int   $products_id  L'identifiant du produit
+     * @param int    $employees_id L'identifiant du salarié
+     * @return bool Vrai si la personne est disponible sinon faux
      */
     public function isEmployeeAvailable($year, $month, $day, $hour, $duration, $products_id, $employees_id)
     {
@@ -261,7 +273,7 @@ class EmployeesHandler extends Myservices\ServiceORM
             return false;
         }
 
-        $hour =\XoopsModules\Myservices\Utilities::normalyzeTime($hour);
+        $hour = \XoopsModules\Myservices\Utilities::normalyzeTime($hour);
 
         // 2) La personne est en vacances ?
         if ($this->isEmployeeInHoliday($year, $month, $day, $hour, $duration, $employees_id)) {
@@ -275,9 +287,9 @@ class EmployeesHandler extends Myservices\ServiceORM
         }
 
         // 4) Heure de début + durée = en dehors des heures de travail ?
-        $hours           = (int)substr($hour, 0, 2);
-        $minutes         = (int)substr($hour, 3, 2);
-        $seconds         = (int)substr($hour, 6, 2);
+        $hours           = (int)mb_substr($hour, 0, 2);
+        $minutes         = (int)mb_substr($hour, 3, 2);
+        $seconds         = (int)mb_substr($hour, 6, 2);
         $timestamp       = mktime($hours, $minutes, $seconds, $month, $day, $year) + ($duration * 3600);
         $calculdatedHour = date('H:i:s', $timestamp);
         if (!$hMsPrefs->isStoreOpen($year, $month, $day, $calculdatedHour)) {
@@ -286,9 +298,9 @@ class EmployeesHandler extends Myservices\ServiceORM
         }
 
         // 5) Toute la durée de la prestation tombe pendant les heures de travail ?
-        $hours     = (int)substr($hour, 0, 2);
-        $minutes   = (int)substr($hour, 3, 2);
-        $seconds   = (int)substr($hour, 6, 2);
+        $hours     = (int)mb_substr($hour, 0, 2);
+        $minutes   = (int)mb_substr($hour, 3, 2);
+        $seconds   = (int)mb_substr($hour, 6, 2);
         $timestamp = mktime($hours, $minutes, $seconds, $month, $day, $year);
         for ($i = 1; $i <= $duration; ++$i) {
             $newDate      = getdate($timestamp);

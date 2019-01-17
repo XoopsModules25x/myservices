@@ -20,9 +20,9 @@ foreach ($tblEmployees as $item) {
     $xoopsTpl->append('employees', $item->toArray());
 }
 
-$xoopsTpl->assign('moduleName',\XoopsModules\Myservices\Utilities::getModuleName());
+$xoopsTpl->assign('moduleName', \XoopsModules\Myservices\Utilities::getModuleName());
 
 // Titre de page et meta description ****************************************************
-$pageTitle = _MYSERVICES_EMPLOYEES_LIST . ' - ' .\XoopsModules\Myservices\Utilities::getModuleName();
+$pageTitle = _MYSERVICES_EMPLOYEES_LIST . ' - ' . \XoopsModules\Myservices\Utilities::getModuleName();
 \XoopsModules\Myservices\Utilities::setMetas($pageTitle, $pageTitle);
 require_once XOOPS_ROOT_PATH . '/footer.php';

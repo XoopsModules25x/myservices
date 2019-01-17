@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 /**
  * ****************************************************************************
@@ -21,7 +23,6 @@ defined('XOOPS_ROOT_PATH') || die('Restricted access');
  * @todo          Replace with a package like the Zend Framework Currency (http://framework.zend.com/manual/fr/zend.currency.html)
  *
  * Note: don't call it staticly or be sure to call the constructor
- *
  */
 class Currency
 {
@@ -35,12 +36,12 @@ class Currency
     public function __construct()
     {
         // Get the module's preferences
-        $this->_decimalsCount =\XoopsModules\Myservices\Utilities::getModuleOption('decimals_count');
-        $this->_thousandsSep  =\XoopsModules\Myservices\Utilities::getModuleOption('thousands_sep');
-        $this->_decimalSep    =\XoopsModules\Myservices\Utilities::getModuleOption('decimal_sep');
-        $this->_moneyFull     =\XoopsModules\Myservices\Utilities::getModuleOption('money_full');
-        $this->_moneyShort    =\XoopsModules\Myservices\Utilities::getModuleOption('money_short');
-        $this->_monnaiePlace  =\XoopsModules\Myservices\Utilities::getModuleOption('monnaie_place');
+        $this->_decimalsCount = \XoopsModules\Myservices\Utilities::getModuleOption('decimals_count');
+        $this->_thousandsSep  = \XoopsModules\Myservices\Utilities::getModuleOption('thousands_sep');
+        $this->_decimalSep    = \XoopsModules\Myservices\Utilities::getModuleOption('decimal_sep');
+        $this->_moneyFull     = \XoopsModules\Myservices\Utilities::getModuleOption('money_full');
+        $this->_moneyShort    = \XoopsModules\Myservices\Utilities::getModuleOption('money_short');
+        $this->_monnaiePlace  = \XoopsModules\Myservices\Utilities::getModuleOption('monnaie_place');
     }
 
     /**
@@ -75,8 +76,8 @@ class Currency
     /**
      * Format an amount for display according to module's preferences
      *
-     * @param  float|string  $amount The amount to format
-     * @param  string $format Format to use, 's' for Short and 'l' for Long
+     * @param  float|string $amount The amount to format
+     * @param  string       $format Format to use, 's' for Short and 'l' for Long
      * @return string The amount formatted
      */
     public function amountForDisplay($amount, $format = 's')
@@ -93,8 +94,8 @@ class Currency
         }
         if ('s' !== $format) {
             return $monnaieLeft . $amount . $monnaieRight;
-        } else {
-            return $monnaieSleft . $amount . $monnaieSright;
         }
+
+        return $monnaieSleft . $amount . $monnaieSright;
     }
 }

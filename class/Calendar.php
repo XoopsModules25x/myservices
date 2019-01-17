@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 /**
  * ****************************************************************************
@@ -47,7 +49,7 @@ class Calendar extends Myservices\ServiceObject
         $tblStatus = [
             CALENDAR_STATUS_WORK    => _MYSERVICES_STATE_WORK,
             CALENDAR_STATUS_HOLIDAY => _MYSERVICES_STATE_HOLIDAY,
-            CALENDAR_STATUS_CLOSED  => _MYSERVICES_STATE_CLOSED
+            CALENDAR_STATUS_CLOSED  => _MYSERVICES_STATE_CLOSED,
         ];
         if (isset($tblStatus[$this->getVar('calendar_status')])) {
             return $tblStatus[$this->getVar('calendar_status')];

@@ -6,7 +6,6 @@
  * Created on 20 oct. 07 at 14:38:20
  * ****************************************************************************
  */
-
 define('_MI_MYSERVICES_NAME', 'Services à la maison');
 define('_MI_MYSERVICES_DESC', 'Permet de proposer les services de personnes (par exemple du ménage)');
 

@@ -10,52 +10,54 @@
 use XoopsModules\Myservices;
 
 //require_once  dirname(__DIR__) . '/include/common.php';
-/** @var Myservices\Helper $helper */
-$helper = Myservices\Helper::getInstance();
+/** @var \XoopsModules\Myservices\Helper $helper */
+$helper = \XoopsModules\Myservices\Helper::getInstance();
 
 $pathIcon32 = \Xmf\Module\Admin::menuIconPath('');
-$pathModIcon32 = $helper->getModule()->getInfo('modicons32');
+if (is_object($helper->getModule())) {
+    $pathModIcon32 = $helper->getModule()->getInfo('modicons32');
+}
 
 $adminmenu[] = [
     'title' => _MI_MYSERVICES_HOME,
     'link'  => 'admin/index.php',
-    'icon'  => $pathIcon32 . '/home.png'
+    'icon'  => $pathIcon32 . '/home.png',
 ];
 
 $adminmenu[] = [
     'title' => _MI_MYSERVICES_ADMENU0,
     'link'  => 'admin/main.php?op=dashboard',
-    'icon'  => $pathIcon32 . '/manage.png'
+    'icon'  => $pathIcon32 . '/manage.png',
 ];
 
 $adminmenu[] = [
     'title' => _MI_MYSERVICES_ADMENU1,
     'link'  => 'admin/main.php?op=vat',
-    'icon'  => $pathIcon32 . '/calculator.png'
+    'icon'  => $pathIcon32 . '/calculator.png',
 ];
 
 $adminmenu[] = [
     'title' => _MI_MYSERVICES_ADMENU2,
     'link'  => 'admin/main.php?op=employees',
-    'icon'  => $pathIcon32 . '/users.png'
+    'icon'  => $pathIcon32 . '/users.png',
 ];
 
 $adminmenu[] = [
     'title' => _MI_MYSERVICES_ADMENU3,
     'link'  => 'admin/main.php?op=holiday',
-    'icon'  => $pathIcon32 . '/face-smile.png'
+    'icon'  => $pathIcon32 . '/face-smile.png',
 ];
 
 $adminmenu[] = [
     'title' => _MI_MYSERVICES_ADMENU4,
     'link'  => 'admin/main.php?op=categories',
-    'icon'  => $pathIcon32 . '/category.png'
+    'icon'  => $pathIcon32 . '/category.png',
 ];
 
 $adminmenu[] = [
     'title' => _MI_MYSERVICES_ADMENU5,
     'link'  => 'admin/main.php?op=products',
-    'icon'  => $pathIcon32 . '/delivery.png'
+    'icon'  => $pathIcon32 . '/delivery.png',
 ];
 
 //$adminmenu[] = array(
@@ -67,23 +69,23 @@ $adminmenu[] = [
 $adminmenu[] = [
     'title' => _MI_MYSERVICES_ADMENU7,
     'link'  => 'admin/main.php?op=orders',
-    'icon'  => $pathIcon32 . '/cart_add.png'
+    'icon'  => $pathIcon32 . '/cart_add.png',
 ];
 
 $adminmenu[] = [
     'title' => _MI_MYSERVICES_ADMENU8,
     'link'  => 'admin/main.php?op=texts',
-    'icon'  => $pathIcon32 . '/highlight.png'
+    'icon'  => $pathIcon32 . '/highlight.png',
 ];
 
 $adminmenu[] = [
     'title' => _MI_MYSERVICES_ADMENU9,
     'link'  => 'admin/main.php?op=timesheet',
-    'icon'  => $pathIcon32 . '/event.png'
+    'icon'  => $pathIcon32 . '/event.png',
 ];
 
 $adminmenu[] = [
     'title' => _MI_MYSERVICES_ABOUT,
     'link'  => 'admin/about.php',
-    'icon'  => $pathIcon32 . '/about.png'
+    'icon'  => $pathIcon32 . '/about.png',
 ];

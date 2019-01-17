@@ -6,7 +6,6 @@
  * Created on 20 oct. 07 at 14:38:20
  * ****************************************************************************
  */
-
 define('_MYSERVICES_MODIFY', 'Modifier');
 define('_MYSERVICES_EDIT', 'Editer');
 define('_MYSERVICES_BTN_VALIDATE', 'Valider');

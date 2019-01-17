@@ -21,7 +21,7 @@ require_once XOOPS_ROOT_PATH . '/class/xoopslists.php';
 // require_once MYSERVICES_PATH . 'class/myservices_cart.php';
 // require_once MYSERVICES_PATH . 'class/RegistryFile.php';
 
-$op    = \Xmf\Request::getCmd('op', 'default');
+$op = \Xmf\Request::getCmd('op', 'default');
 
 $cartForTemplate = [];
 $emptyCart       = false;
@@ -32,7 +32,7 @@ $vatArray       = [];
 $vatArray       = $hMsVat->getItems();
 
 $passwordCancel   = md5(xoops_makepass());
-$myservicesPaypal = new Myservices\Paypal(\XoopsModules\Myservices\Utilities::getModuleOption('paypal_test'),\XoopsModules\Myservices\Utilities::getModuleOption('paypal_email'),\XoopsModules\Myservices\Utilities::getModuleOption('paypal_money'), true, $passwordCancel);
+$myservicesPaypal = new Myservices\Paypal(\XoopsModules\Myservices\Utilities::getModuleOption('paypal_test'), \XoopsModules\Myservices\Utilities::getModuleOption('paypal_email'), \XoopsModules\Myservices\Utilities::getModuleOption('paypal_money'), true, $passwordCancel);
 $passwordInvoice  = md5(xoops_makepass());
 
 // Calcul du contenu du caddy
@@ -49,12 +49,12 @@ if (is_object($xoopsUser)) {
     $uid = 0;
 }
 
-$xoopsTpl->assign('moduleName',\XoopsModules\Myservices\Utilities::getModuleName());
+$xoopsTpl->assign('moduleName', \XoopsModules\Myservices\Utilities::getModuleName());
 
 /**
  * Affichage du formulaire de saisie pour valider la commande
  *
- * @param boolean $message Indique s'il faut afficher le message d'erreur ou pas
+ * @param bool $message Indique s'il faut afficher le message d'erreur ou pas
  */
 function CheckoutForm($message = false)
 {
@@ -100,12 +100,12 @@ function CheckoutForm($message = false)
     $yesCGVCheckbox->addOption(1, $label);
     $sform->addElement($yesCGVCheckbox, true);
 
-    $button_tray = new \XoopsFormElementTray('', '');
-    $submit_btn  = new \XoopsFormButton('', 'btnsubmit', _MYSERVICES_SAVE, 'submit');    // post
-    $button_tray->addElement($submit_btn);
-    $sform->addElement($button_tray);
+    $buttonTray = new \XoopsFormElementTray('', '');
+    $submit_btn = new \XoopsFormButton('', 'btnsubmit', _MYSERVICES_SAVE, 'submit');    // post
+    $buttonTray->addElement($submit_btn);
+    $sform->addElement($buttonTray);
     // Marquage des champs obligatoires
-    $sform =\XoopsModules\Myservices\Utilities::formMarkRequiredFields($sform);
+    $sform = \XoopsModules\Myservices\Utilities::formMarkRequiredFields($sform);
     $xoopsTpl->assign('form', $sform->render());
 }
 
@@ -114,23 +114,22 @@ switch ($op) {
     case 'default':    // Présentation du formulaire
         // ****************************************************************************************************************
         if ($myservicesCart->isCartEmpty()) {
-           \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_CART_IS_EMPTY, MYSERVICES_URL, 4);
+            \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_CART_IS_EMPTY, MYSERVICES_URL, 4);
         }
         listCart();
         CheckoutForm();
         break;
-
     // ****************************************************************************************************************
     case 'paypal':    // Validation finale avant envoi sur Paypal
         // ****************************************************************************************************************
         if ($myservicesCart->isCartEmpty()) {
-           \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_CART_IS_EMPTY, MYSERVICES_URL, 4);
+            \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_CART_IS_EMPTY, MYSERVICES_URL, 4);
         }
 
         listCart();
         // On vérifie que les CGV sont bien acceptées
         if (!isset($_POST['cgv']) || (isset($_POST['cgv']) && 1 != \Xmf\Request::getInt('cgv', 0, 'POST'))) {
-           \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_CGV_ERROR, 'checkout.php', 4);
+            \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_CGV_ERROR, 'checkout.php', 4);
         }
 
         // Enregistrement de la commande
@@ -139,14 +138,14 @@ switch ($op) {
         $commande->setVar('orders_uid', $uid);
         $commande->setVar('orders_date', date('Y-m-d H:i:s'));
         $commande->setVar('orders_state', MYSERVICES_ORDER_NOINFORMATION);
-        $commande->setVar('orders_ip',\XoopsModules\Myservices\Utilities::IP());
+        $commande->setVar('orders_ip', \XoopsModules\Myservices\Utilities::IP());
         $commande->setVar('orders_total', $commandAmountTTC);
         $commande->setVar('orders_cancel', $passwordCancel);
         $commande->setVar('orders_articles_count', count($cartForTemplate));
         $commande->setVar('orders_password', $passwordInvoice);
         $res = $hMsOrders->insert($commande, true);
         if (!$res) {    // Si la sauvegarde n'a pas fonctionné
-           \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_ERROR10, MYSERVICES_URL, 6);
+            \XoopsModules\Myservices\Utilities::redirect(_MYSERVICES_ERROR10, MYSERVICES_URL, 6);
         }
 
         // Enregistrement du panier
@@ -164,8 +163,8 @@ switch ($op) {
             $res                = $hMsCaddy->insert($caddy, true);
             $elementsCommande   = [];
             $elementsCommande[] = _MYSERVICES_SERVICE . ' : ' . $line['products_title'];
-            $elementsCommande[] = _MYSERVICES_STARTING_DATE . ' : ' .\XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($line['starting_date']);
-            $elementsCommande[] = _MYSERVICES_ENDING_DATE . ' : ' .\XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($line['ending_date']);
+            $elementsCommande[] = _MYSERVICES_STARTING_DATE . ' : ' . \XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($line['starting_date']);
+            $elementsCommande[] = _MYSERVICES_ENDING_DATE . ' : ' . \XoopsModules\Myservices\Utilities::sqlDateTimeToFrench($line['ending_date']);
             $elementsCommande[] = _MYSERVICES_PRODUCT_PRICETTC . ' : ' . $line['products_price_ttc'];
             $msgCommande        .= implode("\n", $elementsCommande) . "\n";
         }
@@ -183,12 +182,12 @@ switch ($op) {
         $msg['PAYS']         = $tbl_country[$commande->getVar('orders_country')];
         $msg['TELEPHONE']    = $commande->getVar('orders_telephone');
         $msg['EMAIL']        = $commande->getVar('orders_email');
-        $msg['IP']           =\XoopsModules\Myservices\Utilities::IP();
+        $msg['IP']           = \XoopsModules\Myservices\Utilities::IP();
 
         // Envoi du mail au client
-       \XoopsModules\Myservices\Utilities::sendEmailFromTpl('command_client.tpl', $commande->getVar('orders_email'), sprintf(_MYSERVICES_THANKYOU_CMD, $xoopsConfig['sitename']), $msg);
+        \XoopsModules\Myservices\Utilities::sendEmailFromTpl('command_client.tpl', $commande->getVar('orders_email'), sprintf(_MYSERVICES_THANKYOU_CMD, $xoopsConfig['sitename']), $msg);
         // Envoi du mail au groupe de personnes devant recevoir le mail
-       \XoopsModules\Myservices\Utilities::sendEmailFromTpl('command_shop.tpl',\XoopsModules\Myservices\Utilities::getEmailsFromGroup(\XoopsModules\Myservices\Utilities::getModuleOption('grp_sold')), _MYSERVICES_NEW_COMMAND, $msg);
+        \XoopsModules\Myservices\Utilities::sendEmailFromTpl('command_shop.tpl', \XoopsModules\Myservices\Utilities::getEmailsFromGroup(\XoopsModules\Myservices\Utilities::getModuleOption('grp_sold')), _MYSERVICES_NEW_COMMAND, $msg);
 
         // Présentation du formulaire pour envoi à Paypal
         $payURL = $myservicesPaypal->getURL();
@@ -211,14 +210,14 @@ switch ($op) {
         $sform->addElement(new \XoopsFormLabel(_MYSERVICES_PHONE, $commande->getVar('orders_telephone')));
         $sform->addElement(new \XoopsFormLabel(_MYSERVICES_EMAIL, $commande->getVar('orders_email')));
 
-        $button_tray = new \XoopsFormElementTray('', '');
-        $submit_btn  = new \XoopsFormButton('', 'btnsubmit', _MYSERVICES_PAY_PAYPAL, 'submit');    // post
-        $button_tray->addElement($submit_btn);
-        $sform->addElement($button_tray);
+        $buttonTray = new \XoopsFormElementTray('', '');
+        $submit_btn = new \XoopsFormButton('', 'btnsubmit', _MYSERVICES_PAY_PAYPAL, 'submit');    // post
+        $buttonTray->addElement($submit_btn);
+        $sform->addElement($buttonTray);
         $xoopsTpl->assign('form', $sform->render());
         $xoopsTpl->assign('op', 'paypal');
         break;
 }
-$title = _MYSERVICES_VALIDATE_CMD . ' - ' .\XoopsModules\Myservices\Utilities::getModuleName();
+$title = _MYSERVICES_VALIDATE_CMD . ' - ' . \XoopsModules\Myservices\Utilities::getModuleName();
 \XoopsModules\Myservices\Utilities::setMetas($title, $title);
 require_once XOOPS_ROOT_PATH . '/footer.php';
