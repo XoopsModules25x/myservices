@@ -8,7 +8,7 @@
 <{/if}>
 
 <{* Liste des sous-catégories *}>
-<{if count($subCategories) >0 }>
+<{if $subCategories|is_array && count($subCategories) > 0 }>
     <hr size="1" noshade="noshade" style="width: 100%; height: 1px;">
     <table border='0' cellspacing='5' cellpadding='0' align="center">
         <tr>
@@ -39,7 +39,7 @@
     </tr>
     <tr>
         <{* Liste des produits *}>
-        <{if count($products) >0 }>
+        <{if $products|is_array && count($products) > 0 }>
             <td>
                 <br>
                 <h3><{$smarty.const._MYSERVICES_PRODUCTSOF_CATEGORY}></h3>

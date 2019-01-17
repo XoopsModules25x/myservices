@@ -15,7 +15,6 @@
  * @package
  * @author       XOOPS Development Team
  */
-
 global $xoopsModule;
 //$pathIcon32 = '../../../' . $xoopsModule->getInfo('sysicons32');
 

@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 //  ------------------------------------------------------------------------ //
 //                XOOPS - PHP Content Management System                      //
@@ -28,8 +30,6 @@
 // URL: https://xoops.org/ http://jp.xoops.org/  http://www.myweb.ne.jp/  //
 // Project: The XOOPS Project (https://xoops.org/)                        //
 // ------------------------------------------------------------------------- //
-
-use XoopsModules\Myservices;
 
 /**
  * A tree structures with {@link XoopsObject}s as nodes
@@ -62,10 +62,10 @@ class Tree
      **/
     public function __construct(&$objectArr, $myId, $parentId, $rootId = null)
     {
-        $this->_objects  =& $objectArr;
+        $this->_objects  = &$objectArr;
         $this->_myId     = $myId;
         $this->_parentId = $parentId;
-        if ($rootId !== null) {
+        if (null !== $rootId) {
             $this->_rootId = $rootId;
         }
         $this->_initialize();
@@ -80,7 +80,7 @@ class Tree
     {
         foreach (array_keys($this->_objects) as $i) {
             $key1                          = $this->_objects[$i]->getVar($this->_myId);
-            $this->_tree[$key1]['obj']     =& $this->_objects[$i];
+            $this->_tree[$key1]['obj']     = &$this->_objects[$i];
             $key2                          = $this->_objects[$i]->getVar($this->_parentId);
             $this->_tree[$key1]['parent']  = $key2;
             $this->_tree[$key2]['child'][] = $key1;
@@ -122,7 +122,7 @@ class Tree
         $ret = [];
         if (isset($this->_tree[$key]['child'])) {
             foreach ($this->_tree[$key]['child'] as $childkey) {
-                $ret[$childkey] =& $this->_tree[$childkey]['obj'];
+                $ret[$childkey] = &$this->_tree[$childkey]['obj'];
             }
         }
 
@@ -140,10 +140,10 @@ class Tree
     {
         if (isset($this->_tree[$key]['child'])) {
             foreach ($this->_tree[$key]['child'] as $childkey) {
-                $ret[$childkey] =& $this->_tree[$childkey]['obj'];
-                $children       =& $this->getAllChild($childkey, $ret);
+                $ret[$childkey] = &$this->_tree[$childkey]['obj'];
+                $children       = &$this->getAllChild($childkey, $ret);
                 foreach (array_keys($children) as $newkey) {
-                    $ret[$newkey] =& $children[$newkey];
+                    $ret[$newkey] = &$children[$newkey];
                 }
             }
         }
@@ -163,10 +163,10 @@ class Tree
     public function getAllParent($key, $ret = [], $uplevel = 1)
     {
         if (isset($this->_tree[$key]['parent']) && isset($this->_tree[$this->_tree[$key]['parent']]['obj'])) {
-            $ret[$uplevel] =& $this->_tree[$this->_tree[$key]['parent']]['obj'];
-            $parents       =& $this->getAllParent($this->_tree[$key]['parent'], $ret, $uplevel + 1);
+            $ret[$uplevel] = &$this->_tree[$this->_tree[$key]['parent']]['obj'];
+            $parents       = &$this->getAllParent($this->_tree[$key]['parent'], $ret, $uplevel + 1);
             foreach (array_keys($parents) as $newkey) {
-                $ret[$newkey] =& $parents[$newkey];
+                $ret[$newkey] = &$parents[$newkey];
             }
         }
 
@@ -211,7 +211,7 @@ class Tree
      * @param  string     $prefix         String to indent deeper levels
      * @param  string     $selected       Value to display as selected
      * @param bool|string $addEmptyOption Set TRUE to add an empty option with value "0" at the top of the hierarchy
-     * @param  integer    $key            ID of the object to display as the root of select options
+     * @param  int        $key            ID of the object to display as the root of select options
      * @param string      $additional
      * @return string HTML select box
      */

@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 /**
  * ****************************************************************************
@@ -55,16 +57,15 @@ class Paypal
         if (!$securized) {
             if (1 == $this->testMode) {
                 return 'https://www.sandbox.paypal.com/cgi-bin/webscr';
-            } else {
-                return 'https://www.paypal.com/cgi-bin/webscr';
             }
-        } else {
-            if (1 == $this->testMode) {
-                return 'www.sandbox.paypal.com';
-            } else {
-                return 'www.paypal.com';
-            }
+
+            return 'https://www.paypal.com/cgi-bin/webscr';
         }
+        if (1 == $this->testMode) {
+            return 'www.sandbox.paypal.com';
+        }
+
+        return 'www.paypal.com';
     }
 
     /**
@@ -101,7 +102,7 @@ class Paypal
         $ret['item_number']      = $commandId;
         $ret['amount']           = $this->formatAmount($ttc);
         $ret['custom']           = $commandId;
-        //$ret['rm'] = 2;	// Renvoyer les données par POST (normalement)
+        //$ret['rm'] = 2;   // Renvoyer les données par POST (normalement)
         $ret['email'] = $emailClient;
         // paypal_pdt
         if ('' != xoops_trim($this->passwordCancel)) {    // URL à laquelle le navigateur du client est ramené si le paiement est annulé

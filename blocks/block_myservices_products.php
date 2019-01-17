@@ -36,7 +36,7 @@ function b_ms_products_show($options)
     $productsPerCategory = $hMsProducts->getProductsPerCategory();
     $tree                = $mytree->getAllChild(0);
     foreach ($tree as $key => $category) {
-        $select .= '<optgroup label="' .\XoopsModules\Myservices\Utilities::makeHrefTitle($category->getVar('categories_title')) . '">';
+        $select .= '<optgroup label="' . \XoopsModules\Myservices\Utilities::makeHrefTitle($category->getVar('categories_title')) . '">';
         if (isset($productsPerCategory[$category->getVar('categories_id')])) {
             $products = [];
             $products = $productsPerCategory[$category->getVar('categories_id')];

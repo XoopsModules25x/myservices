@@ -34,7 +34,6 @@ switch ($op) {
             }
         }
         break;
-
     case 'calendar':    // Réaffichage du calendrier en fonction du mois et de l'année sélectionnés
         $year  = \Xmf\Request::getInt('year', 0, 'POST');
         $month = \Xmf\Request::getInt('month', 0, 'POST');
@@ -49,13 +48,13 @@ switch ($op) {
             // Récupération du nom des jours, raccourcis
             $l     = $prefs['daysLength'];    // Longueur du texte des jours
             $jours = [
-                substr(_CAL_SUNDAY, 0, $l),
-                substr(_CAL_MONDAY, 0, $l),
-                substr(_CAL_TUESDAY, 0, $l),
-                substr(_CAL_WEDNESDAY, 0, $l),
-                substr(_CAL_THURSDAY, 0, $l),
-                substr(_CAL_FRIDAY, 0, $l),
-                substr(_CAL_SATURDAY, 0, $l)
+                mb_substr(_CAL_SUNDAY, 0, $l),
+                mb_substr(_CAL_MONDAY, 0, $l),
+                mb_substr(_CAL_TUESDAY, 0, $l),
+                mb_substr(_CAL_WEDNESDAY, 0, $l),
+                mb_substr(_CAL_THURSDAY, 0, $l),
+                mb_substr(_CAL_FRIDAY, 0, $l),
+                mb_substr(_CAL_SATURDAY, 0, $l),
             ];
 
             $calendar->setDayNames($jours);
@@ -72,7 +71,7 @@ switch ($op) {
             for ($i = 1; $i <= $daysMonth; ++$i) {    // Boucle sur tous les jours du mois
                 $weekDay = date('N', mktime(1, 1, 1, $month, $i, $year));    // Représentation numérique ISO-8601 du jour de la semaine (ajouté en PHP 5.1.0) de 1 (pour Lundi) à 7 (pour Dimanche)
                 // Premier test, on regarde si le jour tombe sur un jour normal de fermeture, deuxième test, on regarde si on tombe sur un jour de fermeture exceptionnelle
-                if (in_array($weekDay, $closedDays) || in_array($i, $ExceptionnalclosedDays)) {
+                if (in_array($weekDay, $closedDays, true) || in_array($i, $ExceptionnalclosedDays, true)) {
                     $calendar->setEvent($year, $month, $i, 'event');
                 } else {
                     $timestamp = mktime(23, 59, 59, $month, $i, $year);
@@ -94,7 +93,6 @@ switch ($op) {
             $resultat = $calendar->showMonth();
         }
         break;
-
     case 'availability':    // Vérifie la disponibilité de la personne pour le produit et la date sélectionnés
         require_once XOOPS_ROOT_PATH . '/class/template.php';
         $products_id = \Xmf\Request::getInt('products_id', 0, 'POST');
@@ -111,7 +109,7 @@ switch ($op) {
         } else {    // Les paramètres attendus sont présents
             // 1) Est-ce que le délai entre maintenant et la date souhaitée est supérieur au temps de latence ?
             if (!$hMsPrefs->canOrderNow($year, $month, $day, $time)) {
-                $xoopsTpl->assign('additionalBefore', '<b>' . sprintf(_MYSERVICES_ERROR17,\XoopsModules\Myservices\Utilities::getModuleOption('latence')) . '</b><br>');
+                $xoopsTpl->assign('additionalBefore', '<b>' . sprintf(_MYSERVICES_ERROR17, \XoopsModules\Myservices\Utilities::getModuleOption('latence')) . '</b><br>');
             } else {
                 // 2) Vérification que le magasin est bien ouvert ce jour là
                 if (!$hMsPrefs->isStoreOpen($year, $month, $day, $time)) {

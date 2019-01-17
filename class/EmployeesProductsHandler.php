@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 /**
  * ****************************************************************************
@@ -35,7 +37,7 @@ class EmployeesProductsHandler extends Myservices\ServiceORM
     /**
      * Renvoie les identifiants des personnes qui fournissent un certain service (lié à un produit)
      *
-     * @param integer $products_id Numéro du produit
+     * @param int $products_id Numéro du produit
      * @return array   Array of peoples IDs
      */
     public function getEmployeesIdForProduct($products_id)
@@ -53,7 +55,7 @@ class EmployeesProductsHandler extends Myservices\ServiceORM
     /**
      * Renvoie la liste des produits dont une personne assure les services
      *
-     * @param integer $employeesproducts_employees_id Identifiant de la personne dont on veut connaître les produits qu'elle traite
+     * @param int $employeesproducts_employees_id Identifiant de la personne dont on veut connaître les produits qu'elle traite
      * @return array   Identifiants des produits
      */
     public function getProductsFromEployee($employeesproducts_employees_id)

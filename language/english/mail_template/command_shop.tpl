@@ -7,12 +7,12 @@ However, you must verify the payment in your Paypal account.
 Order number : {NUM_COMMANDE}
 
 Information about the client :
-		Last and first name : {NOM} {PRENOM}
-		Adsress : {ADRESSE}
-		Zip and town : {CP} {VILLE}
-		Country  : {PAYS}
-		Telephon : {TELEPHONE}
-		Email : {EMAIL}
+        Last and first name : {NOM} {PRENOM}
+        Adsress : {ADRESSE}
+        Zip and town : {CP} {VILLE}
+        Country  : {PAYS}
+        Telephon : {TELEPHONE}
+        Email : {EMAIL}
 
 
 Order details :

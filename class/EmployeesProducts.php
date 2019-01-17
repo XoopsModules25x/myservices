@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 /**
  * ****************************************************************************

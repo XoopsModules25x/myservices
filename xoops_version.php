@@ -6,10 +6,9 @@
  * Created on 20 oct. 07 at 14:38:20
  * ****************************************************************************
  */
-
 defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
-require_once __DIR__   . '/preloads/autoloader.php';
+require_once __DIR__ . '/preloads/autoloader.php';
 
 $modversion['name']           = _MI_MYSERVICES_NAME;
 $modversion['version']        = 2.0;
@@ -31,12 +30,12 @@ $modversion['module_status']       = 'Beta 1';
 $modversion['release_date']        = '2016/07/05';
 $modversion['module_website_url']  = 'www.xoops.org';
 $modversion['module_website_name'] = 'XOOPS';
-$modversion['min_php']             = '5.6';
+$modversion['min_php']             = '5.5';
 $modversion['min_xoops']           = '2.5.9';
 $modversion['min_admin']           = '1.2';
 $modversion['min_db']              = [
     'mysql'  => '5.0.7',
-    'mysqli' => '5.0.7'
+    'mysqli' => '5.0.7',
 ];
 
 $modversion['sqlfile']['mysql'] = 'sql/mysql.sql';
@@ -225,7 +224,7 @@ $cpto = 0;
 
 // default admin editor
 xoops_load('XoopsEditorHandler');
-$editorHandler              = XoopsEditorHandler::getInstance();
+$editorHandler               = XoopsEditorHandler::getInstance();
 $editorList                  = array_flip($editorHandler->getList());
 $modversion['config'][$cpto] = [
     'name'        => 'form_options',
@@ -234,7 +233,7 @@ $modversion['config'][$cpto] = [
     'formtype'    => 'select',
     'valuetype'   => 'text',
     'default'     => 'dhtmltextarea',
-    'options'     => $editorList
+    'options'     => $editorList,
 ];
 
 /**

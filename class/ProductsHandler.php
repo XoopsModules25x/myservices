@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 /**
  * ****************************************************************************
@@ -45,8 +47,8 @@ class ProductsHandler extends Myservices\ServiceORM
         $sql   = 'SELECT * FROM ' . $this->table . ' WHERE products_online = 1 ORDER BY products_categories_id, products_title';
 
         $CacheLite = new CacheLite($this->cacheOptions);
-        $id         = $this->_getIdForCache($sql, $start, $limit);
-        $cacheData  = $CacheLite->get($id);
+        $id        = $this->_getIdForCache($sql, $start, $limit);
+        $cacheData = $CacheLite->get($id);
         if (false === $cacheData) {
             $result = $this->db->query($sql);
             if (!$result) {
@@ -55,15 +57,15 @@ class ProductsHandler extends Myservices\ServiceORM
             while (false !== ($myrow = $this->db->fetchArray($result))) {
                 $obj = $this->create(false);
                 $obj->assignVars($myrow);
-                $ret[$myrow['products_categories_id']][] =& $obj;
+                $ret[$myrow['products_categories_id']][] = &$obj;
                 unset($obj);
             }
             $CacheLite->save($ret);
 
             return $ret;
-        } else {
-            return $cacheData;
         }
+
+        return $cacheData;
     }
 
     /**
@@ -84,10 +86,10 @@ class ProductsHandler extends Myservices\ServiceORM
     /**
      * Renvoie la liste des produits appartenants à une catégorie spécifique
      *
-     * @param integer $categoryId Identifiant de la catégorie dont on veut récupérer les produits
-     * @param integer $start      Position de départ
-     * @param integer $limit      Nombre maximum de produits à renvoyer
-     * @param string  $sort       Champ à utiliser pour trier les produits
+     * @param int    $categoryId Identifiant de la catégorie dont on veut récupérer les produits
+     * @param int    $start      Position de départ
+     * @param int    $limit      Nombre maximum de produits à renvoyer
+     * @param string $sort       Champ à utiliser pour trier les produits
      * @return array La liste des produits de la catégorie
      */
     public function getProductsFromCategory($categoryId, $start = 0, $limit = 0, $sort = 'products_title')

@@ -24,6 +24,6 @@ $cart = new Myservices\Cart();    // Pour gérer le panier
 $cart->emptyCart();
 $xoopsTpl->assign('success', $success);
 
-$title = _MYSERVICES_PURCHASE_FINSISHED . ' - ' .\XoopsModules\Myservices\Utilities::getModuleName();
+$title = _MYSERVICES_PURCHASE_FINSISHED . ' - ' . \XoopsModules\Myservices\Utilities::getModuleName();
 \XoopsModules\Myservices\Utilities::setMetas($title, $title);
 require_once XOOPS_ROOT_PATH . '/footer.php';

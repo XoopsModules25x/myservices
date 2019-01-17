@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 /**
  * ****************************************************************************
@@ -59,8 +61,8 @@ class Employees extends Myservices\ServiceObject
         $employee_fullname = $this->getEmployeeFullName();
         $url               = '';
 
-        if (1 ==\XoopsModules\Myservices\Utilities::getModuleOption('urlrewriting')) {    // On utilise l'url rewriting
-            $url = MYSERVICES_URL . 'employee-' . (int)$employee_id .\XoopsModules\Myservices\Utilities::makeSeoUrl($employee_fullname) . '.html';
+        if (1 == \XoopsModules\Myservices\Utilities::getModuleOption('urlrewriting')) {    // On utilise l'url rewriting
+            $url = MYSERVICES_URL . 'employee-' . (int)$employee_id . \XoopsModules\Myservices\Utilities::makeSeoUrl($employee_fullname) . '.html';
         } else {    // Pas d'utilisation de l'url rewriting
             $url = MYSERVICES_URL . 'employee.php?employees_id=' . (int)$employee_id;
         }
@@ -80,7 +82,7 @@ class Employees extends Myservices\ServiceObject
         foreach ($this->vars as $k => $v) {
             $ret[$k] = $this->getVar($k, $format);
         }
-        $ret['employees_href_title'] =\XoopsModules\Myservices\Utilities::makeHrefTitle($this->getEmployeeFullName());
+        $ret['employees_href_title'] = \XoopsModules\Myservices\Utilities::makeHrefTitle($this->getEmployeeFullName());
         $ret['employees_fullname']   = $this->getEmployeeFullName();
         $ret['employees_link']       = $this->getEmployeeLink();
         for ($i = 1; $i <= 4; ++$i) {

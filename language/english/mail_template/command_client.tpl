@@ -5,12 +5,12 @@ The services you bought will be reserved when you will pay.
 
 You order number is :  {NUM_COMMANDE}
 Information about the client :
-	Last and first name : {NOM} {PRENOM}
-	Address : {ADRESSE}
-	Zip and Town : {CP} {VILLE}
-	Country : {PAYS}
-	Telephon : {TELEPHONE}
-	Email : {EMAIL}
+    Last and first name : {NOM} {PRENOM}
+    Address : {ADRESSE}
+    Zip and Town : {CP} {VILLE}
+    Country : {PAYS}
+    Telephon : {TELEPHONE}
+    Email : {EMAIL}
 
 Order details :
 {COMMANDE}

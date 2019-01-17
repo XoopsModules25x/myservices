@@ -6,7 +6,6 @@
  * Created on 20 oct. 07 at 14:38:20
  * ****************************************************************************
  */
-
 define('_MI_MYSERVICES_NAME', 'Services');
 define('_MI_MYSERVICES_DESC', 'To offer personal services (e.g. management))');
 

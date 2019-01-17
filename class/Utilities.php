@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 /**
  * ****************************************************************************
@@ -20,7 +22,6 @@ defined('XOOPS_ROOT_PATH') || die('Restricted access');
  * @copyright (c) Instant Zero
  *
  * Note: You should be able to use it without the need to instanciate it.
- *
  */
 class Utilities
 {
@@ -66,7 +67,7 @@ class Utilities
             }
         } else {
             $moduleHandler = xoops_getHandler('module');
-            $module         = $moduleHandler->getByDirname($repmodule);
+            $module        = $moduleHandler->getByDirname($repmodule);
             $configHandler = xoops_getHandler('config');
             if ($module) {
                 $moduleConfig = $configHandler->getConfigsByCat(0, $module->getVar('mid'));
@@ -83,13 +84,13 @@ class Utilities
     /**
      * Is Xoops 2.2.x ?
      *
-     * @return boolean need to say it ?
+     * @return bool need to say it ?
      */
     public static function isX22()
     {
         $x22 = false;
         $xv  = str_replace('XOOPS ', '', XOOPS_VERSION);
-        if ('2' == substr($xv, 2, 1)) {
+        if ('2' == mb_substr($xv, 2, 1)) {
             $x22 = true;
         }
 
@@ -99,13 +100,13 @@ class Utilities
     /**
      * Is Xoops 2.3.x ?
      *
-     * @return boolean need to say it ?
+     * @return bool need to say it ?
      */
     public static function isX23()
     {
         $x23 = false;
         $xv  = str_replace('XOOPS ', '', XOOPS_VERSION);
-        if ((int)substr($xv, 2, 1) >= 3) {
+        if ((int)mb_substr($xv, 2, 1) >= 3) {
             $x23 = true;
         }
 
@@ -137,7 +138,7 @@ class Utilities
 
         $editor_option = static::getModuleOption('form_options');
 
-        switch (strtolower($editor_option)) {
+        switch (mb_strtolower($editor_option)) {
             case 'fck':
                 if (!$x22) {
                     if (is_readable(XOOPS_ROOT_PATH . '/class/fckeditor/formfckeditor.php')) {
@@ -148,7 +149,6 @@ class Utilities
                     $editor = new \XoopsFormEditor($caption, 'fckeditor', $editor_configs);
                 }
                 break;
-
             case 'htmlarea':
                 if (!$x22) {
                     if (is_readable(XOOPS_ROOT_PATH . '/class/htmlarea/formhtmlarea.php')) {
@@ -159,7 +159,6 @@ class Utilities
                     $editor = new \XoopsFormEditor($caption, 'htmlarea', $editor_configs);
                 }
                 break;
-
             case 'dhtml':
                 if (!$x22) {
                     $editor = new \XoopsFormDhtmlTextArea($caption, $name, $value, 10, 50, $supplemental);
@@ -167,18 +166,15 @@ class Utilities
                     $editor = new \XoopsFormEditor($caption, 'dhtmltextarea', $editor_configs);
                 }
                 break;
-
             case 'textarea':
                 $editor = new \XoopsFormTextArea($caption, $name, $value);
                 break;
-
             case 'tinyeditor':
                 if (is_readable(XOOPS_ROOT_PATH . '/class/xoopseditor/tinyeditor/formtinyeditortextarea.php')) {
                     require_once XOOPS_ROOT_PATH . '/class/xoopseditor/tinyeditor/formtinyeditortextarea.php';
                     $editor = new \XoopsFormTinyeditorTextArea(['caption' => $caption, 'name' => $name, 'value' => $value, 'width' => '100%', 'height' => '400px']);
                 }
                 break;
-
             case 'koivi':
                 if (!$x22) {
                     if (is_readable(XOOPS_ROOT_PATH . '/class/wysiwyg/formwysiwygtextarea.php')) {
@@ -197,17 +193,17 @@ class Utilities
     /**
      * Create (in a link) a javascript confirmation's box
      *
-     * @param string  $message Message to display
-     * @param boolean $form    Is this a confirmation for a form ?
+     * @param string $message Message to display
+     * @param bool   $form    Is this a confirmation for a form ?
      * @return string the javascript code to insert in the link (or in the form)
      */
     public static function javascriptLinkConfirm($message, $form = false)
     {
         if (!$form) {
             return "onclick=\"javascript:return confirm('" . str_replace("'", ' ', $message) . "')\"";
-        } else {
-            return "onSubmit=\"javascript:return confirm('" . str_replace("'", ' ', $message) . "')\"";
         }
+
+        return "onSubmit=\"javascript:return confirm('" . str_replace("'", ' ', $message) . "')\"";
     }
 
     /**
@@ -218,7 +214,7 @@ class Utilities
     public static function IP()
     {
         $proxy_ip = '';
-       if (\Xmf\Request::hasVar('HTTP_X_FORWARDED_FOR', 'SERVER')) {
+        if (\Xmf\Request::hasVar('HTTP_X_FORWARDED_FOR', 'SERVER')) {
             $proxy_ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
         } elseif (!empty($_SERVER['HTTP_X_FORWARDED'])) {
             $proxy_ip = $_SERVER['HTTP_X_FORWARDED'];
@@ -250,7 +246,6 @@ class Utilities
      * @param string $pageTitle       Page's Title
      * @param string $metaDescription Page's meta description
      * @param string $metaKeywords    Page's meta keywords
-     * @return void
      */
     public static function setMetas($pageTitle = '', $metaDescription = '', $metaKeywords = '')
     {
@@ -299,7 +294,7 @@ class Utilities
         if (function_exists('xoops_getMailer')) {
             $xoopsMailer = xoops_getMailer();
         } else {
-            $xoopsMailer =& getMailer();
+            $xoopsMailer = &getMailer();
         }
 
         $xoopsMailer->useMail();
@@ -345,7 +340,7 @@ class Utilities
         require_once XOOPS_ROOT_PATH . '/class/xoopsblock.php';
         require_once XOOPS_ROOT_PATH . '/class/template.php';
         $tplfileHandler = xoops_getHandler('tplfile');
-        $tpllist         = $tplfileHandler->find(null, null, null, $folder);
+        $tpllist        = $tplfileHandler->find(null, null, null, $folder);
         xoops_template_clear_module_cache($xoopsModule->getVar('mid'));            // Clear module's blocks cache
 
         foreach ($tpllist as $onetemplate) {    // Remove cache for each page.
@@ -369,7 +364,8 @@ class Utilities
      *
      * @param string $message message to display
      * @param string $url     The place where to go
-     * @param        integer  timeout Time to wait before to redirect
+     * @param        int  timeout Time to wait before to redirect
+     * @param mixed  $time
      */
     public static function redirect($message = '', $url = 'index.php', $time = 2)
     {
@@ -387,10 +383,10 @@ class Utilities
         if (!isset($mymodule)) {
             global $xoopsModule;
             if (isset($xoopsModule) && is_object($xoopsModule) && MYSERVICES_DIRNAME == $xoopsModule->getVar('dirname')) {
-                $mymodule =& $xoopsModule;
+                $mymodule = &$xoopsModule;
             } else {
-                $hModule  = xoops_getHandler('module');
-                $mymodule = $hModule->getByDirname(MYSERVICES_DIRNAME);
+                $moduleHandler = xoops_getHandler('module');
+                $mymodule      = $moduleHandler->getByDirname(MYSERVICES_DIRNAME);
             }
         }
 
@@ -434,9 +430,9 @@ class Utilities
      */
     public static function getUsersFromGroup($groupId)
     {
-        $tblUsers       = [];
+        $tblUsers      = [];
         $memberHandler = xoops_getHandler('member');
-        $tblUsers       = $memberHandler->getUsersByGroup($groupId, true);
+        $tblUsers      = $memberHandler->getUsersByGroup($groupId, true);
 
         return $tblUsers;
     }
@@ -468,7 +464,7 @@ class Utilities
     {
         global $xoopsUser, $xoopsModule;
         if (is_object($xoopsUser)) {
-            if (in_array(XOOPS_GROUP_ADMIN, $xoopsUser->getGroups())) {
+            if (in_array(XOOPS_GROUP_ADMIN, $xoopsUser->getGroups(), true)) {
                 return true;
             } elseif (isset($xoopsModule) && $xoopsUser->isAdmin($xoopsModule->getVar('mid'))) {
                 return true;
@@ -503,7 +499,7 @@ class Utilities
     /**
      * Convert a timestamp to a Mysql date
      *
-     * @param integer $timestamp The timestamp to use
+     * @param int $timestamp The timestamp to use
      * @return string The date in the Mysql format
      */
     public static function timestampToMysqlDate($timestamp)
@@ -523,7 +519,7 @@ class Utilities
 
     /**
      * Convert a timestamp to a Mysql datetime form
-     * @param integer $timestamp The timestamp to use
+     * @param int $timestamp The timestamp to use
      * @return string The date and time in the Mysql format
      */
     public static function timestampToMysqlDateTime($timestamp)
@@ -534,7 +530,7 @@ class Utilities
     /**
      * This function indicates if the current Xoops version needs to add asterisks to required fields in forms
      *
-     * @return boolean Yes = we need to add them, false = no
+     * @return bool Yes = we need to add them, false = no
      */
     public static function needsAsterisk()
     {
@@ -556,10 +552,10 @@ class Utilities
                 $tblRequired[] = $item->_name;
             }
             $tblElements = [];
-            $tblElements =& $sform->getElements();
+            $tblElements = &$sform->getElements();
             $cnt         = count($tblElements);
             for ($i = 0; $i < $cnt; $i++) {
-                if (is_object($tblElements[$i]) && in_array($tblElements[$i]->_name, $tblRequired)) {
+                if (is_object($tblElements[$i]) && in_array($tblElements[$i]->_name, $tblRequired, true)) {
                     $tblElements[$i]->_caption .= ' *';
                 }
             }
@@ -571,8 +567,8 @@ class Utilities
     /**
      * Create an html heading (from h1 to h6)
      *
-     * @param string  $title The text to use
-     * @param integer $level Level to return
+     * @param string $title The text to use
+     * @param int    $level Level to return
      * @return string The heading
      */
     public static function htitle($title = '', $level = 1)
@@ -583,15 +579,15 @@ class Utilities
     /**
      * Create a unique upload filename
      *
-     * @param string  $folder   The folder where the file will be saved
-     * @param string  $fileName Original filename (coming from the user)
-     * @param boolean $trimName Do we need to create a short unique name ?
+     * @param string $folder   The folder where the file will be saved
+     * @param string $fileName Original filename (coming from the user)
+     * @param bool   $trimName Do we need to create a short unique name ?
      * @return string The unique filename to use (with its extension)
      */
     public static function createUploadName($folder, $fileName, $trimName = false)
     {
         $workingfolder = $folder;
-        if ('/' !== xoops_substr($workingfolder, strlen($workingfolder) - 1, 1)) {
+        if ('/' !== xoops_substr($workingfolder, mb_strlen($workingfolder) - 1, 1)) {
             $workingfolder .= '/';
         }
         $ext  = basename($fileName);
@@ -602,7 +598,7 @@ class Utilities
             $ipbits = explode('.', $_SERVER['REMOTE_ADDR']);
             list($usec, $sec) = explode(' ', microtime());
             $usec = ($usec * 65536);
-            $sec  = ((integer)$sec) & 0xFFFF;
+            $sec  = ((int)$sec) & 0xFFFF;
 
             if ($trimName) {
                 $uid = sprintf('%06x%04x%04x', ($ipbits[0] << 24) | ($ipbits[1] << 16) | ($ipbits[2] << 8) | $ipbits[3], $sec, $usec);
@@ -620,8 +616,8 @@ class Utilities
     /**
      * Création d'une titre pour être utilisé par l'url rewriting
      *
-     * @param string  $content Le texte à utiliser pour créer l'url
-     * @param integer $urw     La limite basse pour créer les mots
+     * @param string $content Le texte à utiliser pour créer l'url
+     * @param int    $urw     La limite basse pour créer les mots
      * @return string Le texte à utiliser pour l'url
      */
     public static function makeSeoUrl($content, $urw = 1)
@@ -630,7 +626,7 @@ class Utilities
         $r       = 'AAAAAAOOOOOOEEEECIIIIUUUUYNaaaaaaooooooeeeeciiiiuuuuyn----';
         $content = strtr($content, $s, $r);
         $content = strip_tags($content);
-        $content = strtolower($content);
+        $content = mb_strtolower($content);
         $content = htmlentities($content, ENT_QUOTES | ENT_HTML5);
         $content = preg_replace('/&([a-zA-Z])(uml|acute|grave|circ|tilde);/', '$1', $content);
         $content = html_entity_decode($content);
@@ -645,7 +641,7 @@ class Utilities
         $words    = explode(' ', $content);
         $keywords = '';
         foreach ($words as $word) {
-            if (strlen($word) >= $urw) {
+            if (mb_strlen($word) >= $urw) {
                 $keywords .= '-' . trim($word);
             }
         }
@@ -655,8 +651,8 @@ class Utilities
         // Supprime les tirets en double
         $keywords = str_replace('--', '-', $keywords);
         // Supprime un éventuel tiret à la fin de la chaine
-        if ('-' == substr($keywords, strlen($keywords) - 1, 1)) {
-            $keywords = substr($keywords, 0, -1);
+        if ('-' == mb_substr($keywords, mb_strlen($keywords) - 1, 1)) {
+            $keywords = mb_substr($keywords, 0, -1);
         }
 
         return $keywords;
@@ -675,7 +671,7 @@ class Utilities
 
         $tmp = [];
         //  Search for the "Minimum keyword length"
-        $configHandler    = xoops_getHandler('config');
+        $configHandler     = xoops_getHandler('config');
         $xoopsConfigSearch = $configHandler->getConfigsByCat(XOOPS_CONF_SEARCH);
         $limit             = $xoopsConfigSearch['keyword_min'];
 
@@ -683,7 +679,7 @@ class Utilities
         $content         = str_replace('<br>', ' ', $content);
         $content         = $myts->undoHtmlSpecialChars($content);
         $content         = strip_tags($content);
-        $content         = strtolower($content);
+        $content         = mb_strtolower($content);
         $search_pattern  = ['&nbsp;', "\t", "\r\n", "\r", "\n", ',', '.', "'", ';', ':', ')', '(', '"', '?', '!', '{', '}', '[', ']', '<', '>', '/', '+', '-', '_', '\\', '*'];
         $replace_pattern = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
         $content         = str_replace($search_pattern, $replace_pattern, $content);
@@ -704,24 +700,23 @@ class Utilities
                 break;
         }
         foreach ($keywords as $keyword) {
-            if (!is_numeric($keyword) && strlen($keyword) >= $limit) {
+            if (!is_numeric($keyword) && mb_strlen($keyword) >= $limit) {
                 $tmp[] = $keyword;
             }
         }
         $tmp = array_slice($tmp, 0, $keywordscount);
         if (count($tmp) > 0) {
             return implode(',', $tmp);
-        } else {
-            if (!isset($configHandler) || !is_object($configHandler)) {
-                $configHandler = xoops_getHandler('config');
-            }
-            $xoopsConfigMetaFooter = $configHandler->getConfigsByCat(XOOPS_CONF_METAFOOTER);
-            if (isset($xoopsConfigMetaFooter['meta_keywords'])) {
-                return $xoopsConfigMetaFooter['meta_keywords'];
-            } else {
-                return '';
-            }
         }
+        if (!isset($configHandler) || !is_object($configHandler)) {
+            $configHandler = xoops_getHandler('config');
+        }
+        $xoopsConfigMetaFooter = $configHandler->getConfigsByCat(XOOPS_CONF_METAFOOTER);
+        if (isset($xoopsConfigMetaFooter['meta_keywords'])) {
+            return $xoopsConfigMetaFooter['meta_keywords'];
+        }
+
+        return '';
     }
 
     /**
@@ -732,11 +727,11 @@ class Utilities
      */
     public static function normalyzeTime($time)
     {
-        if (8 != strlen($time)) {
+        if (8 != mb_strlen($time)) {
             return $time . ':00';
-        } else {
-            return $time;
         }
+
+        return $time;
     }
 
     /**

@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 /**
  * ****************************************************************************
@@ -60,8 +62,8 @@ class Products extends Myservices\ServiceObject
         $products_title = $this->getVar('products_title', 'n');
         $url            = '';
 
-        if (1 ==\XoopsModules\Myservices\Utilities::getModuleOption('urlrewriting')) {    // On utilise l'url rewriting
-            $url = MYSERVICES_URL . 'product-' . (int)$products_id .\XoopsModules\Myservices\Utilities::makeSeoUrl($products_title) . '.html';
+        if (1 == \XoopsModules\Myservices\Utilities::getModuleOption('urlrewriting')) {    // On utilise l'url rewriting
+            $url = MYSERVICES_URL . 'product-' . (int)$products_id . \XoopsModules\Myservices\Utilities::makeSeoUrl($products_title) . '.html';
         } else {    // Pas d'utilisation de l'url rewriting
             $url = MYSERVICES_URL . 'product.php?products_id=' . (int)$products_id;
         }
@@ -89,16 +91,16 @@ class Products extends Myservices\ServiceObject
         }
         if (is_object($vat)) {
             return ((float)$this->getVar('products_price', 'e') * (float)$vat->getVar('vat_rate', 'e') / 100) + (float)$this->getVar('products_price', 'e');
-        } else {
-            return (float)$this->getVar('products_price');
         }
+
+        return (float)$this->getVar('products_price');
     }
 
     /**
      * Renvoie le montant HT (sans formatage) du produit en tenant compte de la quantit� et du taux de TVA
      *
-     * @param integer $quantity La quantité voulue de produit
-     * @param  float  $vatRate
+     * @param int    $quantity La quantité voulue de produit
+     * @param  float $vatRate
      * @return float Le montant HT
      */
     public function getVATAmount($quantity, $vatRate)
@@ -129,9 +131,9 @@ class Products extends Myservices\ServiceObject
         }
         if (is_object($vat)) {
             return $vat->getVar('vat_rate', 'e');
-        } else {
-            return 0;
         }
+
+        return 0;
     }
 
     /**
@@ -147,7 +149,7 @@ class Products extends Myservices\ServiceObject
         }
         $ret['products_url']        = $this->getProductLink();
         $ret['products_ttc']        = $this->getTTC();
-        $ret['products_href_title'] =\XoopsModules\Myservices\Utilities::makeHrefTitle($this->getVar('products_title'));
+        $ret['products_href_title'] = \XoopsModules\Myservices\Utilities::makeHrefTitle($this->getVar('products_title'));
         $quantity                   = $this->getVar('products_duration');
 
         // Formattage des monnaies

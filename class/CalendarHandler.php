@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 /**
  * ****************************************************************************
@@ -39,8 +41,8 @@ class CalendarHandler extends Myservices\ServiceORM
     /**
      * Renvoie les numéros (de 1 à 28,29,30,31) des jours de fermetures exceptionnels du magasin dans un mois
      *
-     * @param integer $month Le numéro du mois
-     * @param integer $year  L'année
+     * @param int $month Le numéro du mois
+     * @param int $year  L'année
      * @return array en valeur les jours du mois (de 1 à 31) qui sont fermés
      */
     public function getClosedDayInMonth($month, $year)
@@ -78,9 +80,9 @@ class CalendarHandler extends Myservices\ServiceORM
     /**
      * Indique si le magasin est exceptionnellement fermé à une date donnée
      *
-     * @param integer  $year  Année à de la date
-     * @param  integer $month Mois de la date
-     * @param  integer $day   Jour de la date
+     * @param int  $year  Année à de la date
+     * @param  int $month Mois de la date
+     * @param  int $day   Jour de la date
      * @return bool Vrai = magasin fermé, False = magasin ouvert
      */
     public function isStoreClosed($year, $month, $day)
@@ -95,9 +97,9 @@ class CalendarHandler extends Myservices\ServiceORM
         $count = $this->getCount($criteria);
         if ($count > 0) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**

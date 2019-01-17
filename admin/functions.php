@@ -22,7 +22,7 @@ function myservices_adminMenu($currentoption = 0, $breadcrumb = '')
     /** @var Myservices\Helper $helper */
     $helper = Myservices\Helper::getInstance();
     $helper->loadLanguage('modinfo');
-    
+
     require_once XOOPS_ROOT_PATH . '/modules/myservices/admin/menu.php';
 
     echo "<style type=\"text/css\">\n";

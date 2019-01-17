@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 /**
  * ****************************************************************************
@@ -30,7 +32,7 @@ class CaddyHandler extends Myservices\ServiceORM
     /**
      * Renvoie les ID de commandes pour un produit acheté
      *
-     * @param integer $product_id Identifiant du produit recherché
+     * @param int $product_id Identifiant du produit recherché
      * @return array Les ID des commandes dans lesquelles ce produit a été commandé
      */
     public function getCommandIdFromProduct($product_id)

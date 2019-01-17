@@ -12,7 +12,7 @@
 
 **myServices** for [XOOPS CMS](https://xoops.org) is a module to manage "Personal Services" business
 
-[![Tutorial Available](https://xoops.org/images/tutorial-available-blue.svg)](https://www.gitbook.com/book/xoops/myservices-tutorial/) Tutorial: see [GitBook](https://www.gitbook.com/book/xoops/myservices-tutorial/).
+[![Tutorial Available](https://xoops.org/images/tutorial-available-blue.svg)](https://xoops.gitbook.io/myservices-tutorial/) Tutorial: see [GitBook](https://xoops.gitbook.io/myservices-tutorial/).
 To contribute to the Tutorial, [fork it on GitHub](https://github.com/XoopsDocs/myservices-tutorial)
 
 [![Translations on Transifex](https://xoops.org/images/translations-transifex-blue.svg)](https://www.transifex.com/xoops)

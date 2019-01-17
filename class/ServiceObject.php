@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 /**
  * ****************************************************************************
@@ -7,9 +9,6 @@
  * Created on 20 oct. 07 at 14:38:20
  * ****************************************************************************
  */
-
-use XoopsModules\Myservices;
-
 defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 /**

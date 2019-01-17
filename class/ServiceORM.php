@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 /**
  * ****************************************************************************
@@ -12,13 +14,10 @@ use XoopsModules\Myservices;
 
 defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
-
-
 /**
  * Persistable Object Handler class.
  * This class is responsible for providing data access mechanisms to the data source
  * of derived class objects. Original Author : Mithrandir
- *
  */
 class ServiceORM extends \XoopsObjectHandler
 {
@@ -27,7 +26,7 @@ class ServiceORM extends \XoopsObjectHandler
      *
      * @var string
      */
-    public $table;
+    public    $table;
     protected $keyName;
     protected $className;
     protected $identifierName;
@@ -36,13 +35,13 @@ class ServiceORM extends \XoopsObjectHandler
 
     /**
      * Constructor - called from child classes
-     * @param \XoopsDatabase $db           {@link XoopsDatabase}
-     *                                     object
-     * @param string         $tablename    Name of database table
-     * @param string         $classname    Name of Class, this handler is managing
-     * @param string         $keyname      Name of the property, holding the key
-     * @param string         $idenfierName Name of the property, holding the label
-     * @param array          $cacheOptions Optional, options for the cache
+     * @param \XoopsDatabase|null $db           {@link XoopsDatabase}
+     *                                          object
+     * @param string              $tablename    Name of database table
+     * @param string              $classname    Name of Class, this handler is managing
+     * @param string              $keyname      Name of the property, holding the key
+     * @param string              $idenfierName Name of the property, holding the label
+     * @param array               $cacheOptions Optional, options for the cache
      */
     public function __construct(\XoopsDatabase $db, $tablename, $classname, $keyname, $idenfierName = '', $cacheOptions = null)
     {
@@ -62,7 +61,7 @@ class ServiceORM extends \XoopsObjectHandler
 
         if (null === $cacheOptions) {
             $this->setCachingOptions(['cacheDir' => MYSERVICES_CACHE_PATH, 'lifeTime' => null, 'automaticSerialization' => true, 'fileNameProtection' => false, 'caching' => false]);
-        //            $this->setCachingOptions(array('cacheDir' => MYSERVICES_CACHE_PATH, 'lifeTime' => null, 'automaticSerialization' => true, 'fileNameProtection' => false));
+            //            $this->setCachingOptions(array('cacheDir' => MYSERVICES_CACHE_PATH, 'lifeTime' => null, 'automaticSerialization' => true, 'fileNameProtection' => false));
         } else {
             $this->setCachingOptions($cacheOptions);
         }
@@ -79,9 +78,9 @@ class ServiceORM extends \XoopsObjectHandler
     /**
      * Generates a unique ID for a Sql Query
      *
-     * @param  string  $query The SQL query for which we want a unidque ID
-     * @param  integer $start Which record to start at
-     * @param  integer $limit Max number of objects to fetch
+     * @param  string $query The SQL query for which we want a unidque ID
+     * @param  int    $start Which record to start at
+     * @param  int    $limit Max number of objects to fetch
      * @return string  An MD5 of the query
      */
     protected function _getIdForCache($query, $start, $limit)
@@ -131,7 +130,7 @@ class ServiceORM extends \XoopsObjectHandler
         if (1 != count($obj_array)) {
             $ret = null;
         } else {
-            $ret =& $obj_array[0];
+            $ret = &$obj_array[0];
         }
 
         return $ret;
@@ -141,11 +140,11 @@ class ServiceORM extends \XoopsObjectHandler
      * retrieve objects from the database
      *
      * @param null|\CriteriaElement $criteria  {@link CriteriaElement} conditions to be met
-     * @param bool                 $id_as_key use the ID as key for the array?
-     * @param bool                 $as_object return an array of objects?
+     * @param bool                  $id_as_key use the ID as key for the array?
+     * @param bool                  $as_object return an array of objects?
      *
-     * @param string               $fields
-     * @param bool                 $autoSort
+     * @param string                $fields
+     * @param bool                  $autoSort
      * @return array
      */
     public function &getObjects(\CriteriaElement $criteria = null, $id_as_key = false, $as_object = true, $fields = '*', $autoSort = true)
@@ -154,7 +153,7 @@ class ServiceORM extends \XoopsObjectHandler
         $ret   = [];
         $limit = $start = 0;
         $sql   = 'SELECT ' . $fields . ' FROM ' . $this->table;
-        if ($criteria !== null && is_subclass_of($criteria, 'CriteriaElement')) {
+        if (null !== $criteria && is_subclass_of($criteria, 'CriteriaElement')) {
             $sql .= ' ' . $criteria->renderWhere();
             if ('' != $criteria->groupby) {
                 $sql .= $criteria->getGroupby();
@@ -168,8 +167,8 @@ class ServiceORM extends \XoopsObjectHandler
             $start = $criteria->getStart();
         }
         $CacheLite = new CacheLite($this->cacheOptions);
-        $id         = $this->_getIdForCache($sql, $start, $limit);
-        $cacheData  = $CacheLite->get($id);
+        $id        = $this->_getIdForCache($sql, $start, $limit);
+        $cacheData = $CacheLite->get($id);
         if (false === $cacheData) {
             $result = $this->db->query($sql, $limit, $start);
             if (!$result) {
@@ -179,18 +178,18 @@ class ServiceORM extends \XoopsObjectHandler
             $CacheLite->save($ret);
 
             return $ret;
-        } else {
-            return $cacheData;
         }
+
+        return $cacheData;
     }
 
     /**
      * Convert a database resultset to a returnable array
      *
-     * @param object  $result    database resultset
-     * @param boolean $id_as_key - should NOT be used with joint keys
-     * @param boolean $as_object
-     * @param string  $fields    Requested fields from the query
+     * @param object $result    database resultset
+     * @param bool   $id_as_key - should NOT be used with joint keys
+     * @param bool   $as_object
+     * @param string $fields    Requested fields from the query
      *
      * @return array
      */
@@ -202,7 +201,7 @@ class ServiceORM extends \XoopsObjectHandler
             $obj->assignVars($myrow);
             if (!$id_as_key) {
                 if ($as_object) {
-                    $ret[] =& $obj;
+                    $ret[] = &$obj;
                 } else {
                     $row     = [];
                     $vars    = $obj->getVars();
@@ -215,9 +214,9 @@ class ServiceORM extends \XoopsObjectHandler
             } else {
                 if ($as_object) {
                     if ('*' === $fields) {
-                        $ret[$myrow[$this->keyName]] =& $obj;
+                        $ret[$myrow[$this->keyName]] = &$obj;
                     } else {
-                        $ret[] =& $obj;
+                        $ret[] = &$obj;
                     }
                 } else {
                     $row     = [];
@@ -247,7 +246,7 @@ class ServiceORM extends \XoopsObjectHandler
         $limit = $start = 0;
 
         $CacheLite = new CacheLite($this->cacheOptions);
-        $sql        = 'SELECT ' . $this->keyName . ' FROM ' . $this->table;
+        $sql       = 'SELECT ' . $this->keyName . ' FROM ' . $this->table;
         if (isset($criteria) && is_subclass_of($criteria, 'CriteriaElement')) {
             $sql .= ' ' . $criteria->renderWhere();
             if ('' != $criteria->groupby) {
@@ -273,9 +272,9 @@ class ServiceORM extends \XoopsObjectHandler
             $CacheLite->save($ret);
 
             return $ret;
-        } else {
-            return $cacheData;
         }
+
+        return $cacheData;
     }
 
     /**
@@ -287,7 +286,7 @@ class ServiceORM extends \XoopsObjectHandler
     public function getList($criteria = null)
     {
         // require_once __DIR__ . '/lite.php';
-        $limit      = $start = 0;
+        $limit     = $start = 0;
         $CacheLite = new CacheLite($this->cacheOptions);
 
         $ret = [];
@@ -330,9 +329,9 @@ class ServiceORM extends \XoopsObjectHandler
             $CacheLite->save($ret);
 
             return $ret;
-        } else {
-            return $cacheData;
         }
+
+        return $cacheData;
     }
 
     /**
@@ -381,8 +380,8 @@ class ServiceORM extends \XoopsObjectHandler
             $start = $criteria->getStart();
         }
         $CacheLite = new CacheLite($this->cacheOptions);
-        $id         = $this->_getIdForCache($sql, $start, $limit);
-        $cacheData  = $CacheLite->get($id);
+        $id        = $this->_getIdForCache($sql, $start, $limit);
+        $cacheData = $CacheLite->get($id);
         if (false === $cacheData) {
             $result = $this->db->query($sql, $limit, $start);
             if (!$result) {
@@ -396,18 +395,17 @@ class ServiceORM extends \XoopsObjectHandler
                 $CacheLite->save($count);
 
                 return $count;
-            } else {
-                $ret = [];
-                while (false !== (list($id, $count) = $this->db->fetchRow($result))) {
-                    $ret[$id] = $count;
-                }
-                $CacheLite->save($ret);
-
-                return $ret;
             }
-        } else {
-            return $cacheData;
+            $ret = [];
+            while (false !== (list($id, $count) = $this->db->fetchRow($result))) {
+                $ret[$id] = $count;
+            }
+            $CacheLite->save($ret);
+
+            return $ret;
         }
+
+        return $cacheData;
     }
 
     /**
@@ -415,7 +413,7 @@ class ServiceORM extends \XoopsObjectHandler
      *
      * @param  string $field    Le champ dont on veut calculer le total
      * @param  object $criteria {@link CriteriaElement} to match
-     * @return integer le total
+     * @return int le total
      */
     public function getSum($field, $criteria = null)
     {
@@ -432,8 +430,8 @@ class ServiceORM extends \XoopsObjectHandler
             $start = $criteria->getStart();
         }
         $CacheLite = new \XoopsModules\Myservices\CacheLite($this->cacheOptions);
-        $id         = $this->_getIdForCache($sql, $start, $limit);
-        $cacheData  = $CacheLite->get($id);
+        $id        = $this->_getIdForCache($sql, $start, $limit);
+        $cacheData = $CacheLite->get($id);
         if (false === $cacheData) {
             $result = $this->db->query($sql, $limit, $start);
             if (!$result) {
@@ -447,9 +445,9 @@ class ServiceORM extends \XoopsObjectHandler
             $CacheLite->save($count);
 
             return $count;
-        } else {
-            return $cacheData;
         }
+
+        return $cacheData;
     }
 
     /**
@@ -515,7 +513,6 @@ class ServiceORM extends \XoopsObjectHandler
      * @param  bool        $checkObject check if the object is dirty and clean the attributes
      * @return bool   FALSE if failed, TRUE if already present and unchanged or successful
      */
-
     public function insert(\XoopsObject $obj, $force = false, $checkObject = true)
     {
         if (false !== $checkObject) {
@@ -567,7 +564,7 @@ class ServiceORM extends \XoopsObjectHandler
         } else {
             $sql = 'UPDATE ' . $this->table . ' SET';
             foreach ($cleanvars as $key => $value) {
-                if ((!is_array($this->keyName) && $key == $this->keyName) || (is_array($this->keyName) && in_array($key, $this->keyName))) {
+                if ((!is_array($this->keyName) && $key == $this->keyName) || (is_array($this->keyName) && in_array($key, $this->keyName, true))) {
                     continue;
                 }
                 if (isset($notfirst)) {
@@ -613,11 +610,11 @@ class ServiceORM extends \XoopsObjectHandler
     /**
      * Change a value for objects with a certain criteria
      *
-     * @param string $fieldname  Name of the field
+     * @param string       $fieldname  Name of the field
      * @param string|array $fieldvalue Value to write
-     * @param object $criteria   {@link CriteriaElement}
+     * @param object       $criteria   {@link CriteriaElement}
      *
-     * @param bool   $force
+     * @param bool         $force
      * @return bool
      */
     public function updateAll($fieldname, $fieldvalue, $criteria = null, $force = false)
@@ -745,8 +742,8 @@ class ServiceORM extends \XoopsObjectHandler
         $sql .= ' GROUP BY ' . $field . ' ORDER BY ' . $field;
 
         $CacheLite = new CacheLite($this->cacheOptions);
-        $id         = $this->_getIdForCache($sql, $start, $limit);
-        $cacheData  = $CacheLite->get($id);
+        $id        = $this->_getIdForCache($sql, $start, $limit);
+        $cacheData = $CacheLite->get($id);
         if (false === $cacheData) {
             $result = $this->db->query($sql, $limit, $start);
             $ret    = [];
@@ -758,9 +755,9 @@ class ServiceORM extends \XoopsObjectHandler
             $CacheLite->save($ret);
 
             return $ret;
-        } else {
-            return $cacheData;
         }
+
+        return $cacheData;
     }
 
     /**
@@ -768,11 +765,11 @@ class ServiceORM extends \XoopsObjectHandler
      *
      * @author Herve Thouzard - Instant Zero
      *
-     * @param  integer $start   Starting position
-     * @param  integer $limit   Maximum count of elements to return
-     * @param  string  $sort    Field to use for the sort
-     * @param  string  $order   Sort order
-     * @param  boolean $idAsKey Do we have to return an array whoses keys are the record's ID ?
+     * @param  int    $start   Starting position
+     * @param  int    $limit   Maximum count of elements to return
+     * @param  string $sort    Field to use for the sort
+     * @param  string $order   Sort order
+     * @param  bool   $idAsKey Do we have to return an array whoses keys are the record's ID ?
      * @return array   Array of current objects
      */
     public function getItems($start = 0, $limit = 0, $sort = '', $order = 'ASC', $idAsKey = true)

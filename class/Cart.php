@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 /**
  * ****************************************************************************
@@ -54,10 +56,11 @@ class Cart
      *  Note : Les paramètres entrants de la fonction sont utilisés comme paramètres sortants... (sic)
      *
      * @param array $cartForTemplate  Contenu du caddy à passer au template (en fait la liste des produits)
-     * @param       boolean           emptyCart Indique si le panier est vide ou pas
+     * @param       bool           emptyCart Indique si le panier est vide ou pas
      * @param float $commandAmount    Montant HT de la commande
      * @param float $vatAmount        VAT amount
      * @param float $commandAmountTTC Tax amount of the order
+     * @param mixed $emptyCart
      */
     public function computeCart(&$cartForTemplate, &$emptyCart, &$commandAmount, &$vatAmount, &$commandAmountTTC)
     {
@@ -76,7 +79,7 @@ class Cart
                     $datas          = [];
                     $produit_number = $caddyElement['number'];    // Numéro séquentiel
                     $produit_id     = $caddyElement['id'];            // Identifiant Produit
-                    $employees_id    = $caddyElement['empid'];        // Identifiant employé(e)
+                    $employees_id   = $caddyElement['empid'];        // Identifiant employé(e)
                     $startingHour   = $caddyElement['hour'];        // Heure de début
                     $date           = $caddyElement['date'];                // Date de réservation
                     $produit_qty    = $caddyElement['qty'];        // Durée en heures
@@ -100,7 +103,7 @@ class Cart
                     $datas                               = $product->toArray();
                     $datas['id']                         = $produit_id;
                     $datas['empid']                      = $employees_id;
-                    $datas['products_reserved_date']     =\XoopsModules\Myservices\Utilities::SQLDateToHuman($date, 's');
+                    $datas['products_reserved_date']     = \XoopsModules\Myservices\Utilities::SQLDateToHuman($date, 's');
                     $datas['products_reserved_time']     = $startingHour;
                     $datas['products_reserved_duration'] = $produit_qty;
                     $datas['employee']                   = $employee->toArray();
@@ -169,7 +172,7 @@ class Cart
     /**
      * Suppression d'un produit du caddy
      *
-     * @param integer $indice Indice de l'élément à supprimer
+     * @param int $indice Indice de l'élément à supprimer
      */
     public function deleteProduct($indice)
     {
@@ -191,11 +194,11 @@ class Cart
      * Ajout d'un produit au caddy
      * Note, les produits ajoutés mais déjà présents dans le panier ne sont pas dupliqués, on modifie la quantité
      *
-     * @param integer $product_id   Identifiant du produit
-     * @param integer $quantity     Quantité en heures
-     * @param integer $employees_id Identifiant de l'employé(e)
-     * @param string  $hour         Heure de début pour la prestation
-     * @param string  $date         Date de la prestation (au format YYYY-MM-DD)
+     * @param int    $product_id   Identifiant du produit
+     * @param int    $quantity     Quantité en heures
+     * @param int    $employees_id Identifiant de l'employé(e)
+     * @param string $hour         Heure de début pour la prestation
+     * @param string $date         Date de la prestation (au format YYYY-MM-DD)
      */
     public function addProduct($product_id, $quantity, $employees_id, $hour, $date)
     {
@@ -228,15 +231,15 @@ class Cart
     /**
      * Indique si le caddy est vide ou pas
      *
-     * @return boolean vide, ou pas...
+     * @return bool vide, ou pas...
      */
     public function isCartEmpty()
     {
         if (isset($_SESSION[self::CADDY_NAME])) {
             return false;
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     /**

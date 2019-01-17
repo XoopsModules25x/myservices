@@ -6,7 +6,6 @@
  * Created on 20 oct. 07 at 14:38:20
  * ****************************************************************************
  */
-
 defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 /**
@@ -20,7 +19,7 @@ function b_ms_detcategories_show()
 
     $myTpl = new \XoopsTpl();
     // Préférences du module
-    $block['blockColumnsCount'] =\XoopsModules\Myservices\Utilities::getModuleOption('columnscount');
+    $block['blockColumnsCount'] = \XoopsModules\Myservices\Utilities::getModuleOption('columnscount');
 
     // Lecture de toutes les TVA ************************************************************
     $vatArray = [];

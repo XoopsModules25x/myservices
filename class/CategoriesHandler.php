@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
+
+namespace XoopsModules\Myservices;
 
 /**
  * ****************************************************************************
@@ -35,7 +37,7 @@ class CategoriesHandler extends Myservices\ServiceORM
     /**
      * Renvoie la liste des catégories filles d'une catégorie particulière
      *
-     * @param integer $categories_id Id de la catégorie dont on veut récupérer les filles
+     * @param int $categories_id Id de la catégorie dont on veut récupérer les filles
      * @return array Tableau d'objets catégories
      */
     public function getAllChild($categories_id)
@@ -68,7 +70,7 @@ class CategoriesHandler extends Myservices\ServiceORM
      * Renvoie un breadcrumb jusqu'à une catégorie déterminée
      *
      * @param Categories|object Objet  de type catégorie qui représente la catégorie courante
-     * @param string                       $raquo Le "séparateur" à utiliser entre les chaines de caractères
+     * @param string $raquo Le "séparateur" à utiliser entre les chaines de caractères
      * @return string Le breadcrumb depuis la page d'index jusqu'à la catégorie courante
      */
     public function getBreadCrumb(Categories $currentCategory, $raquo = ' &raquo; ')
@@ -81,15 +83,15 @@ class CategoriesHandler extends Myservices\ServiceORM
 
         $tblTmp       = $tblAncestors = [];
         $tblAncestors = array_reverse($mytree->getAllParent($currentCategoryId));
-        $moduleName   =\XoopsModules\Myservices\Utilities::getModuleName();
+        $moduleName   = \XoopsModules\Myservices\Utilities::getModuleName();
 
         // Ajout de la page d'index avec le nom du module (permet de renvoyer vers la liste des catégories de niveau 1)
-        $tblTmp[] = "<a href='" . MYSERVICES_URL . "index.php' title='" .\XoopsModules\Myservices\Utilities::makeHrefTitle($moduleName) . "'>" . $moduleName . '</a>';
+        $tblTmp[] = "<a href='" . MYSERVICES_URL . "index.php' title='" . \XoopsModules\Myservices\Utilities::makeHrefTitle($moduleName) . "'>" . $moduleName . '</a>';
         foreach ($tblAncestors as $item) {
-            $tblTmp[] = "<a href='" . $item->getCategoryLink() . "' title='" .\XoopsModules\Myservices\Utilities::makeHrefTitle($item->getVar('categories_title')) . "'>" . $item->getVar('categories_title') . '</a>';
+            $tblTmp[] = "<a href='" . $item->getCategoryLink() . "' title='" . \XoopsModules\Myservices\Utilities::makeHrefTitle($item->getVar('categories_title')) . "'>" . $item->getVar('categories_title') . '</a>';
         }
         // Ajout de la catégorie courante
-        $tblTmp[]   = "<a href='" . $currentCategory->getCategoryLink() . "' title='" .\XoopsModules\Myservices\Utilities::makeHrefTitle($currentCategory->getVar('categories_title')) . "'>" . $currentCategory->getVar('categories_title') . '</a>';
+        $tblTmp[]   = "<a href='" . $currentCategory->getCategoryLink() . "' title='" . \XoopsModules\Myservices\Utilities::makeHrefTitle($currentCategory->getVar('categories_title')) . "'>" . $currentCategory->getVar('categories_title') . '</a>';
         $breadcrumb = implode($raquo, $tblTmp);
 
         return $breadcrumb;

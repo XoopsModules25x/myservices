@@ -26,7 +26,7 @@ function myservices_search($queryarray, $andor, $limit, $offset, $userid)
     $sql .= ') ';
 
     $tmpObject = new \XoopsModules\Myservices\Products();
-    $datas     =& $tmpObject->getVars();
+    $datas     = &$tmpObject->getVars();
     $tblFields = [];
     $cnt       = 0;
     foreach ($datas as $key => $value) {

@@ -15,7 +15,6 @@
  * @package
  * @author       XOOPS Development Team
  */
-
 require __DIR__ . '/admin_header.php';
 xoops_cp_header();
 
@@ -24,4 +23,3 @@ $adminObject::setPaypal('xoopsfoundation@gmail.com');
 $adminObject->displayAbout(false);
 
 require __DIR__ . '/admin_footer.php';
-

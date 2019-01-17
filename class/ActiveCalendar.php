@@ -1,5 +1,6 @@
-<?php namespace XoopsModules\Myservices;
+<?php
 
+namespace XoopsModules\Myservices;
 
 /*
 * @class: activeCalendar
@@ -33,8 +34,6 @@
 * The layout of can be configured using css, as the class generates various html classes
 * Please read the readme.html first and check the examples included in this package
 */
-
-use XoopsModules\Myservices;
 
 /**
  * Class ActiveCalendar
@@ -156,12 +155,13 @@ class ActiveCalendar
     $GMTDiff: GMT Zone for current day calculation, do not set to use local server time
     ********************************************************************************
     */
+
     /**
      * ActiveCalendar constructor.
-     * @param bool   $year
-     * @param bool|int   $month
-     * @param bool|int   $day
-     * @param string $GMTDiff
+     * @param bool     $year
+     * @param bool|int $month
+     * @param bool|int $day
+     * @param string   $GMTDiff
      */
     public function __construct($year = false, $month = false, $day = false, $GMTDiff = 'none')
     {
@@ -229,6 +229,7 @@ class ActiveCalendar
     PUBLIC enableYearNav() -> enables the year's navigation controls
     ********************************************************************************
     */
+
     /**
      * @param bool $link
      * @param bool $arrowBack
@@ -255,6 +256,7 @@ class ActiveCalendar
     PUBLIC enableMonthNav() -> enables the month's navigation controls
     ********************************************************************************
     */
+
     /**
      * @param bool $link
      * @param bool $arrowBack
@@ -282,6 +284,7 @@ class ActiveCalendar
     param javaScript: sets a Javascript function on each day link
     ********************************************************************************
     */
+
     /**
      * @param bool $link
      * @param bool $javaScript
@@ -304,6 +307,7 @@ class ActiveCalendar
     PUBLIC enableDatePicker() -> enables the day picker control
     ********************************************************************************
     */
+
     /**
      * @param bool $startYear
      * @param bool $endYear
@@ -336,6 +340,7 @@ class ActiveCalendar
     PUBLIC enableWeekNum() -> enables a week number column
     ********************************************************************************
     */
+
     /**
      * @param string $title
      * @param bool   $link
@@ -361,12 +366,13 @@ class ActiveCalendar
     PUBLIC setEvent() -> sets a calendar event, $id: the HTML class (css layout)
     ********************************************************************************
     */
+
     /**
-     * @param      $year
-     * @param      $month
-     * @param      $day
+     * @param             $year
+     * @param             $month
+     * @param             $day
      * @param bool|string $id
-     * @param bool $url
+     * @param bool        $url
      */
     public function setEvent($year, $month, $day, $id = false, $url = false)
     {
@@ -384,12 +390,13 @@ class ActiveCalendar
     $content: can be a string or an array, $id: the HTML class (css layout)
     ********************************************************************************
     */
+
     /**
-     * @param      $year
-     * @param      $month
-     * @param      $day
-     * @param      $content
-     * @param bool $url
+     * @param             $year
+     * @param             $month
+     * @param             $day
+     * @param             $content
+     * @param bool        $url
      * @param bool|string $id
      */
     public function setEventContent($year, $month, $day, $content, $url = false, $id = false)
@@ -413,6 +420,7 @@ class ActiveCalendar
     PUBLIC setMonthNames() -> sets the month names, $namesArray must be an array of 12 months starting with January
     ********************************************************************************
     */
+
     /**
      * @param $namesArray
      * @return bool
@@ -431,6 +439,7 @@ class ActiveCalendar
     PUBLIC setDayNames() -> sets the week day names, $namesArray must be an array of 7 days starting with Sunday
     ********************************************************************************
     */
+
     /**
      * @param $namesArray
      * @return bool
@@ -449,6 +458,7 @@ class ActiveCalendar
     PUBLIC setFirstWeekDay() -> sets the first day of the week, currently only Sunday and Monday supported, $daynum=0 -> Sunday
     ********************************************************************************
     */
+
     /**
      * @param $daynum
      */
@@ -468,6 +478,7 @@ class ActiveCalendar
     You can change the calendar structure by simply calling these private methods in another order
     ********************************************************************************
     */
+
     /**
      * @param bool $rowCount
      * @param bool $startMonth
@@ -499,6 +510,7 @@ class ActiveCalendar
     (note: these 'noMonthDays' will not contain any events or eventcontents!)
     ********************************************************************************
     */
+
     /**
      * @param bool $showNoMonthDays
      * @return string
@@ -520,6 +532,7 @@ class ActiveCalendar
 
         return $out;
     }
+
     /*
     ----------------------
     @START PRIVATE METHODS
@@ -560,6 +573,7 @@ class ActiveCalendar
     PRIVATE mkYearHead() -> creates the year table tag
     ********************************************************************************
     */
+
     /**
      * @return string
      */
@@ -573,6 +587,7 @@ class ActiveCalendar
     PRIVATE mkYearTitle() -> creates the tile and navigation tr tag of the year table
     ********************************************************************************
     */
+
     /**
      * @return string
      */
@@ -604,6 +619,7 @@ class ActiveCalendar
     PRIVATE mkYearBody() -> creates the tr tags of the year table
     ********************************************************************************
     */
+
     /**
      * @param bool|int $stmonth
      * @return string
@@ -640,6 +656,7 @@ class ActiveCalendar
     PRIVATE mkYearFoot() -> closes the year table tag
     ********************************************************************************
     */
+
     /**
      * @return string
      */
@@ -653,6 +670,7 @@ class ActiveCalendar
     PRIVATE mkMonthHead() -> creates the month table tag
     ********************************************************************************
     */
+
     /**
      * @return string
      */
@@ -666,6 +684,7 @@ class ActiveCalendar
     PRIVATE mkMonthTitle() -> creates the tile and navigation tr tag of the month table
     ********************************************************************************
     */
+
     /**
      * @return string
      */
@@ -702,6 +721,7 @@ class ActiveCalendar
     PRIVATE mkDatePicker() -> creates the tr tag for the date picker
     ********************************************************************************
     */
+
     /**
      * @param bool $yearpicker
      * @return string
@@ -751,6 +771,7 @@ class ActiveCalendar
     PRIVATE mkWeekDays() -> creates the tr tag of the month table for the weekdays
     ********************************************************************************
     */
+
     /**
      * @return string
      */
@@ -773,8 +794,8 @@ class ActiveCalendar
             for ($x = 1; $x <= 6; ++$x) {
                 $out .= '<td class="' . $this->cssWeekDay . '">' . $this->getDayName($x) . '</td>';
             }
-            $out            .= '<td class="' . $this->cssWeekDay . '">' . $this->getDayName(0) . '</td>';
-            $out            .= "</tr>\n";
+            $out .= '<td class="' . $this->cssWeekDay . '">' . $this->getDayName(0) . '</td>';
+            $out .= "</tr>\n";
             --$this->firstday;
             if ($this->firstday < 0) {
                 $this->firstday = 6;
@@ -789,6 +810,7 @@ class ActiveCalendar
     PRIVATE mkMonthBody() -> creates the tr tags of the month table
     ********************************************************************************
     */
+
     /**
      * @param int $showNoMonthDays
      * @return string
@@ -863,6 +885,7 @@ class ActiveCalendar
     PRIVATE mkDay() -> creates each td tag of the month body
     ********************************************************************************
     */
+
     /**
      * @param $var
      * @return string
@@ -877,7 +900,7 @@ class ActiveCalendar
         if ($this->isEvent($var)) {
             if ($this->eventUrl) {
                 // Modification Hervé
-                if (0 === stripos($this->eventUrl, 'javascript:')) {
+                if (0 === mb_stripos($this->eventUrl, 'javascript:')) {
                     $out = '<td class="' . $this->eventID . '"><a href="' . $this->eventUrl . '(' . $this->actyear . ',' . $this->actmonth . ',' . $var . ')">' . $var . '</a>' . $eventContent . '</td>';
                 } else {
                     $out = '<td class="' . $this->eventID . '"><a href="' . $this->eventUrl . '">' . $var . '</a>' . $eventContent . '</td>';
@@ -928,6 +951,7 @@ class ActiveCalendar
     PRIVATE mkMonthFoot() -> closes the month table
     ********************************************************************************
     */
+
     /**
      * @return string
      */
@@ -941,6 +965,7 @@ class ActiveCalendar
     PRIVATE mkUrl() -> creates the day and navigation link structure
     ********************************************************************************
     */
+
     /**
      * @param      $year
      * @param bool $month
@@ -949,12 +974,12 @@ class ActiveCalendar
      */
     public function mkUrl($year, $month = false, $day = false)
     {
-        if (false === strpos($this->url, '?')) {
+        if (false === mb_strpos($this->url, '?')) {
             $glue = '?';
         } else {
             $glue = '&amp;';
         }
-        if (false === strpos($this->urlNav, '?')) {
+        if (false === mb_strpos($this->urlNav, '?')) {
             $glueNav = '?';
         } else {
             $glueNav = '&amp;';
@@ -978,6 +1003,7 @@ class ActiveCalendar
     PRIVATE mkEventContent() -> creates the table for the event content
     ********************************************************************************
     */
+
     /**
      * @param $var
      * @return string
@@ -1022,6 +1048,7 @@ class ActiveCalendar
     PRIVATE mkWeekNum() -> returns the week number and optionally creates a link
     ********************************************************************************
     */
+
     /**
      * @param $var
      * @return string
@@ -1035,7 +1062,7 @@ class ActiveCalendar
         }
         $out = '';
         if ($this->weekUrl) {
-            if (false === strpos($this->weekUrl, '?')) {
+            if (false === mb_strpos($this->weekUrl, '?')) {
                 $glue = '?';
             } else {
                 $glue = '&amp;';
@@ -1055,6 +1082,7 @@ class ActiveCalendar
     PRIVATE getMonthName() -> returns the month's name, according to the configuration
     ********************************************************************************
     */
+
     /**
      * @param bool|string $var
      * @return string
@@ -1062,7 +1090,7 @@ class ActiveCalendar
     public function getMonthName($var = false)
     {
         if (!$var) {
-            $var = @ $this->actmonth;
+            $var = @$this->actmonth;
         }
         if ($this->monthNames) {
             return $this->monthNames[$var - 1];
@@ -1100,6 +1128,7 @@ class ActiveCalendar
     PRIVATE getDayName() -> returns the day's name, according to the configuration
     ********************************************************************************
     */
+
     /**
      * @param bool $var
      * @return string
@@ -1132,6 +1161,7 @@ class ActiveCalendar
     PRIVATE getMonthDays() -> returns the number of days of the month specified
     ********************************************************************************
     */
+
     /**
      * @param $month
      * @param $year
@@ -1159,6 +1189,7 @@ class ActiveCalendar
     PRIVATE getWeekday() -> returns the weekday's number, 0 = Sunday ... 6 = Saturday
     ********************************************************************************
     */
+
     /**
      * @param $var
      * @return false|string
@@ -1173,6 +1204,7 @@ class ActiveCalendar
     PRIVATE getWeekNum() -> returns the week number, php version > 4.1.0, unsupported by the ADOdb Date Library
     ********************************************************************************
     */
+
     /**
      * @param $var
      * @return false|int|string
@@ -1187,6 +1219,7 @@ class ActiveCalendar
     PRIVATE isEvent() -> checks if a date was set as an event and creates the eventID (css layout) and eventUrl
     ********************************************************************************
     */
+
     /**
      * @param $var
      * @return bool
@@ -1223,6 +1256,7 @@ class ActiveCalendar
     PRIVATE hasEventContent() -> checks if an event content was set
     ********************************************************************************
     */
+
     /**
      * @param $var
      * @return array|bool
@@ -1252,8 +1286,9 @@ class ActiveCalendar
     PRIVATE mkActiveDate() -> checks if ADOdb Date Library is loaded and calls the date function
     ********************************************************************************
     */
+
     /**
-     * @param      $param
+     * @param            $param
      * @param bool|float $acttime
      * @return false|string
      */
@@ -1274,8 +1309,9 @@ class ActiveCalendar
     PRIVATE mkActiveGMDate() -> checks if ADOdb Date Library is loaded and calls the gmdate function
     ********************************************************************************
     */
+
     /**
-     * @param      $param
+     * @param          $param
      * @param bool|int $acttime
      * @return false|string
      */
@@ -1296,6 +1332,7 @@ class ActiveCalendar
     PRIVATE mkActiveTime() -> checks if ADOdb Date Library is loaded and calls the mktime function
     ********************************************************************************
     */
+
     /**
      * @param      $hr
      * @param      $min

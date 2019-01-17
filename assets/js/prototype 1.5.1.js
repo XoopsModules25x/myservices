@@ -4773,8 +4773,8 @@ Prototype._original_property = window.Sizzle;
     /**
      * Create key-value caches of limited size
      * @returns {Function(string, Object)} Returns the Object data after storing it on itself with
-     *	property name the (space-suffixed) string and (if the cache is larger than Expr.cacheLength)
-     *	deleting the oldest entry
+     *  property name the (space-suffixed) string and (if the cache is larger than Expr.cacheLength)
+     *  deleting the oldest entry
      */
     function createCache() {
         var keys = [];
@@ -4953,7 +4953,7 @@ Prototype._original_property = window.Sizzle;
         }
 
         /* Attributes
-	---------------------------------------------------------------------- */
+    ---------------------------------------------------------------------- */
 
         support.attributes = assert(function( div ) {
             div.className = "i";
@@ -4961,7 +4961,7 @@ Prototype._original_property = window.Sizzle;
         });
 
         /* getElement(s)By*
-	---------------------------------------------------------------------- */
+    ---------------------------------------------------------------------- */
 
         support.getElementsByTagName = assert(function( div ) {
             div.appendChild( doc.createComment("") );
@@ -5036,7 +5036,7 @@ Prototype._original_property = window.Sizzle;
         };
 
         /* QSA/matchesSelector
-	---------------------------------------------------------------------- */
+    ---------------------------------------------------------------------- */
 
 
         rbuggyMatches = [];
@@ -5095,7 +5095,7 @@ Prototype._original_property = window.Sizzle;
         rbuggyMatches = rbuggyMatches.length && new RegExp( rbuggyMatches.join("|") );
 
         /* Contains
-	---------------------------------------------------------------------- */
+    ---------------------------------------------------------------------- */
         hasCompare = rnative.test( docElem.compareDocumentPosition );
 
         contains = hasCompare || rnative.test( docElem.contains ) ?
@@ -5120,7 +5120,7 @@ Prototype._original_property = window.Sizzle;
             };
 
         /* Sorting
-	---------------------------------------------------------------------- */
+    ---------------------------------------------------------------------- */
 
         sortOrder = hasCompare ?
             function( a, b ) {
@@ -5358,15 +5358,15 @@ Prototype._original_property = window.Sizzle;
 
             "CHILD": function( match ) {
                 /* matches from matchExpr["CHILD"]
-				1 type (only|nth|...)
-				2 what (child|of-type)
-				3 argument (even|odd|\d*|\d*n([+-]\d+)?|...)
-				4 xn-component of xn+y argument ([+-]?\d*n|)
-				5 sign of xn-component
-				6 x of xn-component
-				7 sign of y-component
-				8 y of y-component
-			*/
+                1 type (only|nth|...)
+                2 what (child|of-type)
+                3 argument (even|odd|\d*|\d*n([+-]\d+)?|...)
+                4 xn-component of xn+y argument ([+-]?\d*n|)
+                5 sign of xn-component
+                6 x of xn-component
+                7 sign of y-component
+                8 y of y-component
+            */
                 match[1] = match[1].toLowerCase();
 
                 if ( match[1].slice( 0, 3 ) === "nth" ) {

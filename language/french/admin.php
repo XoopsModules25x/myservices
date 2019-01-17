@@ -6,7 +6,6 @@
  * Created on 20 oct. 07 at 14:38:20
  * ****************************************************************************
  */
-
 define('_AM_MYSERVICES_GO_TO_MODULE', 'Aller au module');
 define('_AM_MYSERVICES_PREFERENCES', 'Préférences');
 define('_AM_MYSERVICES_ADMINISTRATION', 'Administration');

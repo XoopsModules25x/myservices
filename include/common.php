@@ -39,15 +39,15 @@ require_once MYSERVICES_PATH . 'class/Currency.php';
 require_once MYSERVICES_PATH . 'class/PEAR.php';
 
 // Handlers des tables
-$hMsCaddy            = $helper->getHandler('Caddy');
-$hMsCalendar         = $helper->getHandler('Calendar');
-$hMsCategories       = $helper->getHandler('Categories');
+$hMsCaddy             = $helper->getHandler('Caddy');
+$hMsCalendar          = $helper->getHandler('Calendar');
+$hMsCategories        = $helper->getHandler('Categories');
 $hMsEmployees         = $helper->getHandler('Employees');
 $hMsEmployeesProducts = $helper->getHandler('EmployeesProducts');
-$hMsOrders           = $helper->getHandler('Orders');
-$hMsProducts         = $helper->getHandler('Products');
-$hMsVat              = $helper->getHandler('Vat');
-$hMsPrefs            = $helper->getHandler('Preferences');
+$hMsOrders            = $helper->getHandler('Orders');
+$hMsProducts          = $helper->getHandler('Products');
+$hMsVat               = $helper->getHandler('Vat');
+$hMsPrefs             = $helper->getHandler('Preferences');
 
 // Definition des images
 if (!defined('_MYSERVICES_EDIT')) {
@@ -61,6 +61,6 @@ if (!defined('_MYSERVICES_EDIT')) {
         'delete'     => "<img src='" . MYSERVICES_IMAGES_URL . "delete.png' alt='" . _MYSERVICES_DELETE . "' align='middle'>",
         'validate'   => "<img src='" . MYSERVICES_IMAGES_URL . "ok.png' alt='" . _MYSERVICES_BTN_VALIDATE . "' align='middle'>",
         'details'    => "<img src='" . MYSERVICES_IMAGES_URL . "details.png' alt='" . _MYSERVICES_DETAILS . "' align='middle'>",
-        'unvalidate' => "<img src='" . MYSERVICES_IMAGES_URL . "button_cancel.png' alt='" . _MYSERVICES_BTN_UNVALIDATE . "' align='middle'>"
+        'unvalidate' => "<img src='" . MYSERVICES_IMAGES_URL . "button_cancel.png' alt='" . _MYSERVICES_BTN_UNVALIDATE . "' align='middle'>",
     ];
 }

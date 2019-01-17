@@ -16,7 +16,6 @@ use XoopsModules\Myservices;
  *
  * @return bool true if ready to uninstall, false if not
  */
-
 function xoops_module_pre_uninstall_myservices(\XoopsModule $module)
 {
     // Do some synchronization
@@ -24,7 +23,6 @@ function xoops_module_pre_uninstall_myservices(\XoopsModule $module)
 }
 
 /**
- *
  * Performs tasks required during uninstallation of the module
  * @param XoopsModule $module {@link XoopsModule}
  *
@@ -35,9 +33,9 @@ function xoops_module_uninstall_myservices(\XoopsModule $module)
     //    return true;
 
     $moduleDirName      = basename(dirname(__DIR__));
-    $moduleDirNameUpper = strtoupper($moduleDirName);
-    /** @var Myservices\Helper $helper */
-    $helper = Myservices\Helper::getInstance();
+    $moduleDirNameUpper = mb_strtoupper($moduleDirName);
+    /** @var \XoopsModules\Myservices\Helper $helper */
+    $helper = \XoopsModules\Myservices\Helper::getInstance();
 
     /** @var Myservices\Utility $utility */
     $utility = new Myservices\Utility();

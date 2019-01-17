@@ -15,7 +15,6 @@
  * @package
  * @author       XOOPS Development Team
  */
-
 $moduleDirName = basename(dirname(__DIR__));
 require_once dirname(dirname(dirname(__DIR__))) . '/mainfile.php';
 require_once $GLOBALS['xoops']->path('www/include/cp_functions.php');
